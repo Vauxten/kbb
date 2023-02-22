@@ -4,8 +4,6 @@ main: agmas.kingsbutbad.KingsButBad
 api-version: 1.19
 prefix: KBB
 authors: [ agmas ]
-loadbefore:
-  - LuckPerms
 depend:
   - LuckPerms
 description: The Plugin for KingsButBad
