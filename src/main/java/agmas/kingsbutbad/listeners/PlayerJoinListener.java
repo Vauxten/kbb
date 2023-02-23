@@ -18,6 +18,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
@@ -38,7 +39,14 @@ public class PlayerJoinListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         event.setJoinMessage(LegacyComponentSerializer.legacySection().serialize(miniMessage().deserialize("<#D49B63>" + event.getPlayer().getName() + " was shipped into the kingdom.")));
-        KingsButBad.playerRoleHashMap.put(event.getPlayer(), Role.PEASANT);
-        RoleManager.givePlayerRole(event.getPlayer());
+        if (event.getPlayer().getPersistentDataContainer().getOrDefault(KingsButBad.wasinPrison, PersistentDataType.INTEGER, 0) == 0) {
+            KingsButBad.playerRoleHashMap.put(event.getPlayer(), Role.PEASANT);
+            RoleManager.givePlayerRole(event.getPlayer());
+        } else {
+            event.setJoinMessage(LegacyComponentSerializer.legacySection().serialize(miniMessage().deserialize("<gold>" + event.getPlayer().getName() + " was sent back to prison.")));
+            KingsButBad.prisonTimer.put(event.getPlayer(), (20 * 60) * 5);
+            KingsButBad.playerRoleHashMap.put(event.getPlayer(), Role.PRISONER);
+            RoleManager.givePlayerRole(event.getPlayer());
+        }
     }
 }

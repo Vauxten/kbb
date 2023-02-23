@@ -2,16 +2,14 @@ package agmas.kingsbutbad.utils;
 
 import agmas.kingsbutbad.KingsButBad;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import java.util.ArrayList;
 
@@ -70,6 +68,11 @@ public class RoleManager {
             blademeta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             blade.setItemMeta(blademeta);
             p.getInventory().addItem(blade);
+            ItemStack card = new ItemStack(Material.TRIPWIRE_HOOK);
+            ItemMeta cardm = card.getItemMeta();
+            cardm.setDisplayName(ChatColor.BLUE + "Keycard");
+            card.setItemMeta(cardm);
+            p.getInventory().addItem(card);
             return;
         }
         if (KingsButBad.playerRoleHashMap.get(p) == Role.KNIGHT) {
@@ -97,13 +100,49 @@ public class RoleManager {
             diamondchestmeta.setUnbreakable(true);
             diamondchest.setItemMeta(diamondchestmeta);
             p.getInventory().setBoots(diamondchest);
-            ItemStack blade = new ItemStack(Material.IRON_SWORD);
+            ItemStack blade = new ItemStack(Material.DIAMOND_SWORD);
             ItemMeta blademeta = blade.getItemMeta();
             blademeta.setUnbreakable(true);
-            blademeta.addEnchant(Enchantment.DAMAGE_ALL, 2, true);
             blademeta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             blade.setItemMeta(blademeta);
             p.getInventory().addItem(blade);
+            ItemStack card = new ItemStack(Material.TRIPWIRE_HOOK);
+            ItemMeta cardm = card.getItemMeta();
+            cardm.setDisplayName(ChatColor.BLUE + "Keycard");
+            card.setItemMeta(cardm);
+            p.getInventory().addItem(card);
+        }
+        if (KingsButBad.playerRoleHashMap.get(p) == Role.PRISONER) {
+            KingsButBad.prisonTimer.put(p, (20 * 60) * 5);
+            ItemStack orangechest = new ItemStack(Material.LEATHER_CHESTPLATE);
+            LeatherArmorMeta chestmeta = (LeatherArmorMeta) orangechest.getItemMeta();
+            chestmeta.setColor(Color.fromRGB(208, 133, 22));
+            chestmeta.setDisplayName("Prisoner Chestplate");
+            orangechest.setItemMeta(chestmeta);
+
+            ItemStack orangeleg = new ItemStack(Material.LEATHER_LEGGINGS);
+            LeatherArmorMeta orangelegItemMeta = (LeatherArmorMeta) orangeleg.getItemMeta();
+            orangelegItemMeta.setColor(Color.fromRGB(208, 133, 22));
+            orangelegItemMeta.setDisplayName("Prisoner Leggings");
+            orangeleg.setItemMeta(orangelegItemMeta);
+
+            ItemStack orangeboot = new ItemStack(Material.LEATHER_BOOTS);
+            LeatherArmorMeta orangebootItemMeta = (LeatherArmorMeta) orangeboot.getItemMeta();
+            orangebootItemMeta.setColor(Color.fromRGB(40, 20, 2));
+            orangebootItemMeta.setDisplayName("Prisoner Boots");
+            orangeboot.setItemMeta(orangebootItemMeta);
+
+            p.getInventory().setChestplate(orangechest);
+            p.getInventory().setLeggings(orangeleg);
+            p.getInventory().setBoots(orangeboot);
+            Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
+                p.teleport(new Location(Bukkit.getWorld("world"), -139.5, -57, 32.5, 180, 0));
+            }, 5);
+        }
+        if (KingsButBad.playerRoleHashMap.get(p) == Role.PEASANT) {
+            Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
+                p.teleport(new Location(Bukkit.getWorld("world"), -120.5, -57, -30.5));
+            }, 5);
         }
         p.sendTitle(KingsButBad.playerRoleHashMap.get(p).tag, KingsButBad.playerRoleHashMap.get(p).objective);
     }

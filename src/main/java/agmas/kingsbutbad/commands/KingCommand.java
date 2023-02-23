@@ -17,6 +17,10 @@ public class KingCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player p) {
+            if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PRISONER)) {
+                p.sendMessage(ChatColor.RED + "You can't become a king as a prisoner. Stay in, scum.");
+                return true;
+            }
             if (KingsButBad.king == null) {
                 KingsButBad.playerRoleInviteHashMap.clear();
                 KingsButBad.king = p;
@@ -48,8 +52,6 @@ public class KingCommand implements CommandExecutor {
                             p.sendMessage(CreateText.addColors("<blue>I'm the <gradient:#FFFF52:#FFBA52><b>ROYAL<blue> Villager.<blue> I help new kings get settled!"));
                             p.sendMessage(CreateText.addColors("<blue> Your goal is to <red>survive long<blue> and be <gold>powerful."));
                             p.sendMessage(CreateText.addColors("<red>To get started, I'd reccomend getting some <gradient:#0095ff:#1e00ff>Knights<red> to help you in <dark_red>combat."));
-                            p.sendMessage(CreateText.addColors("<blue> Then, <gold>jail<blue> anyone that comes in your way. Only <dark_blue>Police<blue> and <gradient:#FFFF52:#FFBA52><b>KINGS<blue> can <gold>jail<blue>"));
-                            p.sendMessage(CreateText.addColors("<blue> To jail someone, click their dead body (before they respawn) and select \"Send To Jail\"<blue>"));
                             p.sendMessage("");
                             p.sendMessage(CreateText.addColors("<gray>----- <gradient:#FFFF52:#FFBA52>KING'S COMMANDS <gray>-----"));
                             p.sendMessage(CreateText.addColors("<blue>/<gradient:#FFFF52:#FFBA52>king<blue> help <gray>- Shows this menu."));

@@ -24,9 +24,9 @@ public class RoleTask extends BukkitRunnable {
 
             KingsButBad.playerRoleHashMap.putIfAbsent(p, Role.PEASANT);
             if (KingsButBad.api.getPlayerAdapter(Player.class).getUser(p).getCachedData().getMetaData().getPrefix() != null) {
-                p.setPlayerListName(CreateText.addColors("<dark_gray>[" + KingsButBad.api.getPlayerAdapter(Player.class).getUser(p).getCachedData().getMetaData().getPrefix() + "<dark_gray>] " + "[" + KingsButBad.playerRoleHashMap.get(p).uncompressedColors + "<dark_gray>]<white> " + p.getName()));
+                p.setPlayerListName(CreateText.addColors("<dark_gray>[" + KingsButBad.api.getPlayerAdapter(Player.class).getUser(p).getCachedData().getMetaData().getPrefix() + "<dark_gray>] " + "[" + KingsButBad.playerRoleHashMap.get(p).uncompressedColors + "<dark_gray>] ") + KingsButBad.playerRoleHashMap.get(p).chatColor + p.getName());
             } else {
-                p.setPlayerListName(CreateText.addColors("<dark_gray>[" + KingsButBad.playerRoleHashMap.get(p).uncompressedColors + "<dark_gray>] <white>" + p.getName()));
+                p.setPlayerListName(CreateText.addColors("<dark_gray>[" + KingsButBad.playerRoleHashMap.get(p).uncompressedColors + "<dark_gray>] <white>") + KingsButBad.playerRoleHashMap.get(p).chatColor + p.getName());
             }
             p.setDisplayName(p.getPlayerListName());
             if (KingsButBad.playerRoleHashMap.get(p).equals(Role.KING) && KingsButBad.king != p) {
