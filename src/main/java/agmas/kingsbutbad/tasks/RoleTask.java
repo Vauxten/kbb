@@ -26,7 +26,7 @@ public class RoleTask extends BukkitRunnable {
             if (KingsButBad.api.getPlayerAdapter(Player.class).getUser(p).getCachedData().getMetaData().getPrefix() != null) {
                 p.setPlayerListName(CreateText.addColors("<dark_gray>[" + KingsButBad.api.getPlayerAdapter(Player.class).getUser(p).getCachedData().getMetaData().getPrefix() + "<dark_gray>] " + "[" + KingsButBad.playerRoleHashMap.get(p).uncompressedColors + "<dark_gray>]<white> " + p.getName()));
             } else {
-                p.setPlayerListName("<dark_gray>[" + KingsButBad.playerRoleHashMap.get(p).tag + "<dark_gray>] " + ChatColor.WHITE + p.getName());
+                p.setPlayerListName(CreateText.addColors("<dark_gray>[" + KingsButBad.playerRoleHashMap.get(p).uncompressedColors + "<dark_gray>] <white>" + p.getName()));
             }
             p.setDisplayName(p.getPlayerListName());
             if (KingsButBad.playerRoleHashMap.get(p).equals(Role.KING) && KingsButBad.king != p) {

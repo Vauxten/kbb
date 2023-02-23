@@ -7,5 +7,13 @@ authors: [ agmas ]
 load: POSTWORLD
 depend:
   - LuckPerms
+  - LibsDisguises
 description: The Plugin for KingsButBad
 website: agmas.repl.co
+commands:
+  king:
+    description: "King Controls/Claiming"
+    usage: /king
+  accept:
+    description: "Role accepting"
+    usage: /accept

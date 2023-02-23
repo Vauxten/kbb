@@ -38,13 +38,7 @@ public class PlayerJoinListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         event.setJoinMessage(LegacyComponentSerializer.legacySection().serialize(miniMessage().deserialize("<#D49B63>" + event.getPlayer().getName() + " was shipped into the kingdom.")));
-        if (KingsButBad.king == null) {
-            KingsButBad.playerRoleHashMap.put(event.getPlayer(), Role.KING);
-            RoleManager.showKingMessages(event.getPlayer(), ChatColor.DARK_GRAY + "You were the first player to join");
-            RoleManager.givePlayerRole(event.getPlayer());
-        } else {
-            KingsButBad.playerRoleHashMap.put(event.getPlayer(), Role.PEASANT);
-            RoleManager.givePlayerRole(event.getPlayer());
-        }
+        KingsButBad.playerRoleHashMap.put(event.getPlayer(), Role.PEASANT);
+        RoleManager.givePlayerRole(event.getPlayer());
     }
 }
