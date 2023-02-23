@@ -38,7 +38,7 @@ public class RoleManager {
             crownlore.add(CreateText.addColors("<color:#ff0400><i><b>Drop <gradient:#ffdd00:#ffff6e>this<color:#ff2f00> to <color:#910005>Resign.</color> </b></i></color>"));
             crownmeta.setLore(crownlore);
             crownmeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5, true);
-            crownmeta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES);
+            crownmeta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             crown.setItemMeta(crownmeta);
             p.getInventory().setHelmet(crown);
             p.getInventory().setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE));
@@ -52,7 +52,7 @@ public class RoleManager {
             bladelore.add(ChatColor.GRAY + "The blade yielded by kings of the past; does loads of damage.");
             blademeta.setLore(bladelore);
             blademeta.addEnchant(Enchantment.DAMAGE_ALL, 2, true);
-            blademeta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES);
+            blademeta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
             blade.setItemMeta(blademeta);
             p.getInventory().addItem(blade);
             return;

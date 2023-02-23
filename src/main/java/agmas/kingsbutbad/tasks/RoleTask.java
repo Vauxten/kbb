@@ -9,6 +9,7 @@ import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -20,6 +21,7 @@ public class RoleTask extends BukkitRunnable {
     public void run(){
 
         for (Player p : Bukkit.getOnlinePlayers()) {
+
             KingsButBad.playerRoleHashMap.putIfAbsent(p, Role.PEASANT);
             if (KingsButBad.api.getPlayerAdapter(Player.class).getUser(p).getCachedData().getMetaData().getPrefix() != null) {
                 p.setPlayerListName(CreateText.addColors("<dark_gray>[" + KingsButBad.api.getPlayerAdapter(Player.class).getUser(p).getCachedData().getMetaData().getPrefix() + "<dark_gray>] " + "[" + KingsButBad.playerRoleHashMap.get(p).uncompressedColors + "<dark_gray>]<white> " + p.getName()));
