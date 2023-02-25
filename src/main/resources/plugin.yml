@@ -17,3 +17,10 @@ commands:
   accept:
     description: "Role accepting"
     usage: /accept
+  resign:
+    description: "Role Resigning"
+    usage: /resign
+  setmoney:
+    description: "set's a player's money count"
+    usage: /setmoney <player> <money>
+    permission: kbb.setMoney

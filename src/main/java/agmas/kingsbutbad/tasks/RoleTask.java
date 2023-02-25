@@ -6,12 +6,10 @@ import agmas.kingsbutbad.utils.Role;
 import agmas.kingsbutbad.utils.RoleManager;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.checkerframework.checker.units.qual.K;
 
 
 // role related stuff here
@@ -21,7 +19,12 @@ public class RoleTask extends BukkitRunnable {
     public void run(){
 
         for (Player p : Bukkit.getOnlinePlayers()) {
-
+            if (KingsButBad.playerRoleHashMap.get(p).isPowerful) {
+                if (KingsButBad.isInside(p, new Location(Bukkit.getWorld("world"), -82, -44, -15), new Location(Bukkit.getWorld("world"), -70, -56, -27))) {
+                    p.teleport(new Location(Bukkit.getWorld("world"), -101.5, -57, -18.5));
+                    p.sendMessage(CreateText.addColors("<red><b>>> </b>You can't be in here!"));
+                }
+            }
             KingsButBad.playerRoleHashMap.putIfAbsent(p, Role.PEASANT);
             if (KingsButBad.api.getPlayerAdapter(Player.class).getUser(p).getCachedData().getMetaData().getPrefix() != null) {
                 p.setPlayerListName(CreateText.addColors("<dark_gray>[" + KingsButBad.api.getPlayerAdapter(Player.class).getUser(p).getCachedData().getMetaData().getPrefix() + "<dark_gray>] " + "[" + KingsButBad.playerRoleHashMap.get(p).uncompressedColors + "<dark_gray>] ") + KingsButBad.playerRoleHashMap.get(p).chatColor + p.getName());

@@ -33,7 +33,9 @@ public class PlayerJoinListener implements Listener {
 
     @EventHandler
     public void cancelDrop(PlayerDropItemEvent event) {
-        event.setCancelled(true);
+        if (KingsButBad.playerRoleHashMap.get(event.getPlayer()).isPowerful) {
+            event.getItemDrop().remove();
+        }
     }
 
     @EventHandler

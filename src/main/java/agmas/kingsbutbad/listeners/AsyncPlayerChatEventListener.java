@@ -15,14 +15,14 @@ public class AsyncPlayerChatEventListener implements Listener {
     public void onPlayerJoin(AsyncPlayerChatEvent event) {
         event.setMessage(KingsButBad.playerRoleHashMap.get(event.getPlayer()).chatColor + event.getMessage());
         if (KingsButBad.king != null) {
-            event.setMessage(event.getMessage().replace(KingsButBad.king.getName(), CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>King " + KingsButBad.king.getName() + "<b></gradient>") + KingsButBad.playerRoleHashMap.get(event.getPlayer()).chatColor));
+            event.setMessage(event.getMessage().replace(KingsButBad.king.getName(), CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>" + KingsButBad.kinggender + " " + KingsButBad.king.getName() + "<b></gradient>") + KingsButBad.playerRoleHashMap.get(event.getPlayer()).chatColor));
         }
         if (KingsButBad.playerRoleHashMap.get(event.getPlayer()).isPowerful) {
             String b = event.getMessage();
-            b = b.substring(0, 1).toUpperCase() + b.substring(1);
             b.replace(" i ", " I ");
             if (!b.endsWith(".") && !b.endsWith("!") && !b.endsWith("?"))
                b += ".";
+            b = b.substring(0, 1).toUpperCase() + b.substring(1);
             event.setMessage(b);
             for (Player p : Bukkit.getOnlinePlayers()) {
                 switch (KingsButBad.playerRoleHashMap.get(p)) {
@@ -31,6 +31,12 @@ public class AsyncPlayerChatEventListener implements Listener {
                         break;
                     case PEASANT:
                         event.setMessage(event.getMessage().replace(p.getName(), CreateText.addColors("<#59442B>Peasant " + p.getName()) + KingsButBad.playerRoleHashMap.get(event.getPlayer()).chatColor));
+                        break;
+                    case CRIMINAl:
+                        event.setMessage(event.getMessage().replace(p.getName(), CreateText.addColors("<red>Criminal  " + p.getName()) + KingsButBad.playerRoleHashMap.get(event.getPlayer()).chatColor));
+                        break;
+                    case PRISONER:
+                        event.setMessage(event.getMessage().replace(p.getName(), CreateText.addColors("<gold>Prisoner " + p.getName()) + KingsButBad.playerRoleHashMap.get(event.getPlayer()).chatColor));
                 }
 
             }

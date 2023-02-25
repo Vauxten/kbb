@@ -20,6 +20,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.checkerframework.checker.units.qual.K;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -36,7 +37,11 @@ public class MiscTask extends BukkitRunnable {
 
     @Override
     public void run(){
+
         for (Player p : Bukkit.getOnlinePlayers()) {
+            if (!p.getPersistentDataContainer().has(KingsButBad.money)) {
+                p.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, 0.0);
+            }
             if (!KingsButBad.playerRoleHashMap.containsKey(p)) {
                 KingsButBad.playerRoleHashMap.put(p, Role.PEASANT);
                 RoleManager.givePlayerRole(p);
@@ -90,7 +95,7 @@ public class MiscTask extends BukkitRunnable {
             if (KingsButBad.king.getInventory().getHelmet() == null) {
                 KingsButBad.king.setItemOnCursor(new ItemStack(Material.AIR));
                 KingsButBad.king = null;
-                        Bukkit.broadcastMessage(CreateText.addColors("<red><b>>><b> THE <gradient:#FFFF52:#FFBA52><b>KING<b></gradient><b><red> HAS RESIGNED! <#A52727>Use /king to become the king.."));
+                        Bukkit.broadcastMessage(CreateText.addColors("<red><b>>><b> THE <gradient:#FFFF52:#FFBA52><b>" + KingsButBad.kinggender.toUpperCase() + "<b></gradient><b><red> HAS RESIGNED! <#A52727>Use /king to become the king.."));
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     if (KingsButBad.playerRoleHashMap.get(p) != Role.PEASANT) {
                         KingsButBad.playerRoleHashMap.put(p, Role.PEASANT);
@@ -100,8 +105,12 @@ public class MiscTask extends BukkitRunnable {
                 }
             }
         for (Player p : Bukkit.getOnlinePlayers()) {
+            if (KingsButBad.isInside(p, new Location(Bukkit.getWorld("world"), -133, -57, -18), new Location(Bukkit.getWorld("world"), -159, -26, 33)))
             p.setLevel(0);
 
+            if (p.hasPotionEffect(PotionEffectType.LUCK)) {
+                stamina.put(p, 0.99f);
+            }
             if (!stamina.containsKey(p)) {
                 stamina.put(p, 0.99f);
             }
@@ -123,7 +132,7 @@ public class MiscTask extends BukkitRunnable {
                 p.setFreezeTicks(30);
             } else {
                 p.setFreezeTicks(0);
-                p.setFoodLevel(20);
+                p.setFoodLevel(19);
                 if (KingsButBad.king != null) {
                     if (!KingsButBad.king.equals(p)) {
                         p.setWalkSpeed(0.16f);
@@ -142,7 +151,7 @@ public class MiscTask extends BukkitRunnable {
                     p.sendTitle(ChatColor.RED + "", ChatColor.DARK_RED + "regenerating stamina..", 20, 20, 20);
                 } else {
 
-                    stamina.put(p, stamina.get(p) - 0.015f);
+                    stamina.put(p, stamina.get(p) - 0.01f);
                 }
             } else {
                 if (stamina.get(p) < 0.99f) {
@@ -151,22 +160,38 @@ public class MiscTask extends BukkitRunnable {
             }
             String actiobarextras = "";
 
+            Role.KING.tag = CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>"+ KingsButBad.kinggender.toUpperCase() + "<b></gradient>");
+            Role.KING.uncompressedColors = "<gradient:#FFFF52:#FFBA52><b>"+ KingsButBad.kinggender.toUpperCase() + "<b></gradient>";
+            DecimalFormat df = new DecimalFormat("#0.0");
+            actiobarextras += ChatColor.GRAY + " | " + CreateText.addColors("<color:#26ff00><b>$</b><gradient:#26ff00:#61ffc0>" +df.format(p.getPersistentDataContainer().get(KingsButBad.money, PersistentDataType.DOUBLE)));
             if (p.getGameMode().equals(GameMode.SURVIVAL))
                 p.setGameMode(GameMode.ADVENTURE);
             if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PRISONER)) {
-                p.addPotionEffect(PotionEffectType.WEAKNESS.createEffect(99999, 255));
+                if (KingsButBad.prisonTimer.get(p) <= ((20 * 60) * 5) - 80) {
+                    if (!KingsButBad.isInside(p, new Location(Bukkit.getWorld("world"), -167, -64, 40), new Location(Bukkit.getWorld("world"), -129, -33, -26))) {
+                        KingsButBad.playerRoleHashMap.put(p, Role.PEASANT);
+                        p.removePotionEffect(PotionEffectType.WEAKNESS);
+                        p.getPersistentDataContainer().remove(KingsButBad.wasinPrison);
+                        Bukkit.broadcastMessage(CreateText.addColors("<red><b>>> " + p.getName() + " has escaped the prison!"));
+                        p.sendTitle(ChatColor.RED + "!!! You're now a criminal !!!", ChatColor.GRAY + "You escaped");
+                        KingsButBad.playerRoleHashMap.put(p, Role.CRIMINAl);
+                        p.playSound(p, Sound.ENTITY_SILVERFISH_DEATH, 1, 0.5f);
+                    }
+                }
+                p.addPotionEffect(PotionEffectType.WEAKNESS.createEffect(40, 255));
                 p.setFoodLevel(8);
                 KingsButBad.prisonTimer.put(p, KingsButBad.prisonTimer.get(p) - 1);
                 p.sendActionBar(CreateText.addColors("<gray>Sentence Left: <red><b>" + (KingsButBad.prisonTimer.get(p) / 20) + "<gold> seconds left."));
                 if (KingsButBad.prisonTimer.get(p) <= 0) {
                     KingsButBad.playerRoleHashMap.put(p, Role.PEASANT);
                     RoleManager.givePlayerRole(p);
-                    p.getPersistentDataContainer().set(KingsButBad.wasinPrison, PersistentDataType.INTEGER, 0);
+                    p.removePotionEffect(PotionEffectType.WEAKNESS);
+                    p.getPersistentDataContainer().remove(KingsButBad.wasinPrison);
                     Bukkit.broadcastMessage(CreateText.addColors("<gold>>> " + p.getName() + " served their prison sentence."));
                 }
             } else {
                 if (KingsButBad.king != null) {
-                    p.sendActionBar(CreateText.addColors("<gray>Current king<gray>: <gradient:#FFFF52:#FFBA52><b>KING " + KingsButBad.king.getName().toUpperCase()) + actiobarextras);
+                    p.sendActionBar(CreateText.addColors("<gray>Current king<gray>: <gradient:#FFFF52:#FFBA52><b>" + KingsButBad.kinggender.toUpperCase() + " " + KingsButBad.king.getName().toUpperCase()) + actiobarextras);
                 } else {
                     p.sendActionBar(CreateText.addColors("<gray>Current king<gray>: <gradient:#ff2f00:#fcff3d><b>NO KING! Use /king to claim!") + actiobarextras);
                 }

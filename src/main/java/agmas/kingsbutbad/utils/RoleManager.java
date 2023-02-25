@@ -73,6 +73,9 @@ public class RoleManager {
             cardm.setDisplayName(ChatColor.BLUE + "Keycard");
             card.setItemMeta(cardm);
             p.getInventory().addItem(card);
+            p.getInventory().addItem(new ItemStack(Material.BOW));
+            p.getInventory().addItem(new ItemStack(Material.ARROW, 64));
+            p.teleport(new Location(Bukkit.getWorld("world"), -66, -56, 26.5));
             return;
         }
         if (KingsButBad.playerRoleHashMap.get(p) == Role.KNIGHT) {
@@ -111,6 +114,9 @@ public class RoleManager {
             cardm.setDisplayName(ChatColor.BLUE + "Keycard");
             card.setItemMeta(cardm);
             p.getInventory().addItem(card);
+            p.getInventory().addItem(new ItemStack(Material.BOW));
+            p.getInventory().addItem(new ItemStack(Material.ARROW, 64));
+            p.teleport(new Location(Bukkit.getWorld("world"), -56.5, -57, 30));
         }
         if (KingsButBad.playerRoleHashMap.get(p) == Role.PRISONER) {
             KingsButBad.prisonTimer.put(p, (20 * 60) * 5);
@@ -140,6 +146,7 @@ public class RoleManager {
             }, 5);
         }
         if (KingsButBad.playerRoleHashMap.get(p) == Role.PEASANT) {
+            p.getPersistentDataContainer().remove(KingsButBad.wasinPrison);
             Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
                 p.teleport(new Location(Bukkit.getWorld("world"), -120.5, -57, -30.5));
             }, 5);

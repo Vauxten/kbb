@@ -23,7 +23,7 @@ public class AcceptCommand implements CommandExecutor {
                     RoleManager.givePlayerRole(p);
                     break;
                 default:
-                    p.sendMessage(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>KING " + KingsButBad.king.getName().toUpperCase() + "</b><red> hasn't invited you to being any roles."));
+                    p.sendMessage(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>" + KingsButBad.kinggender.toUpperCase()  + KingsButBad.king.getName().toUpperCase() + "</b><red> hasn't invited you to being any roles."));
             }
         }
         return true;
