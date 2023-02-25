@@ -9,6 +9,9 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.*;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.type.Door;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
@@ -34,10 +37,69 @@ public class MiscTask extends BukkitRunnable {
 
     HashMap<Player, Boolean> regenstamina = new HashMap<>();
     ArrayList<Location> cells = new ArrayList<Location>();
+    public static BossBar bossbar = Bukkit.createBossBar("??? TIME", BarColor.WHITE, BarStyle.SOLID);
+    Integer timer1 = 0;
+    Integer timer2 = 1000;
 
     @Override
     public void run(){
-
+        if (Bukkit.getWorld("world").getTime() > 0 && Bukkit.getWorld("world").getTime() < 2000) {
+            timer1 = 0;
+            timer2 = 2500;
+            bossbar.setColor(BarColor.RED);
+            bossbar.setTitle("ROLL CALL");
+        }
+        if (Bukkit.getWorld("world").getTime() > 2000 && Bukkit.getWorld("world").getTime() < 4000) {
+            timer1 = 2000;
+            timer2 = 4000;
+            bossbar.setColor(BarColor.WHITE);
+            bossbar.setTitle("Breakfast");
+        }
+        if (Bukkit.getWorld("world").getTime() > 4000 && Bukkit.getWorld("world").getTime() < 7000) {
+            timer1 = 4000;
+            timer2 = 7000;
+            bossbar.setColor(BarColor.WHITE);
+            bossbar.setTitle("Free Time");
+        }
+        if (Bukkit.getWorld("world").getTime() > 7000 && Bukkit.getWorld("world").getTime() < 10000) {
+            timer1 = 7000;
+            timer2 = 10000;
+            bossbar.setColor(BarColor.WHITE);
+            bossbar.setTitle("Job Time");
+        }
+        if (Bukkit.getWorld("world").getTime() > 10000 && Bukkit.getWorld("world").getTime() < 13000) {
+            timer1 = 10000;
+            timer2 = 13000;
+            bossbar.setColor(BarColor.WHITE);
+            bossbar.setTitle("Lunch");
+        }
+        if (Bukkit.getWorld("world").getTime() > 13000 && Bukkit.getWorld("world").getTime() < 15000) {
+            timer1 = 13000;
+            timer2 = 15000;
+            bossbar.setColor(BarColor.RED);
+            bossbar.setTitle("EVENING ROLL CALL");
+        }
+        if (Bukkit.getWorld("world").getTime() > 15000 && Bukkit.getWorld("world").getTime() < 18000) {
+            timer1 = 15000;
+            timer2 = 18000;
+            bossbar.setColor(BarColor.PINK);
+            bossbar.setTitle("Cell Time");
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PRISONER)) {
+                    if (!KingsButBad.isInside(p, new Location(Bukkit.getWorld("world"), -136, -53, -6), new Location(Bukkit.getWorld("world"), -132, -57, 23))) {
+                        p.sendTitle("", CreateText.addColors("<red><b>GET IN YOUR CELL, FILTH!"), 0, 20, 0);
+                    }
+                }
+            }
+        }
+        if (Bukkit.getWorld("world").getTime() > 18000 && Bukkit.getWorld("world").getTime() < 24000) {
+            timer1 = 18000;
+            timer2 = 24000;
+            bossbar.setColor(BarColor.RED);
+            bossbar.setTitle("LIGHTS OUT");
+            Bukkit.getWorld("world").setTime(Bukkit.getWorld("world").getTime() + 1);
+        }
+        bossbar.setProgress(((float) Bukkit.getWorld("world").getTime() - (float) timer1) / ((float) timer2 - (float) timer1));
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (!p.getPersistentDataContainer().has(KingsButBad.money)) {
                 p.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, 0.0);
@@ -64,16 +126,7 @@ public class MiscTask extends BukkitRunnable {
             }
         } else {
             Bukkit.getWorld("world").getBlockAt(-138, -51, -16).setType(Material.AIR);
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PRISONER)) {
-                    if (!KingsButBad.isInside(p, new Location(Bukkit.getWorld("world"), -136, -53, -6), new Location(Bukkit.getWorld("world"), -132, -57, 23))) {
-                        p.sendMessage(CreateText.addColors("<red><b>>> GET IN YOUR CELL, FILTH!"));
-                        Location randomcell = cells.get(new Random().nextInt(0, cells.size()));
-                        randomcell.setX(-132);
-                        p.teleport(randomcell);
-                    }
-                }
-            }
+
             for (Location l : cells) {
                 BlockState state = l.getBlock().getState();
                 Door openable = (Door) state.getBlockData();
@@ -105,7 +158,26 @@ public class MiscTask extends BukkitRunnable {
                 }
             }
         for (Player p : Bukkit.getOnlinePlayers()) {
-            if (KingsButBad.isInside(p, new Location(Bukkit.getWorld("world"), -133, -57, -18), new Location(Bukkit.getWorld("world"), -159, -26, 33)))
+            if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PRISON_GUARD)) {
+                if (!bossbar.getPlayers().contains(p)) {
+                    p.sendTitle("", ChatColor.RED + "Stay in the prison!");
+                    p.teleport(new Location(Bukkit.getWorld("world"), -137.5, -51, -8));
+                }
+            }
+            if (KingsButBad.isInside(p, new Location(Bukkit.getWorld("world"), -133, -57, -18), new Location(Bukkit.getWorld("world"), -159, -26, 33))) {
+                if (!bossbar.getPlayers().contains(p)) {
+                    p.sendTitle("", ChatColor.GOLD + "-= The Prison =-");
+                    bossbar.addPlayer(p);
+                    p.sendMessage(ChatColor.RED + "> You will only be able to see messages from people in the prison!");
+                }
+            }
+            else {
+                if (bossbar.getPlayers().contains(p)) {
+                    p.sendTitle("", ChatColor.GREEN + "-= The Outside =-");
+                    bossbar.removePlayer(p);
+                    p.sendMessage(ChatColor.RED + "> You will only be able to see messages from people in the outside!");
+                }
+            }
             p.setLevel(0);
 
             if (p.hasPotionEffect(PotionEffectType.LUCK)) {
@@ -133,14 +205,16 @@ public class MiscTask extends BukkitRunnable {
             } else {
                 p.setFreezeTicks(0);
                 p.setFoodLevel(19);
-                if (KingsButBad.king != null) {
-                    if (!KingsButBad.king.equals(p)) {
-                        p.setWalkSpeed(0.16f);
+                if (!KingsButBad.playerRoleHashMap.get(p).equals(Role.PRISONER)) {
+                    if (KingsButBad.king != null) {
+                        if (!KingsButBad.king.equals(p)) {
+                            p.setWalkSpeed(0.16f);
+                        } else {
+                            p.setWalkSpeed(0.2f);
+                        }
                     } else {
-                        p.setWalkSpeed(0.2f);
+                        p.setWalkSpeed(0.16f);
                     }
-                } else {
-                    p.setWalkSpeed(0.16f);
                 }
             }
             if (p.isSprinting()) {
@@ -167,7 +241,7 @@ public class MiscTask extends BukkitRunnable {
             if (p.getGameMode().equals(GameMode.SURVIVAL))
                 p.setGameMode(GameMode.ADVENTURE);
             if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PRISONER)) {
-                if (KingsButBad.prisonTimer.get(p) <= ((20 * 60) * 5) - 80) {
+                if (!p.hasCooldown(Material.TERRACOTTA)) {
                     if (!KingsButBad.isInside(p, new Location(Bukkit.getWorld("world"), -167, -64, 40), new Location(Bukkit.getWorld("world"), -129, -33, -26))) {
                         KingsButBad.playerRoleHashMap.put(p, Role.PEASANT);
                         p.removePotionEffect(PotionEffectType.WEAKNESS);
@@ -179,9 +253,16 @@ public class MiscTask extends BukkitRunnable {
                     }
                 }
                 p.addPotionEffect(PotionEffectType.WEAKNESS.createEffect(40, 255));
-                p.setFoodLevel(8);
-                KingsButBad.prisonTimer.put(p, KingsButBad.prisonTimer.get(p) - 1);
-                p.sendActionBar(CreateText.addColors("<gray>Sentence Left: <red><b>" + (KingsButBad.prisonTimer.get(p) / 20) + "<gold> seconds left."));
+                p.setFoodLevel(6);
+                stamina.put(p, 0.99f);
+                String tooltip = "";
+                if (p.getLocation().getPitch() < 30) {
+                    tooltip = CreateText.addColors("<gray> | <red>Tip: Look down to go faster.");
+                    p.setWalkSpeed(0.06f);
+                } else {
+                    p.setWalkSpeed(0.1f);
+                }
+                p.sendActionBar(CreateText.addColors("<gray>Sentence Left: <red><b>" + KingsButBad.prisonTimer.get(p) + "<gold> blocks to mine.") + tooltip);
                 if (KingsButBad.prisonTimer.get(p) <= 0) {
                     KingsButBad.playerRoleHashMap.put(p, Role.PEASANT);
                     RoleManager.givePlayerRole(p);

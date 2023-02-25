@@ -26,6 +26,15 @@ import org.checkerframework.checker.units.qual.K;
 public class PlayerBlockListeners implements Listener {
     @EventHandler
     public void onPlayerQuit(BlockBreakEvent event) {
+        if (event.getBlock().getType().equals(Material.DEEPSLATE_COAL_ORE)) {
+            event.setDropItems(false);
+            event.setCancelled(true);
+            KingsButBad.prisonTimer.put(event.getPlayer(), KingsButBad.prisonTimer.getOrDefault(event.getPlayer(), 0) - 1);
+            event.getBlock().setType(Material.DEEPSLATE);
+            Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
+                event.getBlock().setType(Material.DEEPSLATE_COAL_ORE);
+            }, 20 * 4);
+        }
         if (event.getBlock().getType().equals(Material.WHEAT_SEEDS) || event.getBlock().getType().equals(Material.WHEAT)) {
             if (event.getPlayer().hasCooldown(Material.WOODEN_HOE)) {
                 event.setCancelled(true);

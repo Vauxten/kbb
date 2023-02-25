@@ -43,7 +43,7 @@ public class PlayerDeathListener implements Listener {
         event.setDeathMessage(ChatColor.GRAY + event.getDeathMessage());
         if (KingsButBad.playerRoleHashMap.get(event.getPlayer()).equals(Role.CRIMINAl)) {
             Bukkit.broadcastMessage(CreateText.addColors("<red>>> <b>Criminal "  + event.getPlayer().getName() + "<gold> </b>has been successfully captured!"));
-            KingsButBad.prisonTimer.put(event.getPlayer(), (20 * 60) * 5);
+            KingsButBad.prisonTimer.put(event.getPlayer(), 100);
             KingsButBad.playerRoleHashMap.put(event.getPlayer(), Role.PRISONER);
             event.setCancelled(true);
             event.getPlayer().getInventory().clear();

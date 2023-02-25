@@ -118,8 +118,49 @@ public class RoleManager {
             p.getInventory().addItem(new ItemStack(Material.ARROW, 64));
             p.teleport(new Location(Bukkit.getWorld("world"), -56.5, -57, 30));
         }
+        if (KingsButBad.playerRoleHashMap.get(p) == Role.PRISON_GUARD) {
+            ItemStack diamondchest = new ItemStack(Material.IRON_CHESTPLATE);
+            ItemMeta diamondchestmeta = diamondchest.getItemMeta();
+            diamondchestmeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 3, true);
+            diamondchestmeta.setUnbreakable(true);
+            diamondchest.setItemMeta(diamondchestmeta);
+            p.getInventory().setChestplate(diamondchest);
+            diamondchest = new ItemStack(Material.DIAMOND_HELMET);
+            diamondchestmeta = diamondchest.getItemMeta();
+            diamondchestmeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 3, true);
+            diamondchestmeta.setUnbreakable(true);
+            diamondchest.setItemMeta(diamondchestmeta);
+            p.getInventory().setHelmet(diamondchest);
+            diamondchest = new ItemStack(Material.DIAMOND_LEGGINGS);
+            diamondchestmeta = diamondchest.getItemMeta();
+            diamondchestmeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2, true);
+            diamondchestmeta.setUnbreakable(true);
+            diamondchest.setItemMeta(diamondchestmeta);
+            p.getInventory().setLeggings(diamondchest);
+            diamondchest = new ItemStack(Material.GOLDEN_BOOTS);
+            diamondchestmeta = diamondchest.getItemMeta();
+            diamondchestmeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4, true);
+            diamondchestmeta.setUnbreakable(true);
+            diamondchest.setItemMeta(diamondchestmeta);
+            p.getInventory().setBoots(diamondchest);
+            ItemStack blade = new ItemStack(Material.NETHERITE_SWORD);
+            ItemMeta blademeta = blade.getItemMeta();
+            blademeta.setUnbreakable(true);
+            blademeta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
+            blade.setItemMeta(blademeta);
+            p.getInventory().addItem(blade);
+            ItemStack card = new ItemStack(Material.TRIPWIRE_HOOK);
+            ItemMeta cardm = card.getItemMeta();
+            cardm.setDisplayName(ChatColor.BLUE + "Keycard");
+            card.setItemMeta(cardm);
+            p.getInventory().addItem(card);
+            p.getInventory().addItem(new ItemStack(Material.BOW));
+            p.getInventory().addItem(new ItemStack(Material.ARROW, 64));
+            p.teleport(new Location(Bukkit.getWorld("world"), -137.5, -51, -8));
+        }
         if (KingsButBad.playerRoleHashMap.get(p) == Role.PRISONER) {
-            KingsButBad.prisonTimer.put(p, (20 * 60) * 5);
+            p.setCooldown(Material.TERRACOTTA, 80);
+            KingsButBad.prisonTimer.put(p, 100);
             ItemStack orangechest = new ItemStack(Material.LEATHER_CHESTPLATE);
             LeatherArmorMeta chestmeta = (LeatherArmorMeta) orangechest.getItemMeta();
             chestmeta.setColor(Color.fromRGB(208, 133, 22));

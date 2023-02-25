@@ -1,6 +1,7 @@
 package agmas.kingsbutbad.listeners;
 
 import agmas.kingsbutbad.KingsButBad;
+import agmas.kingsbutbad.tasks.MiscTask;
 import agmas.kingsbutbad.utils.CreateText;
 import agmas.kingsbutbad.utils.Role;
 import com.destroystokyo.paper.Namespaced;
@@ -41,7 +42,11 @@ public class PlayerInteractAtEntityListener implements Listener {
     public void onPlayerQuit(PlayerItemConsumeEvent event) {
         if (event.getItem().getType().equals(Material.COOKED_COD)) {
             event.getPlayer().sendMessage(CreateText.addColors("<gray><b>|<green><b> +5 HP<gray><b> |"));
-            event.getPlayer().setHealth(event.getPlayer().getHealth() + 5);
+            event.getPlayer().setHealth(Math.min(event.getPlayer().getHealth() + 5, event.getPlayer().getMaxHealth()));
+        }
+        if (event.getItem().getType().equals(Material.BEETROOT_SOUP)) {
+            event.getPlayer().sendMessage(CreateText.addColors("<gray><b>|<green><b> +2 HP<gray><b> |"));
+            event.getPlayer().setHealth(Math.min(event.getPlayer().getHealth() + 2, event.getPlayer().getMaxHealth()));
         }
     }
     @EventHandler
@@ -158,6 +163,15 @@ public class PlayerInteractAtEntityListener implements Listener {
                         event.getWhoClicked().getInventory().addItem(woodenhoe);
                     }
                 }
+                if (event.getCurrentItem().getType().equals(Material.IRON_PICKAXE)) {
+                    if (!event.getWhoClicked().getInventory().contains(Material.IRON_PICKAXE)) {
+                        ItemStack woodenhoe = new ItemStack(Material.IRON_PICKAXE);
+                        ItemMeta woodenhoemeta = woodenhoe.getItemMeta();
+                        woodenhoemeta.setDestroyableKeys(Collections.singleton(NamespacedKey.minecraft("deepslate_coal_ore")));
+                        woodenhoe.setItemMeta(woodenhoemeta);
+                        event.getWhoClicked().getInventory().addItem(woodenhoe);
+                    }
+                }
                 if (event.getCurrentItem().getType().equals(Material.WHEAT)) {
                     Integer iii = 0;
                     for (ItemStack i : event.getWhoClicked().getInventory()) {
@@ -174,7 +188,7 @@ public class PlayerInteractAtEntityListener implements Listener {
                                         }, ii);
                                     }
                             }, iii);
-                            iii += i.getAmount();
+                            iii += originalamount;
                         }
                     }
                 }
@@ -378,6 +392,12 @@ public class PlayerInteractAtEntityListener implements Listener {
                     inv.setItem(5, cod);
                     event.getPlayer().openInventory(inv);
                 }
+                if (event.getRightClicked().equals(KingsButBad.lunchlady)) {
+                    if (MiscTask.bossbar.getTitle().equals("Lunch") || MiscTask.bossbar.getTitle().equals("Breakfast")) {
+                        event.getPlayer().sendMessage(CreateText.addColors("<gold>Lunch Lady <white><b>>> Here's your lunch."));
+                        event.getPlayer().getInventory().addItem(new ItemStack(Material.BEETROOT_SOUP));
+                    }
+                }
                 if (event.getRightClicked().equals(KingsButBad.farmerjoe)) {
                     Inventory inv = Bukkit.createInventory(null, 9);
                     ItemStack hoe = new ItemStack(Material.WOODEN_HOE);
@@ -392,6 +412,16 @@ public class PlayerInteractAtEntityListener implements Listener {
                     wheatmeta.setDisplayName(ChatColor.GOLD + "Sell Wheat");
                     wheat.setItemMeta(wheatmeta);
                     inv.setItem(6, wheat);
+                    event.getPlayer().openInventory(inv);
+                }
+                if (event.getRightClicked().equals(KingsButBad.minerguard)) {
+                    Inventory inv = Bukkit.createInventory(null, 9);
+                    ItemStack hoe = new ItemStack(Material.IRON_PICKAXE);
+                    hoe.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+                    ItemMeta hoemeta = hoe.getItemMeta();
+                    hoemeta.setDisplayName(ChatColor.BLUE + "Get Pickaxe");
+                    hoe.setItemMeta(hoemeta);
+                    inv.setItem(4, hoe);
                     event.getPlayer().openInventory(inv);
                 }
                 if (event.getRightClicked().equals(KingsButBad.royalvillager))

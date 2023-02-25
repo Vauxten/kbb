@@ -1,6 +1,7 @@
 package agmas.kingsbutbad.listeners;
 
 import agmas.kingsbutbad.KingsButBad;
+import agmas.kingsbutbad.tasks.MiscTask;
 import agmas.kingsbutbad.utils.CreateText;
 import agmas.kingsbutbad.utils.Role;
 import org.bukkit.Bukkit;
@@ -29,11 +30,14 @@ public class AsyncPlayerChatEventListener implements Listener {
                     case KNIGHT:
                         event.setMessage(event.getMessage().replace(p.getName(), CreateText.addColors("<gray>Knight " + p.getName()) +  KingsButBad.playerRoleHashMap.get(event.getPlayer()).chatColor));
                         break;
+                    case PRISON_GUARD:
+                        event.setMessage(event.getMessage().replace(p.getName(), CreateText.addColors("<blue>Prison Guard " + p.getName()) +  KingsButBad.playerRoleHashMap.get(event.getPlayer()).chatColor));
+                        break;
                     case PEASANT:
                         event.setMessage(event.getMessage().replace(p.getName(), CreateText.addColors("<#59442B>Peasant " + p.getName()) + KingsButBad.playerRoleHashMap.get(event.getPlayer()).chatColor));
                         break;
                     case CRIMINAl:
-                        event.setMessage(event.getMessage().replace(p.getName(), CreateText.addColors("<red>Criminal  " + p.getName()) + KingsButBad.playerRoleHashMap.get(event.getPlayer()).chatColor));
+                        event.setMessage(event.getMessage().replace(p.getName(), CreateText.addColors("<red>Criminal " + p.getName()) + KingsButBad.playerRoleHashMap.get(event.getPlayer()).chatColor));
                         break;
                     case PRISONER:
                         event.setMessage(event.getMessage().replace(p.getName(), CreateText.addColors("<gold>Prisoner " + p.getName()) + KingsButBad.playerRoleHashMap.get(event.getPlayer()).chatColor));
@@ -41,11 +45,21 @@ public class AsyncPlayerChatEventListener implements Listener {
 
             }
         }
+        event.setCancelled(true);
         event.setMessage(event.getMessage() + " ");
         event.setFormat("%1$s" + ChatColor.GRAY + ": %2$s");
-        if (KingsButBad.playerRoleHashMap.get(event.getPlayer()).equals(Role.PRISONER)) {
-            event.setCancelled(true);
-            event.getPlayer().sendMessage(ChatColor.RED + ".... but no one heard.");
+        if (MiscTask.bossbar.getPlayers().contains(event.getPlayer())) {
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (MiscTask.bossbar.getPlayers().contains(p)) {
+                    p.sendMessage(event.getPlayer().getPlayerListName() + ChatColor.GRAY + ": " + event.getMessage());
+                }
+            }
+        } else {
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (!MiscTask.bossbar.getPlayers().contains(p)) {
+                    p.sendMessage(event.getPlayer().getPlayerListName() + ChatColor.GRAY + ": " + event.getMessage());
+                }
+            }
         }
     }
 }

@@ -33,6 +33,7 @@ public final class KingsButBad extends JavaPlugin {
     public static Player king = null;
     public static HashMap<Player, Role> playerRoleHashMap = new HashMap<>();
     public static NamespacedKey wasinPrison;
+    public static NamespacedKey preffered;
     public static NamespacedKey money;
     public static HashMap<Player, Integer> prisonTimer = new HashMap<>();
     public static HashMap<Player, Role> playerRoleInviteHashMap = new HashMap<>();
@@ -43,6 +44,7 @@ public final class KingsButBad extends JavaPlugin {
     public static Villager farmerjoe;
     public static Villager minerguard;
     public static Villager bertrude;
+    public static Villager lunchlady;
     public static String kinggender = "King";
     public static ArrayList<UUID> prisoners = new ArrayList<>();
 
@@ -67,6 +69,7 @@ public final class KingsButBad extends JavaPlugin {
 
         wasinPrison = new NamespacedKey(this, "inPrison");
         money = new NamespacedKey(this, "money");
+        preffered = new NamespacedKey(this, "preffered");
         task2.runTaskTimer(this, 0, 1);
         this.getCommand("king").setExecutor(new KingCommand());
         this.getCommand("accept").setExecutor(new AcceptCommand());
@@ -111,7 +114,7 @@ public final class KingsButBad extends JavaPlugin {
         sewervillager.setPersistent(true);
         sewervillager.setAI(false);
 
-        selfdefense = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -142.5, -57, 12.5, -45, 0), EntityType.VILLAGER);
+        selfdefense = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -122.5, -57, -2.5, 180, 0), EntityType.VILLAGER);
 
         selfdefense.setProfession(Villager.Profession.LEATHERWORKER);
         selfdefense.setCustomName(CreateText.addColors("<red>Defender Jim"));
@@ -120,13 +123,20 @@ public final class KingsButBad extends JavaPlugin {
         selfdefense.setPersistent(true);
         selfdefense.setAI(false);
 
-        minerguard = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -122.5, -57, -2.5, 180, 0), EntityType.VILLAGER);
+        minerguard = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -142.5, -57, 12.5, -45, 0), EntityType.VILLAGER);
 
         minerguard.setCustomName(CreateText.addColors("<gray>Miner"));
         minerguard.setCustomNameVisible(true);
         minerguard.setInvulnerable(true);
         minerguard.setPersistent(true);
         minerguard.setAI(false);
+        lunchlady = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -149.5, -57, 2.5, -90, 0), EntityType.VILLAGER);
+
+        lunchlady.setCustomName(CreateText.addColors("<gold>Lunch Lady"));
+        lunchlady.setCustomNameVisible(true);
+        lunchlady.setInvulnerable(true);
+        lunchlady.setPersistent(true);
+        lunchlady.setAI(false);
     }
 
     @Override

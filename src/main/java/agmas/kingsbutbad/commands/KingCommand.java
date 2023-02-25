@@ -65,6 +65,21 @@ public class KingCommand implements CommandExecutor {
                                 }
                             }
                         }
+                        if (args[0].equals("prisonguard")) {
+                            if (args.length > 1) {
+                                if (Bukkit.getPlayer(args[1]) != null) {
+                                    Player pe = Bukkit.getPlayer(args[1]);
+                                    if (KingsButBad.playerRoleHashMap.get(pe) == Role.PEASANT) {
+                                        KingsButBad.playerRoleInviteHashMap.put(pe, Role.PRISON_GUARD);
+                                        pe.sendMessage(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>" + KingsButBad.kinggender.toUpperCase() + p.getName().toUpperCase() + "</b><blue> has invited you to being a <blue><b>Prison Guard<reset><blue>! <red>use /accept to accept."));
+                                    } else {
+                                        p.sendMessage(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>" + KingsButBad.kinggender.toUpperCase() + p.getName().toUpperCase() + "</b><blue>, that player <red>isn't a peasant."));
+                                    }
+                                } else {
+                                    p.sendMessage(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>" + KingsButBad.kinggender.toUpperCase() + p.getName().toUpperCase() + "</b><blue>, that player <red>does not exist."));
+                                }
+                            }
+                        }
                         if (args[0].equals("help")) {
                             p.sendMessage(CreateText.addColors("<gray>----- <gradient:#FFFF52:#FFBA52>KING HELP <gray>-----"));
                             p.sendMessage(CreateText.addColors("<blue>Hello, <gradient:#FFFF52:#FFBA52><b>" + KingsButBad.kinggender.toUpperCase() + p.getName().toUpperCase() + "</b><blue>."));
@@ -75,7 +90,8 @@ public class KingCommand implements CommandExecutor {
                             p.sendMessage(CreateText.addColors("<gray>----- <gradient:#FFFF52:#FFBA52>KING'S COMMANDS <gray>-----"));
                             p.sendMessage(CreateText.addColors("<blue>/<gradient:#FFFF52:#FFBA52>king<blue> help <gray>- Shows this menu."));
                             p.sendMessage(CreateText.addColors("<blue>/<gradient:#FFFF52:#FFBA52>king<blue> knight [name] <gray>- Knights a player."));
-                            p.sendMessage(CreateText.addColors("<blue>/<gradient:#FFFF52:#FFBA52>king<blue> gender [male/female/other] <gray>- Changes a player between King, Queen, Monarch or Among Us Impostor."));
+                            p.sendMessage(CreateText.addColors("<blue>/<gradient:#FFFF52:#FFBA52>king<blue> prisonguard [name] <gray>- Makes a player a Prison Guard."));
+                            p.sendMessage(CreateText.addColors("<blue>/<gradient:#FFFF52:#FFBA52>king<blue> gender [male/female/other] <gray>- Changes you between King, Queen, Monarch or Among Us Impostor."));
                             p.sendMessage(CreateText.addColors("<gray>----- -----"));
                         }
                     }
