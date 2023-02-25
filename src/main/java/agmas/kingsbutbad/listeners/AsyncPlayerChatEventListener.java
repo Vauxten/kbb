@@ -18,6 +18,9 @@ public class AsyncPlayerChatEventListener implements Listener {
         if (KingsButBad.king != null) {
             event.setMessage(event.getMessage().replace(KingsButBad.king.getName(), CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>" + KingsButBad.kinggender + " " + KingsButBad.king.getName() + "<b></gradient>") + KingsButBad.playerRoleHashMap.get(event.getPlayer()).chatColor));
         }
+        if (KingsButBad.king2 != null) {
+            event.setMessage(event.getMessage().replace(KingsButBad.king2.getName(), CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>" + KingsButBad.kinggender2 + " " + KingsButBad.king2.getName() + "<b></gradient>") + KingsButBad.playerRoleHashMap.get(event.getPlayer()).chatColor));
+        }
         if (KingsButBad.playerRoleHashMap.get(event.getPlayer()).isPowerful) {
             String b = event.getMessage();
             b.replace(" i ", " I ");

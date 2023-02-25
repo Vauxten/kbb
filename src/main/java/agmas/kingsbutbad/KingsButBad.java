@@ -1,9 +1,6 @@
 package agmas.kingsbutbad;
 
-import agmas.kingsbutbad.commands.AcceptCommand;
-import agmas.kingsbutbad.commands.KingCommand;
-import agmas.kingsbutbad.commands.ResignCommand;
-import agmas.kingsbutbad.commands.SetMoneyCommand;
+import agmas.kingsbutbad.commands.*;
 import agmas.kingsbutbad.listeners.*;
 import agmas.kingsbutbad.tasks.FailsafeTask;
 import agmas.kingsbutbad.tasks.MiscTask;
@@ -31,6 +28,7 @@ import java.util.UUID;
 public final class KingsButBad extends JavaPlugin {
 
     public static Player king = null;
+    public static Player king2 = null;
     public static HashMap<Player, Role> playerRoleHashMap = new HashMap<>();
     public static NamespacedKey wasinPrison;
     public static NamespacedKey preffered;
@@ -40,13 +38,18 @@ public final class KingsButBad extends JavaPlugin {
     public static LuckPerms api;
     public static Villager royalvillager;
     public static Villager sewervillager;
+    public static HashMap<Player,Player> bodylink = new HashMap<>();
     public static Villager selfdefense;
     public static Villager farmerjoe;
     public static Villager minerguard;
     public static Villager bertrude;
     public static Villager lunchlady;
+    public static Villager royaltrader;
     public static String kinggender = "King";
+    public static String kinggender2 = "King";
     public static ArrayList<UUID> prisoners = new ArrayList<>();
+    public static int taxesCount = 25;
+
 
     @Override
     public void onEnable() {
@@ -75,6 +78,7 @@ public final class KingsButBad extends JavaPlugin {
         this.getCommand("accept").setExecutor(new AcceptCommand());
         this.getCommand("setmoney").setExecutor(new SetMoneyCommand());
         this.getCommand("resign").setExecutor(new ResignCommand());
+        this.getCommand("discord").setExecutor(new DiscordCommand());
         while (Bukkit.getWorld("world") == null) {}
         for (LivingEntity le : Bukkit.getWorld("world").getLivingEntities()) {
             if (le.getType().equals(EntityType.VILLAGER)) {
@@ -137,6 +141,14 @@ public final class KingsButBad extends JavaPlugin {
         lunchlady.setInvulnerable(true);
         lunchlady.setPersistent(true);
         lunchlady.setAI(false);
+
+        royaltrader = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -128.5, -57, -6.5, 180, 0), EntityType.VILLAGER);
+
+        royaltrader.setCustomName(CreateText.addColors("<yellow>Royal Trader"));
+        royaltrader.setCustomNameVisible(true);
+        royaltrader.setInvulnerable(true);
+        royaltrader.setPersistent(true);
+        royaltrader.setAI(false);
     }
 
     @Override

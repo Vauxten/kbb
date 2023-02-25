@@ -43,6 +43,30 @@ public class MiscTask extends BukkitRunnable {
 
     @Override
     public void run(){
+        if (Bukkit.getWorld("world").getTime() == 10) {
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PEASANT)) {
+                    if (KingsButBad.taxesCount != 0) {
+                        Double topay = p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) *  (KingsButBad.taxesCount / 100);
+                        p.sendMessage(CreateText.addColors("<red><b>>> <gray>You paid " + topay + " in taxes."));
+                        if (KingsButBad.king2 != null) {
+                            KingsButBad.king.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, KingsButBad.king.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) + (topay / 2));
+                            KingsButBad.king2.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, KingsButBad.king.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) + (topay / 2));
+                        } else {
+                            if (KingsButBad.king != null) {
+                                KingsButBad.king.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, KingsButBad.king.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) + topay);
+                            }
+                        }
+                    }
+                }
+            }
+            if (KingsButBad.king2 != null) {
+                KingsButBad.king2.sendMessage(CreateText.addColors("<green>TAXES <gray>>> <red>You got your taxes!"));
+            }
+            if (KingsButBad.king != null) {
+                KingsButBad.king.sendMessage(CreateText.addColors("<green>TAXES <gray>>> <red>You got your taxes!"));
+            }
+        }
         if (Bukkit.getWorld("world").getTime() > 0 && Bukkit.getWorld("world").getTime() < 2000) {
             timer1 = 0;
             timer2 = 2500;
@@ -137,6 +161,7 @@ public class MiscTask extends BukkitRunnable {
         }
         if (KingsButBad.king == null || !KingsButBad.king.isOnline() || KingsButBad.king.isDead()) {
             KingsButBad.king = null;
+            KingsButBad.king2 = null;
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     if (KingsButBad.playerRoleHashMap.get(p) != Role.PEASANT) {
                         KingsButBad.playerRoleHashMap.put(p, Role.PEASANT);
@@ -158,6 +183,19 @@ public class MiscTask extends BukkitRunnable {
                 }
             }
         for (Player p : Bukkit.getOnlinePlayers()) {
+            if (KingsButBad.playerRoleHashMap.get(p).equals(Role.BODYGUARD)) {
+                WorldBorder kingborder = Bukkit.createWorldBorder();
+                kingborder.setCenter(KingsButBad.bodylink.get(p).getLocation());
+                kingborder.setSize(8);
+                kingborder.setDamageAmount(0.4);
+                kingborder.setDamageBuffer(0);
+                if (!kingborder.isInside(p.getLocation())) {
+                    p.damage(1);
+                }
+                p.setWorldBorder(kingborder);
+            } else {
+                p.setWorldBorder(p.getWorld().getWorldBorder());
+            }
             if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PRISON_GUARD)) {
                 if (!bossbar.getPlayers().contains(p)) {
                     p.sendTitle("", ChatColor.RED + "Stay in the prison!");
@@ -207,8 +245,12 @@ public class MiscTask extends BukkitRunnable {
                 p.setFoodLevel(19);
                 if (!KingsButBad.playerRoleHashMap.get(p).equals(Role.PRISONER)) {
                     if (KingsButBad.king != null) {
-                        if (!KingsButBad.king.equals(p)) {
-                            p.setWalkSpeed(0.16f);
+                        if (!RoleManager.isKingAtAll(p)) {
+                            if (KingsButBad.playerRoleHashMap.get(p) != Role.BODYGUARD) {
+                                p.setWalkSpeed(0.16f);
+                            } else {
+                                p.setWalkSpeed(0.2f);
+                            }
                         } else {
                             p.setWalkSpeed(0.2f);
                         }
@@ -252,7 +294,6 @@ public class MiscTask extends BukkitRunnable {
                         p.playSound(p, Sound.ENTITY_SILVERFISH_DEATH, 1, 0.5f);
                     }
                 }
-                p.addPotionEffect(PotionEffectType.WEAKNESS.createEffect(40, 255));
                 p.setFoodLevel(6);
                 stamina.put(p, 0.99f);
                 String tooltip = "";
@@ -272,7 +313,11 @@ public class MiscTask extends BukkitRunnable {
                 }
             } else {
                 if (KingsButBad.king != null) {
-                    p.sendActionBar(CreateText.addColors("<gray>Current king<gray>: <gradient:#FFFF52:#FFBA52><b>" + KingsButBad.kinggender.toUpperCase() + " " + KingsButBad.king.getName().toUpperCase()) + actiobarextras);
+                    if (KingsButBad.king2 == null) {
+                        p.sendActionBar(CreateText.addColors("<gray>Current king<gray>: <gradient:#FFFF52:#FFBA52><b>" + KingsButBad.kinggender.toUpperCase() + " " + KingsButBad.king.getName().toUpperCase()) + CreateText.addColors("<dark_gray> (Taxes: " + KingsButBad.taxesCount + "%)") + actiobarextras);
+                    } else {
+                        p.sendActionBar(CreateText.addColors("<gray>Current king<gray>: <gradient:#FFFF52:#FFBA52><b>" + KingsButBad.kinggender.toUpperCase() + " " + KingsButBad.king.getName().toUpperCase() + "<dark_gray></b> &</gray>" + "<gradient:#FFFF52:#FFBA52><b> " + KingsButBad.kinggender2.toUpperCase() + " " + KingsButBad.king2.getName().toUpperCase()) + CreateText.addColors("<dark_gray> (Taxes: " + KingsButBad.taxesCount + "%)") + actiobarextras);
+                    }
                 } else {
                     p.sendActionBar(CreateText.addColors("<gray>Current king<gray>: <gradient:#ff2f00:#fcff3d><b>NO KING! Use /king to claim!") + actiobarextras);
                 }

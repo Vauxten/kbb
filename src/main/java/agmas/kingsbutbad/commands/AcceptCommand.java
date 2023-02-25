@@ -18,12 +18,22 @@ public class AcceptCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player p) {
             switch (KingsButBad.playerRoleInviteHashMap.get(p)) {
+                case KING -> {
+                    KingsButBad.playerRoleHashMap.put(p, Role.KING);
+                    RoleManager.showKingMessages(p, CreateText.addColors("<dark_gray>You were sidekicked; Welcome, <gradient:#FFFF52:#FFBA52><b>" + KingsButBad.kinggender2.toUpperCase()));
+                    KingsButBad.king2 = p;
+                    RoleManager.givePlayerRole(p);
+                }
                 case KNIGHT -> {
                     KingsButBad.playerRoleHashMap.put(p, Role.KNIGHT);
                     RoleManager.givePlayerRole(p);
                 }
                 case PRISON_GUARD -> {
                     KingsButBad.playerRoleHashMap.put(p, Role.PRISON_GUARD);
+                    RoleManager.givePlayerRole(p);
+                }
+                case BODYGUARD -> {
+                    KingsButBad.playerRoleHashMap.put(p, Role.BODYGUARD);
                     RoleManager.givePlayerRole(p);
                 }
                 default ->

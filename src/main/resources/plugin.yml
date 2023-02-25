@@ -20,6 +20,9 @@ commands:
   resign:
     description: "Role Resigning"
     usage: /resign
+  discord:
+    description: "Discord"
+    usage: /discord
   setmoney:
     description: "set's a player's money count"
     usage: /setmoney <player> <money>

@@ -33,6 +33,10 @@ public class PlayerBlockListeners implements Listener {
             event.getBlock().setType(Material.DEEPSLATE);
             Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
                 event.getBlock().setType(Material.DEEPSLATE_COAL_ORE);
+                KingsButBad.king.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, KingsButBad.king.getPersistentDataContainer().get(KingsButBad.money, PersistentDataType.DOUBLE) + 5);
+                KingsButBad.king.sendMessage(ChatColor.GREEN + "+5$ Prisoner mined a block");
+                KingsButBad.king2.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, KingsButBad.king.getPersistentDataContainer().get(KingsButBad.money, PersistentDataType.DOUBLE) + 5);
+                KingsButBad.king2.sendMessage(ChatColor.GREEN + "+5$ Prisoner mined a block");
             }, 20 * 4);
         }
         if (event.getBlock().getType().equals(Material.WHEAT_SEEDS) || event.getBlock().getType().equals(Material.WHEAT)) {

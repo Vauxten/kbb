@@ -42,13 +42,17 @@ public class PlayerDeathListener implements Listener {
         event.getDrops().clear();
         event.setDeathMessage(ChatColor.GRAY + event.getDeathMessage());
         if (KingsButBad.playerRoleHashMap.get(event.getPlayer()).equals(Role.CRIMINAl)) {
-            Bukkit.broadcastMessage(CreateText.addColors("<red>>> <b>Criminal "  + event.getPlayer().getName() + "<gold> </b>has been successfully captured!"));
-            KingsButBad.prisonTimer.put(event.getPlayer(), 100);
-            KingsButBad.playerRoleHashMap.put(event.getPlayer(), Role.PRISONER);
-            event.setCancelled(true);
-            event.getPlayer().getInventory().clear();
-            event.getPlayer().getPersistentDataContainer().set(KingsButBad.wasinPrison, PersistentDataType.INTEGER, 1);
-            RoleManager.givePlayerRole(event.getPlayer());
+            if (!event.getPlayer().getInventory().contains(Material.PAPER)) {
+                Bukkit.broadcastMessage(CreateText.addColors("<red>>> <b>Criminal " + event.getPlayer().getName() + "<gold> </b>has been successfully captured!"));
+                KingsButBad.prisonTimer.put(event.getPlayer(), 100);
+                KingsButBad.playerRoleHashMap.put(event.getPlayer(), Role.PRISONER);
+                event.setCancelled(true);
+                event.getPlayer().getInventory().clear();
+                event.getPlayer().getPersistentDataContainer().set(KingsButBad.wasinPrison, PersistentDataType.INTEGER, 1);
+                RoleManager.givePlayerRole(event.getPlayer());
+            } else {
+                Bukkit.broadcastMessage(CreateText.addColors("<red>>> <b>Criminal " + event.getPlayer().getName() + "<gold> </b>used their get-out-of-jail-free card."));
+            }
         }
     }
 

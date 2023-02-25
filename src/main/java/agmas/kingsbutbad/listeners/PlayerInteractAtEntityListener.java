@@ -9,9 +9,8 @@ import com.destroystokyo.paper.NamespacedTag;
 import org.bukkit.*;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.type.Door;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Player;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -20,18 +19,18 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.player.PlayerFishEvent;
-import org.bukkit.event.player.PlayerInteractAtEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.checkerframework.checker.units.qual.K;
+import org.spigotmc.event.entity.EntityDismountEvent;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,6 +48,25 @@ public class PlayerInteractAtEntityListener implements Listener {
             event.getPlayer().setHealth(Math.min(event.getPlayer().getHealth() + 2, event.getPlayer().getMaxHealth()));
         }
     }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerToggleSneakEvent event) {
+        if (event.isSneaking()) {
+            for (Entity e : event.getPlayer().getPassengers()) {
+                event.getPlayer().removePassenger(e);
+                if (e.getType().equals(EntityType.SILVERFISH)) {
+                    e.remove();
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerQuit(EntityDismountEvent event) {
+        if (event.getDismounted().getType().equals(EntityType.SILVERFISH)) {
+            event.setCancelled(true);
+        }
+    }
     @EventHandler
     public void onPlayerQuit(EntityDamageEvent event) {
         if (event.getEntity().getType().equals(EntityType.ITEM_FRAME)) {
@@ -59,6 +77,16 @@ public class PlayerInteractAtEntityListener implements Listener {
     public void onPlayerQuit(EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Player d) {
             if (event.getDamager() instanceof Player p) {
+                if (p.getInventory().getItemInMainHand().getType().equals(Material.IRON_SHOVEL)) {
+                    event.setCancelled(true);
+                    LivingEntity invissilver = (LivingEntity) p.getWorld().spawnEntity(p.getLocation(), EntityType.SILVERFISH);
+                    invissilver.setAI(false);
+                    invissilver.setSilent(true);
+                    invissilver.setInvulnerable(true);
+                    invissilver.setInvisible(true);
+                    p.addPassenger(invissilver);
+                    invissilver.addPassenger(d);
+                }
                 if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PEASANT)) {
                     if (KingsButBad.playerRoleHashMap.get(d).isPowerful) {
                         p.sendTitle(ChatColor.RED + "!!! You're now a criminal !!!", ChatColor.GRAY + "You hit someone of authority.");
@@ -106,6 +134,37 @@ public class PlayerInteractAtEntityListener implements Listener {
                         p.getInventory().setBoots(new ItemStack(Material.LEATHER_BOOTS));
                     }
                 }
+                if (event.getCurrentItem().getType().equals(Material.IRON_SWORD)) {
+                    Player p = (Player) event.getWhoClicked();
+                    if (p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) >= 300.0) {
+                        p.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) - 300.0);
+                        p.getInventory().addItem(new ItemStack(Material.IRON_SWORD));
+                    }
+                }
+                if (event.getCurrentItem().getType().equals(Material.CHAINMAIL_HELMET)) {
+                    Player p = (Player) event.getWhoClicked();
+                    if (p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) >= 2500.0) {
+                        p.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) - 2500.0);
+                        ItemStack orangechest = new ItemStack(Material.LEATHER_CHESTPLATE);
+                        orangechest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
+                        LeatherArmorMeta chestmeta = (LeatherArmorMeta) orangechest.getItemMeta();
+                        chestmeta.setColor(Color.RED);
+                        chestmeta.setDisplayName("Armor " + ChatColor.RED + ChatColor.MAGIC + "[CONTRABAND]");
+                        orangechest.setItemMeta(chestmeta);
+
+                        ItemStack orangeleg = new ItemStack(Material.CHAINMAIL_LEGGINGS);
+                        orangechest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 3);
+                        ItemMeta orangelegItemMeta = orangeleg.getItemMeta();
+                        orangelegItemMeta.setDisplayName("Armor " + ChatColor.RED + ChatColor.MAGIC + "[CONTRABAND]");
+                        orangeleg.setItemMeta(orangelegItemMeta);
+
+
+                        p.getInventory().setHelmet(new ItemStack(Material.CHAINMAIL_HELMET));
+                        p.getInventory().setChestplate(orangechest);
+                        p.getInventory().setLeggings(orangeleg);
+                        p.getInventory().setBoots(new ItemStack(Material.IRON_BOOTS));
+                    }
+                }
                 if (event.getCurrentItem().getType().equals(Material.WOODEN_SWORD)) {
                     Player p = (Player) event.getWhoClicked();
                     if (p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) >= 30.0) {
@@ -138,6 +197,17 @@ public class PlayerInteractAtEntityListener implements Listener {
                         ItemStack card = new ItemStack(Material.TRIPWIRE_HOOK);
                         ItemMeta cardm = card.getItemMeta();
                         cardm.setDisplayName(ChatColor.BLUE + "Keycard");
+                        card.setItemMeta(cardm);
+                        p.getInventory().addItem(card);
+                    }
+                }
+                if (event.getCurrentItem().getType().equals(Material.PAPER)) {
+                    Player p = (Player) event.getWhoClicked();
+                    if (p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) >= 1500.0) {
+                        p.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) - 1500.0);
+                        ItemStack card = new ItemStack(Material.PAPER);
+                        ItemMeta cardm = card.getItemMeta();
+                        cardm.setDisplayName(ChatColor.BLUE + "Get-Out-Of-Jail-Free Card");
                         card.setItemMeta(cardm);
                         p.getInventory().addItem(card);
                     }
@@ -184,7 +254,7 @@ public class PlayerInteractAtEntityListener implements Listener {
                                             Player p = (Player) event.getWhoClicked();
                                             p.setCooldown(Material.WOODEN_HOE, 20);
                                             p.playSound(p, Sound.ENTITY_ITEM_PICKUP, 1, 1);
-                                            event.getWhoClicked().getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, event.getWhoClicked().getPersistentDataContainer().get(KingsButBad.money, PersistentDataType.DOUBLE) + 0.1);
+                                            event.getWhoClicked().getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, event.getWhoClicked().getPersistentDataContainer().get(KingsButBad.money, PersistentDataType.DOUBLE) + 0.5);
                                         }, ii);
                                     }
                             }, iii);
@@ -326,6 +396,58 @@ public class PlayerInteractAtEntityListener implements Listener {
                     inv.setItem(7, cod);
                     event.getPlayer().openInventory(inv);
                 }
+                if (event.getRightClicked().equals(KingsButBad.royaltrader)) {
+                    Inventory inv = Bukkit.createInventory(null, 9);
+                    ItemStack cod = new ItemStack(Material.PAPER);
+                    cod.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+                    ItemMeta codmeta = cod.getItemMeta();
+                    codmeta.setDisplayName(ChatColor.GOLD + "Get-Out-Of-Jail-Free Card");
+                    ArrayList<String> codlore = new ArrayList<>();
+                    codlore.add(ChatColor.GRAY + "Stops you from going to jail as a criminal");
+                    codlore.add(ChatColor.GRAY + "if you die.");
+                    codlore.add(CreateText.addColors("<gray>(note; this will still <obfuscated>LOGFEB31-BRTRUD.. 1: Prisoner Emily, We need you. 1: Don't worry. You'll be let out actually. 1: The warden knows about this. 1: Apparently, they want you to go to a... Storage facility? Strange. 1: They want you to go... on the 31st of feburary? 1: Yeah.. That's not even a day.. 1: Shit. He's calling, I better stop before we get caught talking.</obfuscated>"));
+                    codlore.add(ChatColor.GREEN + "$1500");
+                    codmeta.setLore(codlore);
+                    cod.setItemMeta(codmeta);
+                    inv.setItem(1, cod);
+
+                    cod = new ItemStack(Material.PLAYER_HEAD);
+                    cod.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+                    codmeta = cod.getItemMeta();
+                    SkullMeta sm = (SkullMeta) codmeta;
+                    sm.setOwningPlayer(Bukkit.getOfflinePlayer("Piggopet"));
+                    sm.setDisplayName(ChatColor.GOLD + "Piggopet's Head");
+                    codlore = new ArrayList<>();
+                    codlore.add(ChatColor.GRAY + "piggopet reference");
+                    codlore.add(ChatColor.GREEN + "$priceless");
+                    sm.setLore(codlore);
+                    cod.setItemMeta(sm);
+                    inv.setItem(3, cod);
+
+                    cod = new ItemStack(Material.CHAINMAIL_HELMET);
+                    cod.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+                    codmeta = cod.getItemMeta();
+                    codmeta.setDisplayName(ChatColor.GOLD + "Stronger Gear");
+                    codlore = new ArrayList<>();
+                    codlore.add(ChatColor.GRAY + "There's a tag of something on here;");
+                    codlore.add(ChatColor.GRAY + "But it's definetly not from this kingdom.");
+                    codlore.add(ChatColor.GREEN + "$2500");
+                    codmeta.setLore(codlore);
+                    cod.setItemMeta(codmeta);
+                    inv.setItem(5, cod);
+
+                    cod = new ItemStack(Material.IRON_SWORD);
+                    cod.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+                    codmeta = cod.getItemMeta();
+                    codmeta.setDisplayName(ChatColor.GOLD + "Iron Sword");
+                    codlore = new ArrayList<>();
+                    codlore.add(ChatColor.GRAY + "A simple sword for simple soldiers");
+                    codlore.add(ChatColor.GREEN + "$300");
+                    codmeta.setLore(codlore);
+                    cod.setItemMeta(codmeta);
+                    inv.setItem(7, cod);
+                    event.getPlayer().openInventory(inv);
+                }
                 if (event.getRightClicked().equals(KingsButBad.sewervillager)) {
                     Inventory inv = Bukkit.createInventory(null, 9);
                     ItemStack cod = new ItemStack(Material.TRIPWIRE_HOOK);
@@ -362,6 +484,19 @@ public class PlayerInteractAtEntityListener implements Listener {
                     codmeta.setLore(codlore);
                     cod.setItemMeta(codmeta);
                     inv.setItem(5, cod);
+                    cod = new ItemStack(Material.BROWN_CANDLE);
+                    cod.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+                    codmeta = cod.getItemMeta();
+                    codmeta.setDisplayName(ChatColor.GOLD + "beanms");
+                    codlore = new ArrayList<>();
+                    codlore.add(ChatColor.GRAY + "The most important item in the lore.");
+                    codlore.add(ChatColor.GRAY + "(fact checked by NoahTheSpacyCat)");
+                    codlore.add(ChatColor.GRAY + "");
+                    codlore.add(ChatColor.RED + "OUT OF STOCK!");
+                    codlore.add(ChatColor.GREEN + "$1");
+                    codmeta.setLore(codlore);
+                    cod.setItemMeta(codmeta);
+                    inv.setItem(7, cod);
                     event.getPlayer().openInventory(inv);
                 }
                 if (event.getRightClicked().equals(KingsButBad.bertrude)) {
