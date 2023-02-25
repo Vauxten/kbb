@@ -13,6 +13,8 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -47,7 +49,7 @@ public class MiscTask extends BukkitRunnable {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PEASANT)) {
                     if (KingsButBad.taxesCount != 0) {
-                        Double topay = p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) *  (KingsButBad.taxesCount / 100);
+                        Double topay = p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) *  ((float)KingsButBad.taxesCount / 100.0f);
                         p.sendMessage(CreateText.addColors("<red><b>>> <gray>You paid " + topay + " in taxes."));
                         if (KingsButBad.king2 != null) {
                             KingsButBad.king.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, KingsButBad.king.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) + (topay / 2));
@@ -183,6 +185,11 @@ public class MiscTask extends BukkitRunnable {
                 }
             }
         for (Player p : Bukkit.getOnlinePlayers()) {
+            for (Entity e : p.getPassengers()) {
+                LivingEntity le = (LivingEntity) e;
+                le.setNoDamageTicks(3);
+            }
+
             if (KingsButBad.playerRoleHashMap.get(p).equals(Role.BODYGUARD)) {
                 WorldBorder kingborder = Bukkit.createWorldBorder();
                 kingborder.setCenter(KingsButBad.bodylink.get(p).getLocation());
@@ -272,6 +279,25 @@ public class MiscTask extends BukkitRunnable {
             } else {
                 if (stamina.get(p) < 0.99f) {
                     stamina.put(p, stamina.get(p) + 0.01f);
+                }
+            }
+
+            if (KingsButBad.playerRoleHashMap.get(p).equals(Role.KNIGHT)) {
+                Boolean hasHorseSpawned = false;
+                for (Entity e : Bukkit.getWorld("world").getEntities()) {
+                    if (e.getCustomName().equals(p.getName() + "'s horse"))
+                        hasHorseSpawned = true;
+                }
+                if (!hasHorseSpawned) {
+                    if (!p.getInventory().contains(Material.CLAY_BALL)) {
+                        ItemStack diamondchest = new ItemStack(Material.CLAY_BALL);
+                        ItemMeta diamondchestmeta = diamondchest.getItemMeta();
+                        diamondchestmeta.setDisplayName(CreateText.addColors("<gray>Spawn <gold>Horse"));
+                        diamondchest.setItemMeta(diamondchestmeta);
+                        p.getInventory().addItem(diamondchest);
+                    }
+                } else {
+                    p.getInventory().remove(Material.CLAY_BALL);
                 }
             }
             String actiobarextras = "";

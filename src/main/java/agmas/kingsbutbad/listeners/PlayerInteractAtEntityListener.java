@@ -31,6 +31,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.checkerframework.checker.units.qual.K;
 import org.spigotmc.event.entity.EntityDismountEvent;
+import org.spigotmc.event.entity.EntityMountEvent;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -242,6 +243,15 @@ public class PlayerInteractAtEntityListener implements Listener {
                         event.getWhoClicked().getInventory().addItem(woodenhoe);
                     }
                 }
+                if (event.getCurrentItem().getType().equals(Material.BONE)) {
+                    if (!event.getWhoClicked().getInventory().contains(Material.BONE)) {
+                        ItemStack woodenhoe = new ItemStack(Material.BONE);
+                        ItemMeta woodenhoemeta = woodenhoe.getItemMeta();
+                        woodenhoemeta.setDestroyableKeys(Collections.singleton(NamespacedKey.minecraft("brown_concrete_powder")));
+                        woodenhoe.setItemMeta(woodenhoemeta);
+                        event.getWhoClicked().getInventory().addItem(woodenhoe);
+                    }
+                }
                 if (event.getCurrentItem().getType().equals(Material.WHEAT)) {
                     Integer iii = 0;
                     for (ItemStack i : event.getWhoClicked().getInventory()) {
@@ -257,6 +267,26 @@ public class PlayerInteractAtEntityListener implements Listener {
                                             event.getWhoClicked().getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, event.getWhoClicked().getPersistentDataContainer().get(KingsButBad.money, PersistentDataType.DOUBLE) + 0.5);
                                         }, ii);
                                     }
+                            }, iii);
+                            iii += originalamount;
+                        }
+                    }
+                }
+                if (event.getCurrentItem().getType().equals(Material.BROWN_CONCRETE)) {
+                    Integer iii = 0;
+                    for (ItemStack i : event.getWhoClicked().getInventory()) {
+                        if (i != null && i.getType().equals(Material.BROWN_DYE)) {
+                            Integer originalamount = i.getAmount();
+                            Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
+                                for (int ii = 1; ii < i.getAmount() + 1; ii++) {
+                                    Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
+                                        i.setAmount(i.getAmount() - 1);
+                                        Player p = (Player) event.getWhoClicked();
+                                        p.setCooldown(Material.BONE, 20);
+                                        p.playSound(p, Sound.ENTITY_ITEM_PICKUP, 1, 1);
+                                        event.getWhoClicked().getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, event.getWhoClicked().getPersistentDataContainer().get(KingsButBad.money, PersistentDataType.DOUBLE) + 15.5);
+                                    }, ii);
+                                }
                             }, iii);
                             iii += originalamount;
                         }
@@ -285,9 +315,27 @@ public class PlayerInteractAtEntityListener implements Listener {
             }
         }
     }
+
+    @EventHandler
+    public void onPlayerQuit(EntityMountEvent event) {
+        if (event.getMount().getCustomName().endsWith("'s horse")) {
+            String playername = event.getMount().getCustomName().split("'")[0];
+            if (event.getEntity() instanceof Player p) {
+                if (!p.getName().equals(playername)) {
+                    event.setCancelled(true);
+                }
+            }
+        }
+    }
     @EventHandler
     public void onPlayerQuit(PlayerInteractEvent event) {
         if (event.getItem() != null) {
+            if (event.getItem().getType().equals(Material.CLAY_BALL)) {
+                Horse horse = (Horse) event.getPlayer().getWorld().spawnEntity(event.getPlayer().getLocation(), EntityType.HORSE);
+                horse.setCustomName(event.getPlayer().getName() + "'s horse");
+                horse.getInventory().setArmor(new ItemStack(Material.IRON_HORSE_ARMOR));
+                horse.getInventory().setSaddle(new ItemStack(Material.SADDLE));
+            }
             if (event.getItem().getItemMeta() != null) {
                 if (event.getItem().getItemMeta().getDisplayName().equals(ChatColor.BLUE + "Adrenaline Shot")) {
                     event.getItem().setAmount(event.getItem().getAmount() - 1);
@@ -557,6 +605,22 @@ public class PlayerInteractAtEntityListener implements Listener {
                     hoemeta.setDisplayName(ChatColor.BLUE + "Get Pickaxe");
                     hoe.setItemMeta(hoemeta);
                     inv.setItem(4, hoe);
+                    event.getPlayer().openInventory(inv);
+                }
+                if (event.getRightClicked().equals(KingsButBad.mopvillager)) {
+                    Inventory inv = Bukkit.createInventory(null, 9);
+                    ItemStack hoe = new ItemStack(Material.BONE);
+                    hoe.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+                    ItemMeta hoemeta = hoe.getItemMeta();
+                    hoemeta.setDisplayName(ChatColor.BLUE + "Get Mop");
+                    hoe.setItemMeta(hoemeta);
+                    inv.setItem(2, hoe);
+                    ItemStack wheat = new ItemStack(Material.BROWN_CONCRETE);
+                    wheat.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+                    ItemMeta wheatmeta = wheat.getItemMeta();
+                    wheatmeta.setDisplayName(ChatColor.GOLD + "Sell... the shit? i guess????");
+                    wheat.setItemMeta(wheatmeta);
+                    inv.setItem(6, wheat);
                     event.getPlayer().openInventory(inv);
                 }
                 if (event.getRightClicked().equals(KingsButBad.royalvillager))

@@ -45,6 +45,7 @@ public final class KingsButBad extends JavaPlugin {
     public static Villager bertrude;
     public static Villager lunchlady;
     public static Villager royaltrader;
+    public static Villager mopvillager;
     public static String kinggender = "King";
     public static String kinggender2 = "King";
     public static ArrayList<UUID> prisoners = new ArrayList<>();
@@ -149,6 +150,13 @@ public final class KingsButBad extends JavaPlugin {
         royaltrader.setInvulnerable(true);
         royaltrader.setPersistent(true);
         royaltrader.setAI(false);
+        mopvillager = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -103.21, -57.00, -17.24, 60, 0), EntityType.VILLAGER);
+
+        mopvillager.setCustomName(CreateText.addColors("<yellow>Janitor"));
+        mopvillager.setCustomNameVisible(true);
+        mopvillager.setInvulnerable(true);
+        mopvillager.setPersistent(true);
+        mopvillager.setAI(false);
     }
 
     @Override

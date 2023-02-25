@@ -24,6 +24,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.checkerframework.checker.units.qual.K;
 
 public class PlayerBlockListeners implements Listener {
+
     @EventHandler
     public void onPlayerQuit(BlockBreakEvent event) {
         if (event.getBlock().getType().equals(Material.DEEPSLATE_COAL_ORE)) {
@@ -37,6 +38,18 @@ public class PlayerBlockListeners implements Listener {
                 KingsButBad.king.sendMessage(ChatColor.GREEN + "+5$ Prisoner mined a block");
                 KingsButBad.king2.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, KingsButBad.king.getPersistentDataContainer().get(KingsButBad.money, PersistentDataType.DOUBLE) + 5);
                 KingsButBad.king2.sendMessage(ChatColor.GREEN + "+5$ Prisoner mined a block");
+            }, 20 * 4);
+        }
+        if (event.getBlock().getType().equals(Material.BROWN_CONCRETE_POWDER)) {
+            event.setDropItems(false);
+            event.setCancelled(true);
+            if (event.getPlayer().hasCooldown(Material.BONE)) {
+                return;
+            }
+            event.getBlock().setType(Material.BEDROCK);
+            event.getPlayer().getInventory().addItem(new ItemStack(Material.BROWN_DYE));
+            Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
+                event.getBlock().setType(Material.BROWN_CONCRETE_POWDER);
             }, 20 * 4);
         }
         if (event.getBlock().getType().equals(Material.WHEAT_SEEDS) || event.getBlock().getType().equals(Material.WHEAT)) {
