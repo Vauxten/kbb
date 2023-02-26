@@ -4,6 +4,8 @@ import agmas.kingsbutbad.KingsButBad;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
@@ -101,6 +103,13 @@ public class RoleManager {
         p.sendMessage(miniMessage().deserialize("<green><b>You're </green><gradient:#FFFF52:#FFBA52><b>The king!<b></gradient><#AEAEAE> Read <red><b>/ᴋɪɴɢ ʜᴇʟᴘ</b></red><#AEAEAE> for a small tutorial!<reset>"));
     }
     public static void givePlayerRole(Player p) {
+        for (Entity e : p.getPassengers()) {
+            p.removePassenger(e);
+            if (e.getType().equals(EntityType.SILVERFISH)) {
+                e.remove();
+            }
+        }
+        p.leaveVehicle();
         KingsButBad.playerRoleHashMap.putIfAbsent(p, Role.PEASANT);
         p.getInventory().clear();
         if (p == KingsButBad.king || p == KingsButBad.king2) {

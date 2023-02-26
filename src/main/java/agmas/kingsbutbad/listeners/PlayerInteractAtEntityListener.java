@@ -54,18 +54,19 @@ public class PlayerInteractAtEntityListener implements Listener {
     public void onPlayerQuit(PlayerToggleSneakEvent event) {
         if (event.isSneaking()) {
             for (Entity e : event.getPlayer().getPassengers()) {
-                event.getPlayer().removePassenger(e);
-                if (e.getType().equals(EntityType.SILVERFISH)) {
-                    e.remove();
-                }
+                e.leaveVehicle();
             }
         }
     }
 
     @EventHandler
     public void onPlayerQuit(EntityDismountEvent event) {
-        if (event.getDismounted().getType().equals(EntityType.SILVERFISH)) {
-            event.setCancelled(true);
+        if (event.getDismounted().getType().equals(EntityType.HORSE)) {
+            event.getDismounted().remove();
+        }
+        if (event.getDismounted().getType().equals(EntityType.PLAYER)) {
+            if (!event.getDismounted().isSneaking())
+                event.setCancelled(true);
         }
     }
     @EventHandler
@@ -82,13 +83,7 @@ public class PlayerInteractAtEntityListener implements Listener {
                 d.setCooldown(Material.RED_STAINED_GLASS, 20 * 6);
                 if (p.getInventory().getItemInMainHand().getType().equals(Material.IRON_SHOVEL)) {
                     event.setCancelled(true);
-                    LivingEntity invissilver = (LivingEntity) p.getWorld().spawnEntity(p.getLocation(), EntityType.SILVERFISH);
-                    invissilver.setAI(false);
-                    invissilver.setSilent(true);
-                    invissilver.setInvulnerable(true);
-                    invissilver.setInvisible(true);
-                    p.addPassenger(invissilver);
-                    invissilver.addPassenger(d);
+                    p.addPassenger(d);
                 }
                 if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PEASANT)) {
                     if (KingsButBad.playerRoleHashMap.get(d).isPowerful) {
@@ -335,6 +330,8 @@ public class PlayerInteractAtEntityListener implements Listener {
             if (event.getItem().getType().equals(Material.CLAY_BALL) && !event.getPlayer().isInsideVehicle()) {
                 Horse horse = (Horse) event.getPlayer().getWorld().spawnEntity(event.getPlayer().getLocation(), EntityType.HORSE);
                 horse.setCustomName(event.getPlayer().getName() + "'s horse");
+                horse.addPassenger(event.getPlayer());
+                horse.setTamed(true);
                 horse.getInventory().setArmor(new ItemStack(Material.IRON_HORSE_ARMOR));
                 horse.getInventory().setSaddle(new ItemStack(Material.SADDLE));
             }
