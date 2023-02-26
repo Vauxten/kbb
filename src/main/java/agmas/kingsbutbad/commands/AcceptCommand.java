@@ -36,9 +36,12 @@ public class AcceptCommand implements CommandExecutor {
                     KingsButBad.playerRoleHashMap.put(p, Role.BODYGUARD);
                     RoleManager.givePlayerRole(p);
                 }
-                default ->
-                        p.sendMessage(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>" + KingsButBad.kinggender.toUpperCase() + KingsButBad.king.getName().toUpperCase() + "</b><red> hasn't invited you to being any roles."));
+                default -> {
+                    p.sendMessage(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>" + KingsButBad.kinggender.toUpperCase() + KingsButBad.king.getName().toUpperCase() + "</b><red> hasn't invited you to being any roles."));
+                    return true;
+                }
             }
+            KingsButBad.playerRoleInviteHashMap.remove(p);
         }
         return true;
     }

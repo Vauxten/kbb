@@ -103,13 +103,8 @@ public class RoleManager {
         p.sendMessage(miniMessage().deserialize("<green><b>You're </green><gradient:#FFFF52:#FFBA52><b>The king!<b></gradient><#AEAEAE> Read <red><b>/ᴋɪɴɢ ʜᴇʟᴘ</b></red><#AEAEAE> for a small tutorial!<reset>"));
     }
     public static void givePlayerRole(Player p) {
-        for (Entity e : p.getPassengers()) {
-            p.removePassenger(e);
-            if (e.getType().equals(EntityType.SILVERFISH)) {
-                e.remove();
-            }
-        }
-        p.leaveVehicle();
+        Bukkit.broadcastMessage(p.getName());
+        Bukkit.broadcastMessage("Trigged Event");
         KingsButBad.playerRoleHashMap.putIfAbsent(p, Role.PEASANT);
         p.getInventory().clear();
         if (p == KingsButBad.king || p == KingsButBad.king2) {
@@ -219,7 +214,7 @@ public class RoleManager {
             p.getInventory().addItem(new ItemStack(Material.ARROW, 64));
             Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
                 p.teleport(new Location(Bukkit.getWorld("world"), -56.5, -57, 30));
-            }, 5);
+            }, 10);
         }
         if (KingsButBad.playerRoleHashMap.get(p) == Role.PRISON_GUARD) {
             ItemStack diamondchest = new ItemStack(Material.IRON_CHESTPLATE);
@@ -270,7 +265,7 @@ public class RoleManager {
             p.getInventory().addItem(handcuffs);
             Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
                 p.teleport(new Location(Bukkit.getWorld("world"), -137.5, -51, -8));
-            }, 5);
+            }, 10);
 
         }
         if (KingsButBad.playerRoleHashMap.get(p) == Role.BODYGUARD) {
@@ -313,7 +308,7 @@ public class RoleManager {
             p.getInventory().addItem(new ItemStack(Material.ARROW, 64));
             Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
                 p.teleport(KingsButBad.bodylink.get(p).getLocation());
-            }, 5);
+            }, 10);
         }
         if (KingsButBad.playerRoleHashMap.get(p) == Role.PRISONER) {
             p.setCooldown(Material.TERRACOTTA, 80);
@@ -341,13 +336,17 @@ public class RoleManager {
             p.getInventory().setBoots(orangeboot);
             Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
                 p.teleport(new Location(Bukkit.getWorld("world"), -139.5, -57, 32.5, 180, 0));
-            }, 5);
+            }, 10);
         }
         if (KingsButBad.playerRoleHashMap.get(p) == Role.PEASANT) {
+            Bukkit.broadcastMessage("Trigged Peasant");
             p.getPersistentDataContainer().remove(KingsButBad.wasinPrison);
+            Bukkit.broadcastMessage("Triggered wasInPrison Removal");
             Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
+                Bukkit.broadcastMessage("Triggered Teleport");
+                Bukkit.broadcastMessage(p.getName());
                 p.teleport(new Location(Bukkit.getWorld("world"), -120.5, -57, -30.5));
-            }, 5);
+            }, 10);
         }
         p.sendTitle(KingsButBad.playerRoleHashMap.get(p).tag, KingsButBad.playerRoleHashMap.get(p).objective);
     }

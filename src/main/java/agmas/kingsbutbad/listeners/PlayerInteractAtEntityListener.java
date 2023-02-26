@@ -35,6 +35,7 @@ import org.spigotmc.event.entity.EntityMountEvent;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 
 public class PlayerInteractAtEntityListener implements Listener {
 
@@ -186,6 +187,55 @@ public class PlayerInteractAtEntityListener implements Listener {
                     if (p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) >= 150.0) {
                         p.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) - 250.0);
                         p.getInventory().addItem(new ItemStack(Material.STONE_AXE));
+                    }
+                }
+                if (event.getCurrentItem().getType().equals(Material.ARROW)) {
+                    Player p = (Player) event.getWhoClicked();
+                    if (p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) >= 50.0) {
+                        p.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) - 50.0);
+                        p.getInventory().addItem(new ItemStack(Material.ARROW, 32));
+                    }
+                }
+                if (event.getCurrentItem().getType().equals(Material.BOW)) {
+                    Player p = (Player) event.getWhoClicked();
+                    if (p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) >= 100.0) {
+                        p.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) - 100.0);
+                        p.getInventory().addItem(new ItemStack(Material.BOW));
+                    }
+                }
+                if (event.getCurrentItem().getType().equals(Material.YELLOW_CONCRETE)) {
+                    Player p = (Player) event.getWhoClicked();
+                    ArrayList<String> dialouges = new ArrayList<>(){};
+                    dialouges.add("Kid, you really make me remember that person who tried to talk to me.. that one time... that they.. talked to me.. darn, i sure am lonely and an outcast (laugh track)");
+                    dialouges.add("After so many years in the agency, it's finnally fun to see someone who isn't about to be put on a mission to their death! Hi, kid!");
+                    dialouges.add("Gosh, I sure am old!");
+                    dialouges.add("the IRS are on our asses");
+                    dialouges.add("Earth isn't really, we all live on one big flat world, one big, blocky, green, flat landscape. The walls are obstructing our views. There is nothing beyond us. Wake up. BTU THAT'S JUST A THEORY! A GAME THEORY!!!!!!!!!!!!!!!!!!!!!!1");
+                    dialouges.add("Hi, I'm arthur Join! (laugh track)");
+                    dialouges.add("God, I sure am comedical! (Laugh track)");
+
+                    p.sendMessage(CreateText.addColors("<green>archer johnm <gray><b>>></gray><white> " + dialouges.get(new Random().nextInt(0, dialouges.size()))));
+                }
+                if (event.getCurrentItem().getType().equals(Material.ENCHANTED_BOOK)) {
+                    Player p = (Player) event.getWhoClicked();
+                    if (event.getCurrentItem().getItemMeta() != null) {
+                        ItemMeta im = event.getCurrentItem().getItemMeta();
+                        if (im.getDisplayName().equals(ChatColor.GOLD + "+1 Power Level")) {
+                            if (p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) >= 400.0) {
+                                p.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) - 400.0);
+                                for (ItemStack i : p.getInventory()) {
+                                    if (i != null) {
+                                        if (i.getType().equals(Material.BOW)) {
+                                            if (i.getEnchantments().containsKey(Enchantment.ARROW_DAMAGE)) {
+                                                i.addEnchantment(Enchantment.ARROW_DAMAGE, i.getEnchantmentLevel(Enchantment.ARROW_DAMAGE) + 1);
+                                            } else {
+                                                i.addEnchantment(Enchantment.ARROW_DAMAGE, 1);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
                 if (event.getCurrentItem().getType().equals(Material.TRIPWIRE_HOOK)) {
@@ -541,6 +591,53 @@ public class PlayerInteractAtEntityListener implements Listener {
                     codlore.add(ChatColor.GRAY + "");
                     codlore.add(ChatColor.RED + "OUT OF STOCK!");
                     codlore.add(ChatColor.GREEN + "$1");
+                    codmeta.setLore(codlore);
+                    cod.setItemMeta(codmeta);
+                    inv.setItem(7, cod);
+                    event.getPlayer().openInventory(inv);
+                }
+                if (event.getRightClicked().equals(KingsButBad.archerjohn)) {
+                    Inventory inv = Bukkit.createInventory(null, 9);
+                    ItemStack cod = new ItemStack(Material.ARROW);
+                    cod.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+                    cod.setAmount(32);
+                    ItemMeta codmeta = cod.getItemMeta();
+                    codmeta.setDisplayName(ChatColor.GOLD + "Bunch o' arrows");
+                    ArrayList<String> codlore = new ArrayList<>();
+                    codlore.add(ChatColor.GRAY + "silly little arrows");
+                    codlore.add(ChatColor.GREEN + "$50");
+                    codmeta.setLore(codlore);
+                    cod.setItemMeta(codmeta);
+                    inv.setItem(1, cod);
+
+                    cod = new ItemStack(Material.BOW);
+                    cod.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+                    codmeta = cod.getItemMeta();
+                    codmeta.setDisplayName(ChatColor.GOLD + "Bow");
+                    codlore = new ArrayList<>();
+                    codlore.add(ChatColor.GRAY + "A bow. You hold it, pull it back, rip the space-time");
+                    codlore.add(ChatColor.GRAY + "continum, and shoot! Atleast, that's what i do.");
+                    codlore.add(ChatColor.GREEN + "$100");
+                    codmeta.setLore(codlore);
+                    cod.setItemMeta(codmeta);
+                    inv.setItem(3, cod);
+
+                    cod = new ItemStack(Material.ENCHANTED_BOOK);
+                    cod.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+                    codmeta = cod.getItemMeta();
+                    codmeta.setDisplayName(ChatColor.GOLD + "+1 Power Level");
+                    codlore = new ArrayList<>();
+                    codlore.add(ChatColor.GREEN + "Applies to every bow in your inventory");
+                    codlore.add(ChatColor.GREEN + "$400");
+                    codmeta.setLore(codlore);
+                    cod.setItemMeta(codmeta);
+                    inv.setItem(5, cod);
+                    cod = new ItemStack(Material.YELLOW_CONCRETE);
+                    cod.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+                    codmeta = cod.getItemMeta();
+                    codmeta.setDisplayName(ChatColor.GOLD + "Talk");
+                    codlore = new ArrayList<>();
+                    codlore.add(ChatColor.GRAY + "Talk to archer john. See how he's doing.");
                     codmeta.setLore(codlore);
                     cod.setItemMeta(codmeta);
                     inv.setItem(7, cod);
