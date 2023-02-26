@@ -40,6 +40,7 @@ public class PlayerDeathListener implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerDeathEvent event) {
         event.getDrops().clear();
+
         event.setDeathMessage(ChatColor.GRAY + event.getDeathMessage());
         if (KingsButBad.playerRoleHashMap.get(event.getPlayer()).equals(Role.CRIMINAl)) {
             if (!event.getPlayer().getInventory().contains(Material.PAPER)) {

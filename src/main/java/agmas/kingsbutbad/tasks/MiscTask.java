@@ -14,6 +14,7 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
@@ -45,30 +46,7 @@ public class MiscTask extends BukkitRunnable {
 
     @Override
     public void run(){
-        if (Bukkit.getWorld("world").getTime() == 10) {
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PEASANT)) {
-                    if (KingsButBad.taxesCount != 0) {
-                        Double topay = p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) *  ((float)KingsButBad.taxesCount / 100.0f);
-                        p.sendMessage(CreateText.addColors("<red><b>>> <gray>You paid " + topay + " in taxes."));
-                        if (KingsButBad.king2 != null) {
-                            KingsButBad.king.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, KingsButBad.king.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) + (topay / 2));
-                            KingsButBad.king2.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, KingsButBad.king.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) + (topay / 2));
-                        } else {
-                            if (KingsButBad.king != null) {
-                                KingsButBad.king.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, KingsButBad.king.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) + topay);
-                            }
-                        }
-                    }
-                }
-            }
-            if (KingsButBad.king2 != null) {
-                KingsButBad.king2.sendMessage(CreateText.addColors("<green>TAXES <gray>>> <red>You got your taxes!"));
-            }
-            if (KingsButBad.king != null) {
-                KingsButBad.king.sendMessage(CreateText.addColors("<green>TAXES <gray>>> <red>You got your taxes!"));
-            }
-        }
+
         if (Bukkit.getWorld("world").getTime() > 0 && Bukkit.getWorld("world").getTime() < 2000) {
             timer1 = 0;
             timer2 = 2500;
@@ -189,6 +167,11 @@ public class MiscTask extends BukkitRunnable {
                 LivingEntity le = (LivingEntity) e;
                 le.setNoDamageTicks(3);
             }
+            if (p.isInsideVehicle()) {
+                if (p.getVehicle().isSneaking()) {
+                    p.leaveVehicle();
+                }
+            }
 
             if (KingsButBad.playerRoleHashMap.get(p).equals(Role.BODYGUARD)) {
                 WorldBorder kingborder = Bukkit.createWorldBorder();
@@ -285,8 +268,10 @@ public class MiscTask extends BukkitRunnable {
             if (KingsButBad.playerRoleHashMap.get(p).equals(Role.KNIGHT)) {
                 Boolean hasHorseSpawned = false;
                 for (Entity e : Bukkit.getWorld("world").getEntities()) {
-                    if (e.getCustomName().equals(p.getName() + "'s horse"))
-                        hasHorseSpawned = true;
+                    if (e.getCustomName() != null) {
+                        if (e.getCustomName().equals(p.getName() + "'s horse"))
+                            hasHorseSpawned = true;
+                    }
                 }
                 if (!hasHorseSpawned) {
                     if (!p.getInventory().contains(Material.CLAY_BALL)) {
@@ -340,9 +325,9 @@ public class MiscTask extends BukkitRunnable {
             } else {
                 if (KingsButBad.king != null) {
                     if (KingsButBad.king2 == null) {
-                        p.sendActionBar(CreateText.addColors("<gray>Current king<gray>: <gradient:#FFFF52:#FFBA52><b>" + KingsButBad.kinggender.toUpperCase() + " " + KingsButBad.king.getName().toUpperCase()) + CreateText.addColors("<dark_gray> (Taxes: " + KingsButBad.taxesCount + "%)") + actiobarextras);
+                        p.sendActionBar(CreateText.addColors("<gray>Current king<gray>: <gradient:#FFFF52:#FFBA52><b>" + KingsButBad.kinggender.toUpperCase() + " " + KingsButBad.king.getName().toUpperCase()) + actiobarextras);
                     } else {
-                        p.sendActionBar(CreateText.addColors("<gray>Current king<gray>: <gradient:#FFFF52:#FFBA52><b>" + KingsButBad.kinggender.toUpperCase() + " " + KingsButBad.king.getName().toUpperCase() + "<dark_gray></b> &</gray>" + "<gradient:#FFFF52:#FFBA52><b> " + KingsButBad.kinggender2.toUpperCase() + " " + KingsButBad.king2.getName().toUpperCase()) + CreateText.addColors("<dark_gray> (Taxes: " + KingsButBad.taxesCount + "%)") + actiobarextras);
+                        p.sendActionBar(CreateText.addColors("<gray>Current king<gray>: <gradient:#FFFF52:#FFBA52><b>" + KingsButBad.kinggender.toUpperCase() + " " + KingsButBad.king.getName().toUpperCase() + "<dark_gray></b> &</gray>" + "<gradient:#FFFF52:#FFBA52><b> " + KingsButBad.kinggender2.toUpperCase() + " " + KingsButBad.king2.getName().toUpperCase()) + actiobarextras);
                     }
                 } else {
                     p.sendActionBar(CreateText.addColors("<gray>Current king<gray>: <gradient:#ff2f00:#fcff3d><b>NO KING! Use /king to claim!") + actiobarextras);
