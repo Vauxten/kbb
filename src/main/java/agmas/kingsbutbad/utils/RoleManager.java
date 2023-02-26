@@ -103,8 +103,6 @@ public class RoleManager {
         p.sendMessage(miniMessage().deserialize("<green><b>You're </green><gradient:#FFFF52:#FFBA52><b>The king!<b></gradient><#AEAEAE> Read <red><b>/ᴋɪɴɢ ʜᴇʟᴘ</b></red><#AEAEAE> for a small tutorial!<reset>"));
     }
     public static void givePlayerRole(Player p) {
-        Bukkit.broadcastMessage(p.getName());
-        Bukkit.broadcastMessage("Trigged Event");
         KingsButBad.playerRoleHashMap.putIfAbsent(p, Role.PEASANT);
         p.getInventory().clear();
         if (p == KingsButBad.king || p == KingsButBad.king2) {
@@ -339,12 +337,8 @@ public class RoleManager {
             }, 10);
         }
         if (KingsButBad.playerRoleHashMap.get(p) == Role.PEASANT) {
-            Bukkit.broadcastMessage("Trigged Peasant");
             p.getPersistentDataContainer().remove(KingsButBad.wasinPrison);
-            Bukkit.broadcastMessage("Triggered wasInPrison Removal");
             Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
-                Bukkit.broadcastMessage("Triggered Teleport");
-                Bukkit.broadcastMessage(p.getName());
                 p.teleport(new Location(Bukkit.getWorld("world"), -120.5, -57, -30.5));
             }, 10);
         }

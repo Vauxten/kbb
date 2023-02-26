@@ -121,23 +121,8 @@ public class MiscTask extends BukkitRunnable {
         cells.add(new Location(Bukkit.getWorld("world"), -136, -57, -4));
         if (Bukkit.getWorld("world").getTime() <= 18000) {
             Bukkit.getWorld("world").getBlockAt(-138, -51, -16).setType(Material.REDSTONE_BLOCK);
-            for (Location l : cells) {
-                BlockState state = l.getBlock().getState();
-                Door openable = (Door) state.getBlockData();
-                openable.setOpen(true);
-                state.setBlockData(openable);
-                state.update();
-            }
         } else {
             Bukkit.getWorld("world").getBlockAt(-138, -51, -16).setType(Material.AIR);
-
-            for (Location l : cells) {
-                BlockState state = l.getBlock().getState();
-                Door openable = (Door) state.getBlockData();
-                openable.setOpen(false);
-                state.setBlockData(openable);
-                state.update();
-            }
         }
         if (KingsButBad.king == null || !KingsButBad.king.isOnline() || KingsButBad.king.isDead()) {
             KingsButBad.king = null;

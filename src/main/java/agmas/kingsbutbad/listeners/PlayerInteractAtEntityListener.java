@@ -17,6 +17,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
@@ -56,6 +57,25 @@ public class PlayerInteractAtEntityListener implements Listener {
         if (event.isSneaking()) {
             for (Entity e : event.getPlayer().getPassengers()) {
                 e.leaveVehicle();
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerQuit(ProjectileHitEvent event) {
+        if (event.getHitEntity() != null) {
+            if (event.getEntity().getShooter() != null) {
+                if (event.getEntity().getShooter() instanceof Player p) {
+                    if (event.getHitEntity() instanceof  Player d) {
+                        if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PEASANT)) {
+                            if (KingsButBad.playerRoleHashMap.get(d).isPowerful) {
+                                p.sendTitle(ChatColor.RED + "!!! You're now a criminal !!!", ChatColor.GRAY + "You hit someone of authority.");
+                                KingsButBad.playerRoleHashMap.put(p, Role.CRIMINAl);
+                                p.playSound(p, Sound.ENTITY_SILVERFISH_DEATH, 1, 0.5f);
+                            }
+                        }
+                    }
+                }
             }
         }
     }
