@@ -166,7 +166,7 @@ public class PlayerInteractAtEntityListener implements Listener {
                     if (p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) >= 150.0) {
                         p.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) - 150.0);
                         Bukkit.broadcastMessage(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b><b>" + RoleManager.getKingGender(p) + " " + p.getName() + "<blue> has bought the <gold>Mines"));
-                        KingsButBad.coalCompactor = true;
+                        KingsButBad.mineunlocked = true;
                     }
                 }
                 if (event.getCurrentItem().getType().equals(Material.LIGHT_BLUE_WOOL)) {
@@ -745,7 +745,7 @@ public class PlayerInteractAtEntityListener implements Listener {
                             codlore.add(ChatColor.GREEN + "$150");
                             codmeta.setLore(codlore);
                             cod.setItemMeta(codmeta);
-                            inv.setItem(3, cod);
+                            inv.setItem(4, cod);
                         } else {
                             cod = new ItemStack(Material.RED_STAINED_GLASS);
                             cod.addItemFlags(ItemFlag.HIDE_PLACED_ON);
@@ -755,7 +755,7 @@ public class PlayerInteractAtEntityListener implements Listener {
                             codlore.add(ChatColor.GRAY + "Already Bought!");
                             codmeta.setLore(codlore);
                             cod.setItemMeta(codmeta);
-                            inv.setItem(3, cod);
+                            inv.setItem(4, cod);
                         }
                         if (!KingsButBad.joesunlocked) {
                             cod = new ItemStack(Material.LIGHT_BLUE_WOOL);

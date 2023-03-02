@@ -200,7 +200,7 @@ public final class KingsButBad extends JavaPlugin {
         littlejoes.setPersistent(true);
         littlejoes.setAI(false);
 
-        miner = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -212.5, -46.0, -176.5, -180, 0), EntityType.VILLAGER);
+        miner = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -212.5, -46.0, -176.5, 0, 0), EntityType.VILLAGER);
 
         miner.setCustomName(CreateText.addColors("<gray>Miner Joseph"));
         miner.setCustomNameVisible(true);
