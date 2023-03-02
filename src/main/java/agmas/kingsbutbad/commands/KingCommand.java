@@ -43,12 +43,12 @@ public class KingCommand implements CommandExecutor {
                                         RoleManager.setKingGender(false, args[1]);
                                         if (KingsButBad.playerRoleHashMap.get(pe) == Role.PEASANT) {
                                             KingsButBad.playerRoleInviteHashMap.put(pe, Role.KING);
-                                            pe.sendMessage(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>" + KingsButBad.kinggender.toUpperCase() + p.getName().toUpperCase() + "</b><blue> has invited you to being <gradient:#FFFF52:#FFBA52><b>their sidekick</b><gradient:#FFFF52:#FFBA52>! <red>use /accept to accept."));
+                                            pe.sendMessage(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>" + KingsButBad.kinggender.toUpperCase() + " " + p.getName().toUpperCase() + "</b><blue> has invited you to being <gradient:#FFFF52:#FFBA52><b>their sidekick</b><gradient:#FFFF52:#FFBA52>! <red>use /accept to accept."));
                                         } else {
-                                            p.sendMessage(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>" + KingsButBad.kinggender.toUpperCase() + p.getName().toUpperCase() + "</b><blue>, that player <red>isn't a peasant."));
+                                            p.sendMessage(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>" + KingsButBad.kinggender.toUpperCase() + " " + p.getName().toUpperCase() + "</b><blue>, that player <red>isn't a peasant."));
                                         }
                                     } else {
-                                        p.sendMessage(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>" + KingsButBad.kinggender.toUpperCase() + p.getName().toUpperCase() + "</b><blue>, that player <red>does not exist."));
+                                        p.sendMessage(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>" + KingsButBad.kinggender.toUpperCase() + " " +  p.getName().toUpperCase() + "</b><blue>, that player <red>does not exist."));
                                     }
                                 }
                             }
@@ -66,12 +66,12 @@ public class KingCommand implements CommandExecutor {
                                     Player pe = Bukkit.getPlayer(args[1]);
                                     if (KingsButBad.playerRoleHashMap.get(pe) == Role.PEASANT) {
                                         KingsButBad.playerRoleInviteHashMap.put(pe, Role.KNIGHT);
-                                        pe.sendMessage(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>" + RoleManager.getKingGender(p) + p.getName().toUpperCase() + "</b><blue> has invited you to being a <gray>knight! <red>use /accept to accept."));
+                                        pe.sendMessage(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>" + RoleManager.getKingGender(p) +" " +  p.getName().toUpperCase() + "</b><blue> has invited you to being a <gray>knight! <red>use /accept to accept."));
                                     } else {
                                         p.sendMessage(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>" + RoleManager.getKingGender(p) + p.getName().toUpperCase() + "</b><blue>, that player <red>isn't a peasant."));
                                     }
                                 } else {
-                                    p.sendMessage(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>" + RoleManager.getKingGender(p) + p.getName().toUpperCase() + "</b><blue>, that player <red>does not exist."));
+                                    p.sendMessage(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>" + RoleManager.getKingGender(p) +" " +  p.getName().toUpperCase() + "</b><blue>, that player <red>does not exist."));
                                 }
                             }
                         }
@@ -81,12 +81,12 @@ public class KingCommand implements CommandExecutor {
                                     Player pe = Bukkit.getPlayer(args[1]);
                                     if (KingsButBad.playerRoleHashMap.get(pe) == Role.PEASANT) {
                                         KingsButBad.playerRoleInviteHashMap.put(pe, Role.PRISON_GUARD);
-                                        pe.sendMessage(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>" + RoleManager.getKingGender(p) + p.getName().toUpperCase() + "</b><blue> has invited you to being a <blue><b>Prison Guard<reset><blue>! <red>use /accept to accept."));
+                                        pe.sendMessage(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>" + RoleManager.getKingGender(p) + " " + p.getName().toUpperCase() + "</b><blue> has invited you to being a <blue><b>Prison Guard<reset><blue>! <red>use /accept to accept."));
                                     } else {
-                                        p.sendMessage(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>" + RoleManager.getKingGender(p) + p.getName().toUpperCase() + "</b><blue>, that player <red>isn't a peasant."));
+                                        p.sendMessage(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>" + RoleManager.getKingGender(p) + " " + p.getName().toUpperCase() + "</b><blue>, that player <red>isn't a peasant."));
                                     }
                                 } else {
-                                    p.sendMessage(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>" + RoleManager.getKingGender(p) + p.getName().toUpperCase() + "</b><blue>, that player <red>does not exist."));
+                                    p.sendMessage(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>" + RoleManager.getKingGender(p) + " " + p.getName().toUpperCase() + "</b><blue>, that player <red>does not exist."));
                                 }
                             }
                         }
@@ -97,12 +97,12 @@ public class KingCommand implements CommandExecutor {
                                     if (KingsButBad.playerRoleHashMap.get(pe) == Role.PEASANT) {
                                         KingsButBad.bodylink.put(pe, p);
                                         KingsButBad.playerRoleInviteHashMap.put(pe, Role.BODYGUARD);
-                                        pe.sendMessage(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>" + RoleManager.getKingGender(p) + p.getName().toUpperCase() + "</b><blue> has invited you to being a <dark_gray><b>Body Guard<reset><blue>! <red>use /accept to accept."));
+                                        pe.sendMessage(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>" + RoleManager.getKingGender(p) + " " + p.getName().toUpperCase() + "</b><blue> has invited you to being a <dark_gray><b>Body Guard<reset><blue>! <red>use /accept to accept."));
                                     } else {
-                                        p.sendMessage(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>" + RoleManager.getKingGender(p) + p.getName().toUpperCase() + "</b><blue>, that player <red>isn't a peasant."));
+                                        p.sendMessage(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>" + RoleManager.getKingGender(p) + " " + p.getName().toUpperCase() + "</b><blue>, that player <red>isn't a peasant."));
                                     }
                                 } else {
-                                    p.sendMessage(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>" + RoleManager.getKingGender(p) + p.getName().toUpperCase() + "</b><blue>, that player <red>does not exist."));
+                                    p.sendMessage(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>" + RoleManager.getKingGender(p) + " " + p.getName().toUpperCase() + "</b><blue>, that player <red>does not exist."));
                                 }
                             }
                         }
