@@ -57,6 +57,18 @@ public class PlayerBlockListeners implements Listener {
                 event.getBlock().setType(Material.BROWN_CONCRETE_POWDER);
             }, 20 * 4);
         }
+        if (event.getBlock().getType().equals(Material.COAL_ORE)) {
+            event.setDropItems(false);
+            event.setCancelled(true);
+            if (event.getPlayer().hasCooldown(Material.STONE_PICKAXE)) {
+                return;
+            }
+            event.getBlock().setType(Material.CHISELED_STONE_BRICKS);
+            event.getPlayer().getInventory().addItem(new ItemStack(Material.COAL_ORE));
+            Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
+                event.getBlock().setType(Material.COAL_ORE);
+            }, 20 * 4);
+        }
         if (event.getBlock().getType().equals(Material.WHEAT_SEEDS) || event.getBlock().getType().equals(Material.WHEAT)) {
             if (event.getPlayer().hasCooldown(Material.WOODEN_HOE)) {
                 event.setCancelled(true);

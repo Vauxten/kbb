@@ -109,6 +109,7 @@ public class RoleManager {
             if (p == KingsButBad.king) {
                 KingsButBad.joesunlocked = false;
                 KingsButBad.coalCompactor = false;
+                KingsButBad.mineunlocked = false;
                 for (LivingEntity le : Bukkit.getWorld("world").getLivingEntities()) {
                     if (le.getType().equals(EntityType.ZOMBIE)) {
                         le.remove();

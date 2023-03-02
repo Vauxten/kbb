@@ -148,7 +148,7 @@ public class PlayerInteractAtEntityListener implements Listener {
 
     @EventHandler
     public void onPlayerQuit(InventoryClickEvent event) {
-        if (event.getWhoClicked().hasCooldown(Material.FISHING_ROD) || event.getWhoClicked().hasCooldown(Material.WOODEN_HOE))
+        if (event.getWhoClicked().hasCooldown(Material.FISHING_ROD) || event.getWhoClicked().hasCooldown(Material.WOODEN_HOE) || event.getWhoClicked().hasCooldown(Material.BONE) || event.getWhoClicked().hasCooldown(Material.STONE_PICKAXE))
             event.setCancelled(true);
         if (event.getCurrentItem() != null) {
             if (event.getCurrentItem().hasItemFlag(ItemFlag.HIDE_PLACED_ON)) {
@@ -158,6 +158,14 @@ public class PlayerInteractAtEntityListener implements Listener {
                     if (p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) >= 150.0) {
                         p.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) - 150.0);
                         Bukkit.broadcastMessage(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b><b>" + RoleManager.getKingGender(p) + " " + p.getName() + "<blue> has bought the <gold>Coal Compactor"));
+                        KingsButBad.coalCompactor = true;
+                    }
+                }
+                if (event.getCurrentItem().getType().equals(Material.OAK_FENCE)) {
+                    Player p = (Player) event.getWhoClicked();
+                    if (p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) >= 150.0) {
+                        p.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) - 150.0);
+                        Bukkit.broadcastMessage(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b><b>" + RoleManager.getKingGender(p) + " " + p.getName() + "<blue> has bought the <gold>Mines"));
                         KingsButBad.coalCompactor = true;
                     }
                 }
@@ -345,6 +353,7 @@ public class PlayerInteractAtEntityListener implements Listener {
                                 }
                             }
                         }
+
                         if (im.getDisplayName().equals(ChatColor.GOLD + "Lure 2 On all Fishing Rods")) {
                             if (p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) >= 400.0) {
                                 p.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) - 400.0);
@@ -357,7 +366,25 @@ public class PlayerInteractAtEntityListener implements Listener {
                                 }
                             }
                         }
+
+                        if (im.getDisplayName().equals(ChatColor.GOLD + "Efficiency 2 On all Pickaxes")) {
+                            if (p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) >= 400.0) {
+                                p.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) - 400.0);
+                                for (ItemStack i : p.getInventory()) {
+                                    if (i != null) {
+                                        if (i.getType().equals(Material.STONE_PICKAXE)) {
+                                            i.addEnchantment(Enchantment.DIG_SPEED, 2);
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
+                }
+                if (event.getCurrentItem().getType().equals(Material.MINECART)) {
+                    Player p = (Player) event.getWhoClicked();
+                    p.teleport(new Location(Bukkit.getWorld("world"), -98.5, -57, -34));
+                    p.playSound(p, Sound.ENTITY_MINECART_RIDING, 1, 1);
                 }
                 if (event.getCurrentItem().getType().equals(Material.TRIPWIRE_HOOK)) {
                     Player p = (Player) event.getWhoClicked();
@@ -418,6 +445,15 @@ public class PlayerInteractAtEntityListener implements Listener {
                         event.getWhoClicked().getInventory().addItem(woodenhoe);
                     }
                 }
+                if (event.getCurrentItem().getType().equals(Material.STONE_PICKAXE)) {
+                    if (!event.getWhoClicked().getInventory().contains(Material.STONE_PICKAXE)) {
+                        ItemStack woodenhoe = new ItemStack(Material.STONE_PICKAXE);
+                        ItemMeta woodenhoemeta = woodenhoe.getItemMeta();
+                        woodenhoemeta.setDestroyableKeys(Collections.singleton(NamespacedKey.minecraft("coal_ore")));
+                        woodenhoe.setItemMeta(woodenhoemeta);
+                        event.getWhoClicked().getInventory().addItem(woodenhoe);
+                    }
+                }
                 if (event.getCurrentItem().getType().equals(Material.BONE)) {
                     if (!event.getWhoClicked().getInventory().contains(Material.BONE)) {
                         ItemStack woodenhoe = new ItemStack(Material.BONE);
@@ -442,6 +478,26 @@ public class PlayerInteractAtEntityListener implements Listener {
                                             event.getWhoClicked().getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, event.getWhoClicked().getPersistentDataContainer().get(KingsButBad.money, PersistentDataType.DOUBLE) + 0.5);
                                         }, ii);
                                     }
+                            }, iii);
+                            iii += originalamount;
+                        }
+                    }
+                }
+                if (event.getCurrentItem().getType().equals(Material.COAL_ORE)) {
+                    Integer iii = 0;
+                    for (ItemStack i : event.getWhoClicked().getInventory()) {
+                        if (i != null && i.getType().equals(Material.COAL_ORE)) {
+                            Integer originalamount = i.getAmount();
+                            Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
+                                for (int ii = 1; ii < i.getAmount() + 1; ii++) {
+                                    Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
+                                        i.setAmount(i.getAmount() - 1);
+                                        Player p = (Player) event.getWhoClicked();
+                                        p.setCooldown(Material.STONE_PICKAXE, 20);
+                                        p.playSound(p, Sound.ENTITY_ITEM_PICKUP, 1, 1);
+                                        event.getWhoClicked().getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, event.getWhoClicked().getPersistentDataContainer().get(KingsButBad.money, PersistentDataType.DOUBLE) + 50);
+                                    }, ii);
+                                }
                             }, iii);
                             iii += originalamount;
                         }
@@ -679,6 +735,28 @@ public class PlayerInteractAtEntityListener implements Listener {
                             cod.setItemMeta(codmeta);
                             inv.setItem(3, cod);
                         }
+                        if (!KingsButBad.mineunlocked) {
+                            cod = new ItemStack(Material.OAK_FENCE);
+                            cod.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+                            codmeta = cod.getItemMeta();
+                            codmeta.setDisplayName(ChatColor.GOLD + "Mines");
+                            codlore = new ArrayList<>();
+                            codlore.add(ChatColor.GRAY + "Unlocks the mining job.");
+                            codlore.add(ChatColor.GREEN + "$150");
+                            codmeta.setLore(codlore);
+                            cod.setItemMeta(codmeta);
+                            inv.setItem(3, cod);
+                        } else {
+                            cod = new ItemStack(Material.RED_STAINED_GLASS);
+                            cod.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+                            codmeta = cod.getItemMeta();
+                            codmeta.setDisplayName(ChatColor.GOLD + "Mines");
+                            codlore = new ArrayList<>();
+                            codlore.add(ChatColor.GRAY + "Already Bought!");
+                            codmeta.setLore(codlore);
+                            cod.setItemMeta(codmeta);
+                            inv.setItem(3, cod);
+                        }
                         if (!KingsButBad.joesunlocked) {
                             cod = new ItemStack(Material.LIGHT_BLUE_WOOL);
                             cod.addItemFlags(ItemFlag.HIDE_PLACED_ON);
@@ -738,6 +816,16 @@ public class PlayerInteractAtEntityListener implements Listener {
                     codmeta.setLore(codlore);
                     cod.setItemMeta(codmeta);
                     inv.setItem(5, cod);
+                    cod = new ItemStack(Material.ENCHANTED_BOOK);
+                    cod.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+                    codmeta = cod.getItemMeta();
+                    codmeta.setDisplayName(ChatColor.GOLD + "Efficiency 2 On all Pickaxes");
+                    codlore = new ArrayList<>();
+                    codlore.add(ChatColor.GREEN + "Applies to every Pickaxe in your inventory");
+                    codlore.add(ChatColor.GREEN + "$400");
+                    codmeta.setLore(codlore);
+                    cod.setItemMeta(codmeta);
+                    inv.setItem(7, cod);
                     event.getPlayer().openInventory(inv);
                 }
                 if (event.getRightClicked().equals(KingsButBad.royaltrader)) {
@@ -939,6 +1027,31 @@ public class PlayerInteractAtEntityListener implements Listener {
                     wheat.setItemMeta(wheatmeta);
                     inv.setItem(6, wheat);
                     event.getPlayer().openInventory(inv);
+                }
+                if (event.getRightClicked().equals(KingsButBad.miner)) {
+                    Inventory inv = Bukkit.createInventory(null, 9);
+                    ItemStack hoe = new ItemStack(Material.STONE_PICKAXE);
+                    hoe.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+                    ItemMeta hoemeta = hoe.getItemMeta();
+                    hoemeta.setDisplayName(ChatColor.BLUE + "Get Pickaxe");
+                    hoe.setItemMeta(hoemeta);
+                    inv.setItem(2, hoe);
+                    ItemStack wheat = new ItemStack(Material.COAL_ORE);
+                    wheat.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+                    ItemMeta wheatmeta = wheat.getItemMeta();
+                    wheatmeta.setDisplayName(ChatColor.GOLD + "Sell Ores");
+                    wheat.setItemMeta(wheatmeta);
+                    inv.setItem(3, wheat);
+                    event.getPlayer().openInventory(inv);
+
+                    hoe = new ItemStack(Material.MINECART);
+                    hoe.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+                    hoemeta = hoe.getItemMeta();
+                    hoemeta.setDisplayName(ChatColor.BLUE + "Back to Surface");
+                    hoe.setItemMeta(hoemeta);
+                    inv.setItem(6, hoe);
+                    event.getPlayer().openInventory(inv);
+
                 }
                 if (event.getRightClicked().equals(KingsButBad.minerguard)) {
                     Inventory inv = Bukkit.createInventory(null, 9);

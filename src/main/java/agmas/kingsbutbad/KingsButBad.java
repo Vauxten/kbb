@@ -42,6 +42,7 @@ public final class KingsButBad extends JavaPlugin {
     public static Villager sewervillager;
     public static HashMap<Player,Player> bodylink = new HashMap<>();
     public static Villager selfdefense;
+    public static Boolean mineunlocked = false;
     public static Villager farmerjoe;
     public static Villager minerguard;
     public static Villager bertrude;
@@ -52,6 +53,7 @@ public final class KingsButBad extends JavaPlugin {
     public static Villager archerjohn;
     public static Villager prisonguard;
     public static Villager littlejoes;
+    public static Villager miner;
     public static String kinggender = "King";
     public static String kinggender2 = "King";
     public static ArrayList<UUID> prisoners = new ArrayList<>();
@@ -197,6 +199,14 @@ public final class KingsButBad extends JavaPlugin {
         littlejoes.setInvulnerable(true);
         littlejoes.setPersistent(true);
         littlejoes.setAI(false);
+
+        miner = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -212.5, -46.0, -176.5, -180, 0), EntityType.VILLAGER);
+
+        miner.setCustomName(CreateText.addColors("<gray>Miner Joseph"));
+        miner.setCustomNameVisible(true);
+        miner.setInvulnerable(true);
+        miner.setPersistent(true);
+        miner.setAI(false);
     }
 
     @Override
