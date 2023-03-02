@@ -157,7 +157,7 @@ public class PlayerInteractAtEntityListener implements Listener {
                     Player p = (Player) event.getWhoClicked();
                     if (p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) >= 150.0) {
                         p.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) - 150.0);
-                        p.sendMessage(ChatColor.RED + "Bought the coal compactor");
+                        Bukkit.broadcastMessage(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b><b>" + RoleManager.getKingGender(p) + p.getName() + "<blue> has bought the <gold>Coal Compactor"));
                         KingsButBad.coalCompactor = true;
                     }
                 }
@@ -165,7 +165,7 @@ public class PlayerInteractAtEntityListener implements Listener {
                     Player p = (Player) event.getWhoClicked();
                     if (p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) >= 200.0) {
                         p.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) - 200.0);
-                        Bukkit.broadcastMessage(CreateText.addColors("<color:#ffff00><b>The" + RoleManager.getKingGender(p) + "<blue> has bought <gold>Little Joe's Shack"));
+                        Bukkit.broadcastMessage(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b><b>" + RoleManager.getKingGender(p) + p.getName() + "<blue> has bought <gold>Little Joe's Shack"));
                         KingsButBad.joesunlocked = true;
                     }
                 }
