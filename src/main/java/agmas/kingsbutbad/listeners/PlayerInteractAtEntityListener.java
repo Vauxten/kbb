@@ -199,7 +199,7 @@ public class PlayerInteractAtEntityListener implements Listener {
                         }
                     }
                     event.getWhoClicked().sendMessage(ChatColor.GOLD + "Prisoners we are current holding: " + prisonercount);
-                    event.getWhoClicked().sendMessage(ChatColor.BLUE + "It is currently" + MiscTask.bossbar.getTitle());
+                    event.getWhoClicked().sendMessage(ChatColor.BLUE + "It is currently " + MiscTask.bossbar.getTitle());
                     event.getWhoClicked().sendMessage(ChatColor.LIGHT_PURPLE + "We have " + guardcount + " loyal guards!");
                 }
                 if (event.getCurrentItem().getType().equals(Material.RED_CONCRETE)) {
@@ -623,6 +623,12 @@ public class PlayerInteractAtEntityListener implements Listener {
                 }
                 if (event.getRightClicked().equals(KingsButBad.royalservant)) {
                     if (RoleManager.isKingAtAll(event.getPlayer())) {
+                        int zombiecount = 0;
+                        for (LivingEntity le : Bukkit.getWorld("world").getLivingEntities()) {
+                            if (le.getType().equals(EntityType.ZOMBIE)) {
+                                zombiecount++;
+                            }
+                        }
                         Inventory inv = Bukkit.createInventory(null, 9);
                         ItemStack cod = new ItemStack(Material.IRON_SHOVEL);
                         cod.addItemFlags(ItemFlag.HIDE_PLACED_ON);
@@ -634,7 +640,23 @@ public class PlayerInteractAtEntityListener implements Listener {
                         codlore.add(ChatColor.GREEN + "$150");
                         codmeta.setLore(codlore);
                         cod.setItemMeta(codmeta);
-                        inv.setItem(1, cod);
+                        if (zombiecount < 5) {
+                            inv.setItem(1, cod);
+                            zombiecount++;
+                            if (zombiecount >= 5) {
+                                event.getPlayer().closeInventory();
+                            }
+                        } else {
+                            cod = new ItemStack(Material.RED_STAINED_GLASS);
+                            cod.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+                            codmeta = cod.getItemMeta();
+                            codmeta.setDisplayName(ChatColor.GOLD + "Royal Patroller");
+                            codlore = new ArrayList<>();
+                            codlore.add(ChatColor.GRAY + "Capped at 5 Patrollers!");
+                            codmeta.setLore(codlore);
+                            cod.setItemMeta(codmeta);
+                            inv.setItem(3, cod);
+                        }
                         if (!KingsButBad.coalCompactor) {
                             cod = new ItemStack(Material.DEEPSLATE_COAL_ORE);
                             cod.addItemFlags(ItemFlag.HIDE_PLACED_ON);
@@ -643,6 +665,16 @@ public class PlayerInteractAtEntityListener implements Listener {
                             codlore = new ArrayList<>();
                             codlore.add(ChatColor.GRAY + "Gain 5$ every time a prisoner mines coal.");
                             codlore.add(ChatColor.GREEN + "$150");
+                            codmeta.setLore(codlore);
+                            cod.setItemMeta(codmeta);
+                            inv.setItem(3, cod);
+                        } else {
+                            cod = new ItemStack(Material.RED_STAINED_GLASS);
+                            cod.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+                            codmeta = cod.getItemMeta();
+                            codmeta.setDisplayName(ChatColor.GOLD + "Coal Compactor");
+                            codlore = new ArrayList<>();
+                            codlore.add(ChatColor.GRAY + "Already Bought!");
                             codmeta.setLore(codlore);
                             cod.setItemMeta(codmeta);
                             inv.setItem(3, cod);
@@ -656,6 +688,16 @@ public class PlayerInteractAtEntityListener implements Listener {
                             codlore.add(ChatColor.GRAY + "Allows people to shop from Little Joe's to upgrade");
                             codlore.add(ChatColor.GRAY + "Tools.");
                             codlore.add(ChatColor.GREEN + "$200");
+                            codmeta.setLore(codlore);
+                            cod.setItemMeta(codmeta);
+                            inv.setItem(5, cod);
+                        } else {
+                            cod = new ItemStack(Material.RED_STAINED_GLASS);
+                            cod.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+                            codmeta = cod.getItemMeta();
+                            codmeta.setDisplayName(ChatColor.GOLD + "Little Joe's Shack");
+                            codlore = new ArrayList<>();
+                            codlore.add(ChatColor.GRAY + "Already Bought!");
                             codmeta.setLore(codlore);
                             cod.setItemMeta(codmeta);
                             inv.setItem(5, cod);
