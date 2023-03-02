@@ -193,6 +193,7 @@ public final class KingsButBad extends JavaPlugin {
         littlejoes.setCustomName(CreateText.addColors("<blue>Little Joes"));
         littlejoes.setCustomNameVisible(true);
         littlejoes.setBaby();
+        littlejoes.setAgeLock(true);
         littlejoes.setInvulnerable(true);
         littlejoes.setPersistent(true);
         littlejoes.setAI(false);
