@@ -33,6 +33,8 @@ public final class KingsButBad extends JavaPlugin {
     public static NamespacedKey wasinPrison;
     public static NamespacedKey preffered;
     public static NamespacedKey money;
+    public static Boolean joesunlocked = false;
+    public static Boolean coalCompactor = false;
     public static HashMap<Player, Integer> prisonTimer = new HashMap<>();
     public static HashMap<Player, Role> playerRoleInviteHashMap = new HashMap<>();
     public static LuckPerms api;
@@ -45,8 +47,11 @@ public final class KingsButBad extends JavaPlugin {
     public static Villager bertrude;
     public static Villager lunchlady;
     public static Villager royaltrader;
+    public static Villager royalservant;
     public static Villager mopvillager;
     public static Villager archerjohn;
+    public static Villager prisonguard;
+    public static Villager littlejoes;
     public static String kinggender = "King";
     public static String kinggender2 = "King";
     public static ArrayList<UUID> prisoners = new ArrayList<>();
@@ -129,7 +134,7 @@ public final class KingsButBad extends JavaPlugin {
         selfdefense.setPersistent(true);
         selfdefense.setAI(false);
 
-        minerguard = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -142.5, -57, 12.5, -45, 0), EntityType.VILLAGER);
+        minerguard = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -144.5, -57, 12.5, 45, 0), EntityType.VILLAGER);
 
         minerguard.setCustomName(CreateText.addColors("<gray>Miner"));
         minerguard.setCustomNameVisible(true);
@@ -166,6 +171,31 @@ public final class KingsButBad extends JavaPlugin {
         archerjohn.setInvulnerable(true);
         archerjohn.setPersistent(true);
         archerjohn.setAI(false);
+
+        prisonguard = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -136.5, -57.0, -12, -90, 0), EntityType.VILLAGER);
+
+        prisonguard.setCustomName(CreateText.addColors("<blue>Prison Guard"));
+        prisonguard.setCustomNameVisible(true);
+        prisonguard.setInvulnerable(true);
+        prisonguard.setPersistent(true);
+        prisonguard.setAI(false);
+
+        royalservant = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -67.5, -57.0, 23.5, -45, 0), EntityType.VILLAGER);
+
+        royalservant.setCustomName(CreateText.addColors("<gold>Royal Servant"));
+        royalservant.setCustomNameVisible(true);
+        royalservant.setInvulnerable(true);
+        royalservant.setPersistent(true);
+        royalservant.setAI(false);
+
+        littlejoes = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -113.5, -56.0, -1.5, -180, 0), EntityType.VILLAGER);
+
+        littlejoes.setCustomName(CreateText.addColors("<blue>Little Joes"));
+        littlejoes.setCustomNameVisible(true);
+        littlejoes.setBaby();
+        littlejoes.setInvulnerable(true);
+        littlejoes.setPersistent(true);
+        littlejoes.setAI(false);
     }
 
     @Override

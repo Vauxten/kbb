@@ -4,10 +4,7 @@ import agmas.kingsbutbad.KingsButBad;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -104,9 +101,19 @@ public class RoleManager {
     }
     public static void givePlayerRole(Player p) {
         KingsButBad.playerRoleHashMap.putIfAbsent(p, Role.PEASANT);
+        if (p.getWorldBorder() != null) {
+            p.setWorldBorder(null);
+        }
         p.getInventory().clear();
         if (p == KingsButBad.king || p == KingsButBad.king2) {
             if (p == KingsButBad.king) {
+                KingsButBad.joesunlocked = false;
+                KingsButBad.coalCompactor = false;
+                for (LivingEntity le : Bukkit.getWorld("world").getLivingEntities()) {
+                    if (le.getType().equals(EntityType.ZOMBIE)) {
+                        le.remove();
+                    }
+                }
                 ItemStack crown = new ItemStack(Material.GOLDEN_HELMET);
                 ItemMeta crownmeta = crown.getItemMeta();
                 crownmeta.setUnbreakable(true);

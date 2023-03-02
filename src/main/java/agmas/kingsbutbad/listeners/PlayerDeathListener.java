@@ -39,6 +39,28 @@ public class PlayerDeathListener implements Listener {
     }
     @EventHandler
     public void onPlayerQuit(PlayerDeathEvent event) {
+        if (event.getPlayer().equals(KingsButBad.king)) {
+            if (event.getPlayer().getKiller() != null) {
+                KingsButBad.king = null;
+                KingsButBad.king2 = null;
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    if (KingsButBad.playerRoleHashMap.get(p) != Role.PEASANT) {
+                        KingsButBad.playerRoleHashMap.put(p, Role.PEASANT);
+                        RoleManager.givePlayerRole(p);
+                    }
+                }
+                Player p = event.getPlayer().getKiller();
+                KingsButBad.playerRoleInviteHashMap.clear();
+                KingsButBad.king = p;
+                KingsButBad.playerRoleHashMap.put(p, Role.KING);
+                RoleManager.showKingMessages(p, Role.KING.objective);
+                RoleManager.givePlayerRole(p);
+                KingsButBad.kinggender = "King";
+                for (Player pe : Bukkit.getOnlinePlayers()) {
+                    pe.sendTitle(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>KING " + p.getName().toUpperCase()), ChatColor.GREEN + "is your new overlord!");
+                }
+            }
+        }
         event.getDrops().clear();
         event.setDeathMessage(ChatColor.GRAY + event.getDeathMessage());
         if (KingsButBad.playerRoleHashMap.get(event.getPlayer()).equals(Role.CRIMINAl)) {

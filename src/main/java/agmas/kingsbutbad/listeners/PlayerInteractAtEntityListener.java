@@ -4,6 +4,7 @@ import agmas.kingsbutbad.KingsButBad;
 import agmas.kingsbutbad.tasks.MiscTask;
 import agmas.kingsbutbad.utils.CreateText;
 import agmas.kingsbutbad.utils.Role;
+import agmas.kingsbutbad.utils.RoleManager;
 import com.destroystokyo.paper.Namespaced;
 import com.destroystokyo.paper.NamespacedTag;
 import org.bukkit.*;
@@ -14,10 +15,7 @@ import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
@@ -45,6 +43,10 @@ public class PlayerInteractAtEntityListener implements Listener {
         if (event.getItem().getType().equals(Material.COOKED_COD)) {
             event.getPlayer().sendMessage(CreateText.addColors("<gray><b>|<green><b> +5 HP<gray><b> |"));
             event.getPlayer().setHealth(Math.min(event.getPlayer().getHealth() + 5, event.getPlayer().getMaxHealth()));
+        }
+        if (event.getItem().getType().equals(Material.GOLDEN_APPLE)) {
+            event.getPlayer().sendMessage(CreateText.addColors("<gray><b>|<green><b> +15 HP<gray><b> |"));
+            event.getPlayer().setHealth(Math.min(event.getPlayer().getHealth() + 15, event.getPlayer().getMaxHealth()));
         }
         if (event.getItem().getType().equals(Material.BEETROOT_SOUP)) {
             event.getPlayer().sendMessage(CreateText.addColors("<gray><b>|<green><b> +2 HP<gray><b> |"));
@@ -127,6 +129,21 @@ public class PlayerInteractAtEntityListener implements Listener {
             return;
         }
         event.getPlayer().getInventory().addItem(new ItemStack(Material.SALMON));
+        if (event.getPlayer().getItemInHand().getEnchantments().containsKey(Enchantment.LOOT_BONUS_BLOCKS)) {
+            event.getPlayer().getInventory().addItem(new ItemStack(Material.SALMON, new Random().nextInt(0, 3)));
+        }
+    }
+
+    @EventHandler
+    public void onPlayerQuit(EntityTargetEvent event) {
+        if (event.getReason().equals(EntityTargetEvent.TargetReason.TARGET_ATTACKED_ENTITY)) {
+            return;
+        }
+        if (event.getTarget() instanceof Player p) {
+            if (!KingsButBad.playerRoleHashMap.get(p).equals(Role.CRIMINAl)) {
+                event.setCancelled(true);
+            }
+        }
     }
 
     @EventHandler
@@ -136,6 +153,66 @@ public class PlayerInteractAtEntityListener implements Listener {
         if (event.getCurrentItem() != null) {
             if (event.getCurrentItem().hasItemFlag(ItemFlag.HIDE_PLACED_ON)) {
                 event.setCancelled(true);
+                if (event.getCurrentItem().getType().equals(Material.DEEPSLATE_COAL_ORE)) {
+                    Player p = (Player) event.getWhoClicked();
+                    if (p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) >= 150.0) {
+                        p.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) - 150.0);
+                        p.sendMessage(ChatColor.RED + "Bought the coal compactor");
+                        KingsButBad.coalCompactor = true;
+                    }
+                }
+                if (event.getCurrentItem().getType().equals(Material.LIGHT_BLUE_WOOL)) {
+                    Player p = (Player) event.getWhoClicked();
+                    if (p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) >= 200.0) {
+                        p.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) - 200.0);
+                        Bukkit.broadcastMessage(CreateText.addColors("<color:#ffff00><b>The" + RoleManager.getKingGender(p) + "<blue> has bought <gold>Little Joe's Shack"));
+                        KingsButBad.joesunlocked = true;
+                    }
+                }
+                if (event.getCurrentItem().getType().equals(Material.IRON_SHOVEL)) {
+                    Player p = (Player) event.getWhoClicked();
+                    if (p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) >= 150.0) {
+                        p.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) - 150.0);
+                        LivingEntity le = (LivingEntity) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -117.220, -57, -10.131), EntityType.ZOMBIE);
+                        le.getEquipment().setHelmet(new ItemStack(Material.DIAMOND_HELMET));
+                        le.getEquipment().setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
+                        le.getEquipment().setLeggings(new ItemStack(Material.IRON_LEGGINGS));
+                        le.getEquipment().setBoots(new ItemStack(Material.IRON_BOOTS));
+                        le.setCustomName(ChatColor.BLUE + "Royal Patroller");
+                        le.setCustomNameVisible(true);
+                        le.getEquipment().setItemInMainHand(new ItemStack(Material.DIAMOND_SWORD));
+                        le.addPotionEffect(PotionEffectType.SPEED.createEffect(9999999, 0));
+                        le.addPotionEffect(PotionEffectType.REGENERATION.createEffect(9999999, 0));
+                    }
+                }
+                if (event.getCurrentItem().getType().equals(Material.MAP)) {
+                    event.getWhoClicked().closeInventory();
+                    event.getWhoClicked().sendMessage(ChatColor.GOLD + "PRISON'S STATS");
+                    Integer prisonercount = 0;
+                    Integer guardcount = 0;
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PRISONER)) {
+                            prisonercount++;
+                        }
+                        if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PRISON_GUARD)) {
+                            guardcount++;
+                        }
+                    }
+                    event.getWhoClicked().sendMessage(ChatColor.GOLD + "Prisoners we are current holding: " + prisonercount);
+                    event.getWhoClicked().sendMessage(ChatColor.BLUE + "It is currently" + MiscTask.bossbar.getTitle());
+                    event.getWhoClicked().sendMessage(ChatColor.LIGHT_PURPLE + "We have " + guardcount + " loyal guards!");
+                }
+                if (event.getCurrentItem().getType().equals(Material.RED_CONCRETE)) {
+
+                    Player p = (Player) event.getWhoClicked();
+                    Bukkit.broadcastMessage(CreateText.addColors("<red>>> <b>" + p.getName() + "<gold> </b> turned themselves in, for some reason.."));
+                    KingsButBad.prisonTimer.put(p, 100);
+                    KingsButBad.playerRoleHashMap.put(p, Role.PRISONER);
+                    event.setCancelled(true);
+                    event.getWhoClicked().getInventory().clear();
+                    event.getWhoClicked().getPersistentDataContainer().set(KingsButBad.wasinPrison, PersistentDataType.INTEGER, 1);
+                    RoleManager.givePlayerRole(p);
+                }
                 if (event.getCurrentItem().getType().equals(Material.GOLDEN_APPLE)) {
                     Player p = (Player) event.getWhoClicked();
                     if (p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) >= 150.0) {
@@ -256,6 +333,30 @@ public class PlayerInteractAtEntityListener implements Listener {
                                 }
                             }
                         }
+                        if (im.getDisplayName().equals(ChatColor.GOLD + "Fortune 1 On all Hoes")) {
+                            if (p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) >= 400.0) {
+                                p.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) - 400.0);
+                                for (ItemStack i : p.getInventory()) {
+                                    if (i != null) {
+                                        if (i.getType().equals(Material.WOODEN_HOE)) {
+                                            i.addEnchantment(Enchantment.LOOT_BONUS_BLOCKS, 1);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (im.getDisplayName().equals(ChatColor.GOLD + "Lure 2 On all Fishing Rods")) {
+                            if (p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) >= 400.0) {
+                                p.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) - 400.0);
+                                for (ItemStack i : p.getInventory()) {
+                                    if (i != null) {
+                                        if (i.getType().equals(Material.FISHING_ROD)) {
+                                            i.addEnchantment(Enchantment.LURE, 2);
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
                 if (event.getCurrentItem().getType().equals(Material.TRIPWIRE_HOOK)) {
@@ -285,6 +386,13 @@ public class PlayerInteractAtEntityListener implements Listener {
                     if (p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) >= 15) {
                         p.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) - 15.0);
                         p.getInventory().addItem(new ItemStack(Material.COOKED_COD, 16));
+                    }
+                }
+                if (event.getCurrentItem().getType().equals(Material.GOLDEN_CARROT)) {
+                    Player p = (Player) event.getWhoClicked();
+                    if (p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) >= 32.0) {
+                        p.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) - 32.0);
+                        p.getInventory().addItem(new ItemStack(Material.GOLDEN_CARROT, 16));
                     }
                 }
                 if (event.getCurrentItem().getType().equals(Material.FISHING_ROD)) {
@@ -513,6 +621,83 @@ public class PlayerInteractAtEntityListener implements Listener {
                     inv.setItem(7, cod);
                     event.getPlayer().openInventory(inv);
                 }
+                if (event.getRightClicked().equals(KingsButBad.royalservant)) {
+                    if (RoleManager.isKingAtAll(event.getPlayer())) {
+                        Inventory inv = Bukkit.createInventory(null, 9);
+                        ItemStack cod = new ItemStack(Material.IRON_SHOVEL);
+                        cod.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+                        ItemMeta codmeta = cod.getItemMeta();
+                        codmeta.setDisplayName(ChatColor.GOLD + "Hire Royal Patroler");
+                        ArrayList<String> codlore = new ArrayList<>();
+                        codlore.add(ChatColor.GRAY + "Hire a Royal Patroler.");
+                        codlore.add(ChatColor.GRAY + "Patrolers find and kill criminals.");
+                        codlore.add(ChatColor.GREEN + "$150");
+                        codmeta.setLore(codlore);
+                        cod.setItemMeta(codmeta);
+                        inv.setItem(1, cod);
+                        if (!KingsButBad.coalCompactor) {
+                            cod = new ItemStack(Material.DEEPSLATE_COAL_ORE);
+                            cod.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+                            codmeta = cod.getItemMeta();
+                            codmeta.setDisplayName(ChatColor.GOLD + "Coal Compactor");
+                            codlore = new ArrayList<>();
+                            codlore.add(ChatColor.GRAY + "Gain 5$ every time a prisoner mines coal.");
+                            codlore.add(ChatColor.GREEN + "$150");
+                            codmeta.setLore(codlore);
+                            cod.setItemMeta(codmeta);
+                            inv.setItem(3, cod);
+                        }
+                        if (!KingsButBad.joesunlocked) {
+                            cod = new ItemStack(Material.LIGHT_BLUE_WOOL);
+                            cod.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+                            codmeta = cod.getItemMeta();
+                            codmeta.setDisplayName(ChatColor.GOLD + "Buy Little Joe's Shack");
+                            codlore = new ArrayList<>();
+                            codlore.add(ChatColor.GRAY + "Allows people to shop from Little Joe's to upgrade");
+                            codlore.add(ChatColor.GRAY + "Tools.");
+                            codlore.add(ChatColor.GREEN + "$200");
+                            codmeta.setLore(codlore);
+                            cod.setItemMeta(codmeta);
+                            inv.setItem(5, cod);
+                        }
+                        event.getPlayer().openInventory(inv);
+                    }
+                }
+                if (event.getRightClicked().equals(KingsButBad.littlejoes)) {
+                    Inventory inv = Bukkit.createInventory(null, 9);
+                    ItemStack cod = new ItemStack(Material.GOLDEN_CARROT, 16);
+                    cod.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+                    ItemMeta codmeta = cod.getItemMeta();
+                    codmeta.setDisplayName(ChatColor.GOLD + "Joe's Snax");
+                    ArrayList<String> codlore = new ArrayList<>();
+                    codlore.add(ChatColor.GRAY + "small man, small bites");
+                    codlore.add(ChatColor.GREEN + "$32");
+                    codmeta.setLore(codlore);
+                    cod.setItemMeta(codmeta);
+                    inv.setItem(1, cod);
+
+                    cod = new ItemStack(Material.ENCHANTED_BOOK);
+                    cod.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+                    codmeta = cod.getItemMeta();
+                    codmeta.setDisplayName(ChatColor.GOLD + "Fortune 1 On all Hoes");
+                    codlore = new ArrayList<>();
+                    codlore.add(ChatColor.GREEN + "Applies to every Hoe in your inventory");
+                    codlore.add(ChatColor.GREEN + "$400");
+                    codmeta.setLore(codlore);
+                    cod.setItemMeta(codmeta);
+                    inv.setItem(3, cod);
+                    cod = new ItemStack(Material.ENCHANTED_BOOK);
+                    cod.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+                    codmeta = cod.getItemMeta();
+                    codmeta.setDisplayName(ChatColor.GOLD + "Lure 2 On all Fishing Rods");
+                    codlore = new ArrayList<>();
+                    codlore.add(ChatColor.GREEN + "Applies to every Fishing Rod in your inventory");
+                    codlore.add(ChatColor.GREEN + "$400");
+                    codmeta.setLore(codlore);
+                    cod.setItemMeta(codmeta);
+                    inv.setItem(5, cod);
+                    event.getPlayer().openInventory(inv);
+                }
                 if (event.getRightClicked().equals(KingsButBad.royaltrader)) {
                     Inventory inv = Bukkit.createInventory(null, 9);
                     ItemStack cod = new ItemStack(Material.PAPER);
@@ -721,6 +906,24 @@ public class PlayerInteractAtEntityListener implements Listener {
                     hoemeta.setDisplayName(ChatColor.BLUE + "Get Pickaxe");
                     hoe.setItemMeta(hoemeta);
                     inv.setItem(4, hoe);
+                    event.getPlayer().openInventory(inv);
+                }
+                if (event.getRightClicked().equals(KingsButBad.prisonguard)) {
+                    Inventory inv = Bukkit.createInventory(null, 9);
+                    ItemStack hoe = new ItemStack(Material.RED_CONCRETE);
+                    hoe.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+                    ItemMeta hoemeta = hoe.getItemMeta();
+                    hoemeta.setDisplayName(ChatColor.BLUE + "Turn Yourself In" + ChatColor.GRAY + " (for some reason)");
+                    hoe.setItemMeta(hoemeta);
+                    inv.setItem(2, hoe);
+                    event.getPlayer().openInventory(inv);
+
+                    hoe = new ItemStack(Material.MAP);
+                    hoe.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+                    hoemeta = hoe.getItemMeta();
+                    hoemeta.setDisplayName(ChatColor.BLUE + "Prison Stats");
+                    hoe.setItemMeta(hoemeta);
+                    inv.setItem(6, hoe);
                     event.getPlayer().openInventory(inv);
                 }
                 if (event.getRightClicked().equals(KingsButBad.mopvillager)) {

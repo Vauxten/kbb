@@ -4,6 +4,8 @@ import agmas.kingsbutbad.KingsButBad;
 import agmas.kingsbutbad.utils.CreateText;
 import agmas.kingsbutbad.utils.Role;
 import agmas.kingsbutbad.utils.RoleManager;
+import me.libraryaddict.disguise.DisguiseAPI;
+import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.*;
@@ -29,6 +31,7 @@ import org.checkerframework.checker.units.qual.K;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Random;
 
 import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
@@ -47,16 +50,60 @@ public class MiscTask extends BukkitRunnable {
     @Override
     public void run(){
 
+        if (KingsButBad.joesunlocked) {
+            KingsButBad.littlejoes.teleport(new Location(Bukkit.getWorld("world"), -113.5, -56.0, -1.5, -180, 0));
+        } else {
+            KingsButBad.littlejoes.teleport(new Location(Bukkit.getWorld("world"), -105.5, -63.0, -77, 0, 0));
+        }
         if (Bukkit.getWorld("world").getTime() > 0 && Bukkit.getWorld("world").getTime() < 2000) {
             timer1 = 0;
             timer2 = 2500;
             bossbar.setColor(BarColor.RED);
             bossbar.setTitle("ROLL CALL");
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PRISONER)) {
+                    WorldBorder rollborder = Bukkit.createWorldBorder();
+                    rollborder.setCenter(new Location(Bukkit.getWorld("world"), -140, -57, 15));
+                    rollborder.setSize(3);
+                    rollborder.setDamageAmount(0.4);
+                    rollborder.setDamageBuffer(0);
+                    if (KingsButBad.isInside(p, new Location(Bukkit.getWorld("world"), -139, -57, 16), new Location(Bukkit.getWorld("world"), -142, -57, 13))) {
+
+                        if (!rollborder.isInside(p.getLocation())) {
+                            p.damage(1);
+                        }
+                        p.setWorldBorder(rollborder);
+                    } else {
+                        if (!Objects.equals(p.getWorldBorder(), rollborder)) {
+                            p.setWorldBorder(null);
+                        }
+                    }
+                }
+            }
         }
         if (Bukkit.getWorld("world").getTime() > 2000 && Bukkit.getWorld("world").getTime() < 4000) {
             timer1 = 2000;
             timer2 = 4000;
             bossbar.setColor(BarColor.WHITE);
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PRISONER)) {
+                    WorldBorder rollborder = Bukkit.createWorldBorder();
+                    rollborder.setCenter(new Location(Bukkit.getWorld("world"), -153, -58, 3));
+                    rollborder.setSize(18);
+                    rollborder.setDamageAmount(0.4);
+                    rollborder.setDamageBuffer(0);
+                    if (KingsButBad.isInside(p, new Location(Bukkit.getWorld("world"), -144, -58, 5), new Location(Bukkit.getWorld("world"), -155, -53, -10))) {
+                        if (!rollborder.isInside(p.getLocation())) {
+                            p.damage(1);
+                        }
+                        p.setWorldBorder(rollborder);
+                    } else {
+                        if (!Objects.equals(p.getWorldBorder(), rollborder)) {
+                            p.setWorldBorder(null);
+                        }
+                    }
+                }
+            }
             bossbar.setTitle("Breakfast");
         }
         if (Bukkit.getWorld("world").getTime() > 4000 && Bukkit.getWorld("world").getTime() < 7000) {
@@ -64,17 +111,64 @@ public class MiscTask extends BukkitRunnable {
             timer2 = 7000;
             bossbar.setColor(BarColor.WHITE);
             bossbar.setTitle("Free Time");
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PRISONER)) {
+                        if (p.getWorldBorder() != null) {
+                            p.setWorldBorder(null);
+                        }
+                }
+            }
         }
         if (Bukkit.getWorld("world").getTime() > 7000 && Bukkit.getWorld("world").getTime() < 10000) {
             timer1 = 7000;
             timer2 = 10000;
             bossbar.setColor(BarColor.WHITE);
             bossbar.setTitle("Job Time");
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                WorldBorder rollborder = Bukkit.createWorldBorder();
+                rollborder.setCenter(new Location(Bukkit.getWorld("world"), -150, -49, 13));
+                rollborder.setSize(15);
+                rollborder.setDamageAmount(0.4);
+                rollborder.setDamageBuffer(0);
+
+                if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PRISONER)) {
+                    if (KingsButBad.isInside(p, new Location(Bukkit.getWorld("world"), -142, -50, 6), new Location(Bukkit.getWorld("world"), -157, -58, 20))) {
+                        if (!rollborder.isInside(p.getLocation())) {
+                            p.damage(1);
+                        }
+                        p.setWorldBorder(rollborder);
+                    } else {
+                        if (!Objects.equals(p.getWorldBorder(), rollborder)) {
+                            p.setWorldBorder(null);
+                        }
+                    }
+                }
+            }
         }
         if (Bukkit.getWorld("world").getTime() > 10000 && Bukkit.getWorld("world").getTime() < 13000) {
             timer1 = 10000;
             timer2 = 13000;
             bossbar.setColor(BarColor.WHITE);
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PRISONER)) {
+                    WorldBorder rollborder = Bukkit.createWorldBorder();
+                    rollborder.setCenter(new Location(Bukkit.getWorld("world"), -153, -58, 3));
+                    rollborder.setSize(18);
+                    rollborder.setDamageAmount(0.4);
+                    rollborder.setDamageBuffer(0);
+
+                    if (KingsButBad.isInside(p, new Location(Bukkit.getWorld("world"), -144, -58, 5), new Location(Bukkit.getWorld("world"), -155, -53, -10))) {
+                        if (!rollborder.isInside(p.getLocation())) {
+                            p.damage(1);
+                        }
+                        p.setWorldBorder(rollborder);
+                    } else {
+                        if (!Objects.equals(p.getWorldBorder(), rollborder)) {
+                            p.setWorldBorder(null);
+                        }
+                    }
+                }
+            }
             bossbar.setTitle("Lunch");
         }
         if (Bukkit.getWorld("world").getTime() > 13000 && Bukkit.getWorld("world").getTime() < 15000) {
@@ -82,6 +176,22 @@ public class MiscTask extends BukkitRunnable {
             timer2 = 15000;
             bossbar.setColor(BarColor.RED);
             bossbar.setTitle("EVENING ROLL CALL");
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PRISONER)) {
+                    WorldBorder rollborder = Bukkit.createWorldBorder();
+                    rollborder.setCenter(new Location(Bukkit.getWorld("world"), -140, -57, 15));
+                    rollborder.setSize(3);
+                    rollborder.setDamageAmount(0.4);
+                    rollborder.setDamageBuffer(0);
+
+                    if (KingsButBad.isInside(p, new Location(Bukkit.getWorld("world"), -139, -57, 16), new Location(Bukkit.getWorld("world"), -142, -57, 13))) {
+                        if (!rollborder.isInside(p.getLocation())) {
+                            p.damage(1);
+                        }
+                        p.setWorldBorder(rollborder);
+                    }
+                }
+            }
         }
         if (Bukkit.getWorld("world").getTime() > 15000 && Bukkit.getWorld("world").getTime() < 18000) {
             timer1 = 15000;
@@ -90,8 +200,25 @@ public class MiscTask extends BukkitRunnable {
             bossbar.setTitle("Cell Time");
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PRISONER)) {
+                    if (p.getWorldBorder() != null) {
+                        p.setWorldBorder(null);
+                    }
+                }
+            }
+            Integer prisonersnotincell = 0;
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PRISONER)) {
                     if (!KingsButBad.isInside(p, new Location(Bukkit.getWorld("world"), -136, -53, -6), new Location(Bukkit.getWorld("world"), -132, -57, 23))) {
                         p.sendTitle("", CreateText.addColors("<red><b>GET IN YOUR CELL, FILTH!"), 0, 20, 0);
+                        prisonersnotincell++;
+                    }
+                }
+            }
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PRISON_GUARD)) {
+                    if (prisonersnotincell != 0) {
+                        p.sendTitle("", CreateText.addColors("<red><b>" + prisonersnotincell + " PRISONERS ARE NOT IN THEIR CELLS!"), 0, 20, 0);
+                        prisonersnotincell++;
                     }
                 }
             }
@@ -168,11 +295,15 @@ public class MiscTask extends BukkitRunnable {
                     p.damage(1);
                 }
                 p.setWorldBorder(kingborder);
-            } else {
-                p.setWorldBorder(p.getWorld().getWorldBorder());
             }
+            if (!KingsButBad.playerRoleHashMap.get(p).equals(Role.BODYGUARD) && !KingsButBad.playerRoleHashMap.get(p).equals(Role.PRISONER)) {
+                if (p.getWorldBorder() != null) {
+                    p.setWorldBorder(null);
+                }
+            }
+
             if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PRISON_GUARD)) {
-                if (!bossbar.getPlayers().contains(p)) {
+                if (!bossbar.getPlayers().contains(p) && !bossbar.getTitle().equals("LIGHTS OUT")) {
                     p.sendTitle("", ChatColor.RED + "Stay in the prison!");
                     p.teleport(new Location(Bukkit.getWorld("world"), -137.5, -51, -8));
                 }
@@ -270,7 +401,15 @@ public class MiscTask extends BukkitRunnable {
                     p.getInventory().remove(Material.CLAY_BALL);
                 }
             }
+
             String actiobarextras = "";
+
+
+            if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PRISON_GUARD)) {
+                if (bossbar.getPlayers().contains(p) && bossbar.getTitle().equals("LIGHTS OUT")) {
+                    actiobarextras += ChatColor.GRAY + " | " + CreateText.addColors("<red>It's lights out! <blue>You can leave the <gold>prison.");
+                }
+            }
 
             Role.KING.tag = CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>"+ KingsButBad.kinggender.toUpperCase() + "<b></gradient>");
             Role.KING.uncompressedColors = "<gradient:#FFFF52:#FFBA52><b>"+ KingsButBad.kinggender.toUpperCase() + "<b></gradient>";
@@ -290,12 +429,18 @@ public class MiscTask extends BukkitRunnable {
                         p.playSound(p, Sound.ENTITY_SILVERFISH_DEATH, 1, 0.5f);
                     }
                 }
+                if (!DisguiseAPI.isDisguised(p)) {
+                    PlayerDisguise prisoner = new PlayerDisguise("leonrobiclone");
+                    prisoner.setName("Prisoner " + new Random().nextInt(1000, 9999));
+                    DisguiseAPI.disguiseEntity(p, prisoner);
+                    DisguiseAPI.setActionBarShown(p, false);
+                }
                 p.setFoodLevel(6);
                 stamina.put(p, 0.99f);
                 String tooltip = "";
                 if (p.getLocation().getPitch() < 30) {
                     tooltip = CreateText.addColors("<gray> | <red>Tip: Look down to go faster.");
-                    p.setWalkSpeed(0.06f);
+                    p.setWalkSpeed(0.02f);
                 } else {
                     p.setWalkSpeed(0.1f);
                 }
@@ -308,6 +453,10 @@ public class MiscTask extends BukkitRunnable {
                     Bukkit.broadcastMessage(CreateText.addColors("<gold>>> " + p.getName() + " served their prison sentence."));
                 }
             } else {
+                if (DisguiseAPI.isDisguised(p)) {
+                    DisguiseAPI.undisguiseToAll(p);
+                }
+
                 if (KingsButBad.king != null) {
                     if (KingsButBad.king2 == null) {
                         p.sendActionBar(CreateText.addColors("<gray>Current king<gray>: <gradient:#FFFF52:#FFBA52><b>" + KingsButBad.kinggender.toUpperCase() + " " + KingsButBad.king.getName().toUpperCase()) + actiobarextras);

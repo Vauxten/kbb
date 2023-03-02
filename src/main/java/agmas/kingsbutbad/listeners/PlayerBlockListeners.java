@@ -11,6 +11,7 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Door;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,6 +24,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.checkerframework.checker.units.qual.K;
 
+import java.util.Random;
+
 public class PlayerBlockListeners implements Listener {
 
     @EventHandler
@@ -34,10 +37,12 @@ public class PlayerBlockListeners implements Listener {
             event.getBlock().setType(Material.DEEPSLATE);
             Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
                 event.getBlock().setType(Material.DEEPSLATE_COAL_ORE);
-                KingsButBad.king.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, KingsButBad.king.getPersistentDataContainer().get(KingsButBad.money, PersistentDataType.DOUBLE) + 5);
-                KingsButBad.king.sendMessage(ChatColor.GREEN + "+5$ Prisoner mined a block");
-                KingsButBad.king2.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, KingsButBad.king.getPersistentDataContainer().get(KingsButBad.money, PersistentDataType.DOUBLE) + 5);
-                KingsButBad.king2.sendMessage(ChatColor.GREEN + "+5$ Prisoner mined a block");
+                if (KingsButBad.coalCompactor) {
+                    KingsButBad.king.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, KingsButBad.king.getPersistentDataContainer().get(KingsButBad.money, PersistentDataType.DOUBLE) + 5);
+                    KingsButBad.king.sendMessage(ChatColor.GREEN + "+5$ Prisoner mined a block");
+                    KingsButBad.king2.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, KingsButBad.king.getPersistentDataContainer().get(KingsButBad.money, PersistentDataType.DOUBLE) + 5);
+                    KingsButBad.king2.sendMessage(ChatColor.GREEN + "+5$ Prisoner mined a block");
+                }
             }, 20 * 4);
         }
         if (event.getBlock().getType().equals(Material.BROWN_CONCRETE_POWDER)) {
@@ -59,6 +64,9 @@ public class PlayerBlockListeners implements Listener {
             }
             event.setDropItems(false);
             event.getPlayer().getInventory().addItem(new ItemStack(Material.WHEAT));
+            if (event.getPlayer().getItemInHand().getEnchantments().containsKey(Enchantment.LOOT_BONUS_BLOCKS)) {
+                event.getPlayer().getInventory().addItem(new ItemStack(Material.WHEAT, new Random().nextInt(0, 5)));
+            }
             Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
                 event.getBlock().setType(Material.WHEAT);
                 BlockState seedstate = event.getBlock().getState();

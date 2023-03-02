@@ -1,9 +1,11 @@
 package agmas.kingsbutbad.listeners;
 
 import agmas.kingsbutbad.KingsButBad;
+import agmas.kingsbutbad.NoNoWords;
 import agmas.kingsbutbad.tasks.MiscTask;
 import agmas.kingsbutbad.utils.CreateText;
 import agmas.kingsbutbad.utils.Role;
+import me.libraryaddict.disguise.DisguiseAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -50,11 +52,28 @@ public class AsyncPlayerChatEventListener implements Listener {
         }
         event.setCancelled(true);
         event.setMessage(event.getMessage() + " ");
+        if (NoNoWords.previouslysaid.containsKey(event.getPlayer())) {
+            if (NoNoWords.previouslysaid.get(event.getPlayer()).equalsIgnoreCase(event.getMessage())) {
+                event.getPlayer().sendMessage(ChatColor.RED + "No Spamming!");
+                return;
+            }
+        }
+        NoNoWords.previouslysaid.put(event.getPlayer(), event.getMessage());
         event.setFormat("%1$s" + ChatColor.GRAY + ": %2$s");
+        for (String i : NoNoWords.filter) {
+            if (event.getMessage().contains(i)) {
+                event.setMessage("God, I love KingsButBad! It's amazing! I love it so much, i would never say anything bad about it, yet again trigger the chat filter. That would be a shame! Golly jee.");
+            }
+        }
         if (MiscTask.bossbar.getPlayers().contains(event.getPlayer())) {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (MiscTask.bossbar.getPlayers().contains(p)) {
-                    p.sendMessage(event.getPlayer().getPlayerListName() + ChatColor.GRAY + ": " + event.getMessage());
+                    if (!DisguiseAPI.isDisguised(event.getPlayer())) {
+                        p.sendMessage(event.getPlayer().getPlayerListName() + ChatColor.GRAY + ": " + event.getMessage());
+
+                    } else {
+                        p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.GOLD + "PRISONER" + ChatColor.DARK_GRAY + "] " + DisguiseAPI.getDisguise(event.getPlayer()).getWatcher().getCustomName() + ChatColor.GRAY + ": " + event.getMessage());
+                    }
                 }
             }
         } else {
