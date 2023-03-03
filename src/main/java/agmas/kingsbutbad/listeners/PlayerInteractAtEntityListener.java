@@ -189,6 +189,7 @@ public class PlayerInteractAtEntityListener implements Listener {
                         le.getEquipment().setLeggings(new ItemStack(Material.IRON_LEGGINGS));
                         le.getEquipment().setBoots(new ItemStack(Material.IRON_BOOTS));
                         le.setCustomName(ChatColor.BLUE + "Royal Patroller");
+                        p.getOpenInventory().close();
                         le.setCustomNameVisible(true);
                         le.getEquipment().setItemInMainHand(new ItemStack(Material.DIAMOND_SWORD));
                         le.addPotionEffect(PotionEffectType.SPEED.createEffect(9999999, 0));
@@ -700,10 +701,6 @@ public class PlayerInteractAtEntityListener implements Listener {
                         cod.setItemMeta(codmeta);
                         if (zombiecount < 5) {
                             inv.setItem(1, cod);
-                            zombiecount++;
-                            if (zombiecount >= 5) {
-                                event.getPlayer().closeInventory();
-                            }
                         } else {
                             cod = new ItemStack(Material.RED_STAINED_GLASS);
                             cod.addItemFlags(ItemFlag.HIDE_PLACED_ON);
