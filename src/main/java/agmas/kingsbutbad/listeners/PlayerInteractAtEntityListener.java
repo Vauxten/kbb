@@ -468,10 +468,11 @@ public class PlayerInteractAtEntityListener implements Listener {
                 }
                 if (event.getCurrentItem().getType().equals(Material.WHEAT)) {
                     Integer iii = 0;
-                    for (ItemStack i : event.getWhoClicked().getInventory()) {
-                        if (i != null && i.getType().equals(Material.WHEAT)) {
-                            Integer originalamount = i.getAmount();
-                            Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
+                    if (!event.getWhoClicked().hasCooldown(Material.WOODEN_HOE)) {
+                        for (ItemStack i : event.getWhoClicked().getInventory()) {
+                            if (i != null && i.getType().equals(Material.WHEAT)) {
+                                Integer originalamount = i.getAmount();
+                                Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
                                     for (int ii = 1; ii < i.getAmount() + 1; ii++) {
                                         Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
                                             i.setAmount(i.getAmount() - 1);
@@ -481,57 +482,63 @@ public class PlayerInteractAtEntityListener implements Listener {
                                             event.getWhoClicked().getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, event.getWhoClicked().getPersistentDataContainer().get(KingsButBad.money, PersistentDataType.DOUBLE) + 0.5);
                                         }, ii);
                                     }
-                            }, iii);
-                            iii += originalamount;
+                                }, iii);
+                                iii += originalamount;
+                            }
                         }
                     }
                 }
                 if (event.getCurrentItem().getType().equals(Material.COAL_ORE)) {
                     Integer iii = 0;
-                    for (ItemStack i : event.getWhoClicked().getInventory()) {
-                        if (i != null && i.getType().equals(Material.COAL_ORE)) {
-                            Integer originalamount = i.getAmount();
-                            Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
-                                for (int ii = 1; ii < i.getAmount() + 1; ii++) {
-                                    Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
-                                        i.setAmount(i.getAmount() - 1);
-                                        Player p = (Player) event.getWhoClicked();
-                                        p.setCooldown(Material.STONE_PICKAXE, 20);
-                                        p.playSound(p, Sound.ENTITY_ITEM_PICKUP, 1, 1);
-                                        event.getWhoClicked().getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, event.getWhoClicked().getPersistentDataContainer().get(KingsButBad.money, PersistentDataType.DOUBLE) + 50);
-                                    }, ii);
-                                }
-                            }, iii);
-                            iii += originalamount;
+                    if (!event.getWhoClicked().hasCooldown(Material.STONE_PICKAXE)) {
+                        for (ItemStack i : event.getWhoClicked().getInventory()) {
+                            if (i != null && i.getType().equals(Material.COAL_ORE)) {
+                                Integer originalamount = i.getAmount();
+                                Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
+                                    for (int ii = 1; ii < i.getAmount() + 1; ii++) {
+                                        Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
+                                            i.setAmount(i.getAmount() - 1);
+                                            Player p = (Player) event.getWhoClicked();
+                                            p.setCooldown(Material.STONE_PICKAXE, 20);
+                                            p.playSound(p, Sound.ENTITY_ITEM_PICKUP, 1, 1);
+                                            event.getWhoClicked().getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, event.getWhoClicked().getPersistentDataContainer().get(KingsButBad.money, PersistentDataType.DOUBLE) + 50);
+                                        }, ii);
+                                    }
+                                }, iii);
+                                iii += originalamount;
+                            }
                         }
                     }
                 }
                 if (event.getCurrentItem().getType().equals(Material.BROWN_CONCRETE)) {
                     Integer iii = 0;
-                    for (ItemStack i : event.getWhoClicked().getInventory()) {
-                        if (i != null && i.getType().equals(Material.BROWN_DYE)) {
-                            Integer originalamount = i.getAmount();
-                            Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
-                                for (int ii = 1; ii < i.getAmount() + 1; ii++) {
-                                    Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
-                                        i.setAmount(i.getAmount() - 1);
-                                        Player p = (Player) event.getWhoClicked();
-                                        p.setCooldown(Material.BONE, 20);
-                                        p.playSound(p, Sound.ENTITY_ITEM_PICKUP, 1, 1);
-                                        event.getWhoClicked().getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, event.getWhoClicked().getPersistentDataContainer().get(KingsButBad.money, PersistentDataType.DOUBLE) + 15.5);
-                                    }, ii);
-                                }
-                            }, iii);
-                            iii += originalamount;
+                    if (!event.getWhoClicked().hasCooldown(Material.BONE)) {
+                        for (ItemStack i : event.getWhoClicked().getInventory()) {
+                            if (i != null && i.getType().equals(Material.BROWN_DYE)) {
+                                Integer originalamount = i.getAmount();
+                                Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
+                                    for (int ii = 1; ii < i.getAmount() + 1; ii++) {
+                                        Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
+                                            i.setAmount(i.getAmount() - 1);
+                                            Player p = (Player) event.getWhoClicked();
+                                            p.setCooldown(Material.BONE, 20);
+                                            p.playSound(p, Sound.ENTITY_ITEM_PICKUP, 1, 1);
+                                            event.getWhoClicked().getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, event.getWhoClicked().getPersistentDataContainer().get(KingsButBad.money, PersistentDataType.DOUBLE) + 15.5);
+                                        }, ii);
+                                    }
+                                }, iii);
+                                iii += originalamount;
+                            }
                         }
                     }
                 }
                 if (event.getCurrentItem().getType().equals(Material.WATER_BUCKET)) {
                     Integer iii = 0;
-                    for (ItemStack i : event.getWhoClicked().getInventory()) {
-                        if (i != null && i.getType().equals(Material.SALMON)) {
-                            Integer originalamount = i.getAmount();
-                            Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
+                    if (!event.getWhoClicked().hasCooldown(Material.FISHING_ROD)) {
+                        for (ItemStack i : event.getWhoClicked().getInventory()) {
+                            if (i != null && i.getType().equals(Material.SALMON)) {
+                                Integer originalamount = i.getAmount();
+                                Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
                                     for (int ii = 1; ii < i.getAmount() + 1; ii++) {
                                         Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
                                             i.setAmount(i.getAmount() - 1);
@@ -541,8 +548,9 @@ public class PlayerInteractAtEntityListener implements Listener {
                                             event.getWhoClicked().getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, event.getWhoClicked().getPersistentDataContainer().get(KingsButBad.money, PersistentDataType.DOUBLE) + 100);
                                         }, ii);
                                     }
-                            }, iii);
-                            iii += originalamount;
+                                }, iii);
+                                iii += originalamount;
+                            }
                         }
                     }
                 }
