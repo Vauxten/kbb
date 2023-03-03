@@ -386,7 +386,7 @@ public class MiscTask extends BukkitRunnable {
 
             if (KingsButBad.isInside(p, new Location(Bukkit.getWorld("world"), -98, -58, -38), new Location(Bukkit.getWorld("world"), -101, -59, -41))) {
                 if (KingsButBad.mineunlocked) {
-                    p.teleport(new Location(Bukkit.getWorld("world"), -213.5, -45, -171.5));
+                    p.teleport(new Location(Bukkit.getWorld("world"), -203.5, -39, -236.5));
                 } else {
                     p.teleport(new Location(Bukkit.getWorld("world"), -98.5, -57, -34));
                     p.sendMessage(ChatColor.RED + "That's not unlocked!");
