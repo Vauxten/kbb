@@ -71,7 +71,7 @@ public class PlayerDeathListener implements Listener {
         if (KingsButBad.playerRoleHashMap.get(event.getPlayer()).equals(Role.CRIMINAl)) {
             if (!event.getPlayer().getInventory().contains(Material.PAPER)) {
                 Bukkit.broadcastMessage(CreateText.addColors("<red>>> <b>Criminal " + event.getPlayer().getName() + "<gold> </b>has been successfully captured!"));
-                KingsButBad.prisonTimer.put(event.getPlayer(), 100);
+                KingsButBad.prisonTimer.put(event.getPlayer(), 6000);
                 KingsButBad.playerRoleHashMap.put(event.getPlayer(), Role.PRISONER);
                 event.setCancelled(true);
                 event.getPlayer().getInventory().clear();

@@ -59,7 +59,7 @@ public class PlayerJoinListener implements Listener {
             RoleManager.givePlayerRole(event.getPlayer());
         } else {
             event.setJoinMessage(LegacyComponentSerializer.legacySection().serialize(miniMessage().deserialize("<gold>" + event.getPlayer().getName() + " was sent back to prison.")));
-            KingsButBad.prisonTimer.put(event.getPlayer(), 100);
+            KingsButBad.prisonTimer.put(event.getPlayer(), 6000);
             KingsButBad.playerRoleHashMap.put(event.getPlayer(), Role.PRISONER);
             RoleManager.givePlayerRole(event.getPlayer());
         }
