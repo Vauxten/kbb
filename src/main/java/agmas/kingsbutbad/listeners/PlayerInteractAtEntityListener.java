@@ -102,6 +102,8 @@ public class PlayerInteractAtEntityListener implements Listener {
     public void onPlayerQuit(EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Player d) {
             if (event.getDamager() instanceof Player p) {
+                if (p.hasPotionEffect(PotionEffectType.DAMAGE_RESISTANCE))
+                    p.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
                 p.setCooldown(Material.RED_STAINED_GLASS, 20 * 6);
                 d.setCooldown(Material.RED_STAINED_GLASS, 20 * 6);
                 if (p.getInventory().getItemInMainHand().getType().equals(Material.IRON_SHOVEL)) {

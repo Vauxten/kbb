@@ -60,11 +60,7 @@ public class AsyncPlayerChatEventListener implements Listener {
         }
         NoNoWords.previouslysaid.put(event.getPlayer(), event.getMessage());
         event.setFormat("%1$s" + ChatColor.GRAY + ": %2$s");
-        for (String i : NoNoWords.filter) {
-            if (event.getMessage().contains(i)) {
-                event.setMessage("God, I love KingsButBad! It's amazing! I love it so much, i would never say anything bad about it, yet again trigger the chat filter. That would be a shame! Golly jee.");
-            }
-        }
+        event.setMessage(NoNoWords.filtermsg(event.getMessage()));
         if (MiscTask.bossbar.getPlayers().contains(event.getPlayer())) {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (MiscTask.bossbar.getPlayers().contains(p)) {

@@ -40,7 +40,7 @@ public class PlayerBlockListeners implements Listener {
                 if (KingsButBad.coalCompactor) {
                     KingsButBad.king.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, KingsButBad.king.getPersistentDataContainer().get(KingsButBad.money, PersistentDataType.DOUBLE) + 5);
                     KingsButBad.king.sendMessage(ChatColor.GREEN + "+5$ Prisoner mined a block");
-                    KingsButBad.king2.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, KingsButBad.king.getPersistentDataContainer().get(KingsButBad.money, PersistentDataType.DOUBLE) + 5);
+                    KingsButBad.king2.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, KingsButBad.king2.getPersistentDataContainer().get(KingsButBad.money, PersistentDataType.DOUBLE) + 5);
                     KingsButBad.king2.sendMessage(ChatColor.GREEN + "+5$ Prisoner mined a block");
                 }
             }, 20 * 4);

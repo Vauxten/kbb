@@ -31,6 +31,7 @@ import static net.kyori.adventure.text.minimessage.MiniMessage.*;
 public class PlayerJoinListener implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
+        event.getPlayer().damage(80);
         event.setQuitMessage(LegacyComponentSerializer.legacySection().serialize(miniMessage().deserialize("<#D49B63>" + event.getPlayer().getName() + " ran away somewhere else..")));
     }
 

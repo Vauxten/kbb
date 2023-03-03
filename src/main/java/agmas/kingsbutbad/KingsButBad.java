@@ -58,6 +58,10 @@ public final class KingsButBad extends JavaPlugin {
     public static String kinggender2 = "King";
     public static ArrayList<UUID> prisoners = new ArrayList<>();
     public static int taxesCount = 25;
+    public static int cooldown = 20 * 5;
+    public static boolean cooldownisreal = true;
+    public static Player lastking;
+    public static Player lastking2;
 
 
     @Override

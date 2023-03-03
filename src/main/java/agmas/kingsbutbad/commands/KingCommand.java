@@ -22,14 +22,19 @@ public class KingCommand implements CommandExecutor {
                 return true;
             }
             if (KingsButBad.king == null) {
-                KingsButBad.playerRoleInviteHashMap.clear();
-                KingsButBad.king = p;
-                KingsButBad.playerRoleHashMap.put(p, Role.KING);
-                RoleManager.showKingMessages(p, Role.KING.objective);
-                RoleManager.givePlayerRole(p);
-                KingsButBad.kinggender = "King";
-                for (Player pe : Bukkit.getOnlinePlayers()) {
-                    pe.sendTitle(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>KING " + p.getName().toUpperCase()), ChatColor.GREEN + "is your new overlord!");
+                if (KingsButBad.cooldown <= 0) {
+                    if (p != KingsButBad.lastking || p != KingsButBad.lastking2) {
+                        p.sendMessage(ChatColor.RED + "You were a king last time!");
+                    }
+                    KingsButBad.playerRoleInviteHashMap.clear();
+                    KingsButBad.king = p;
+                    KingsButBad.playerRoleHashMap.put(p, Role.KING);
+                    RoleManager.showKingMessages(p, Role.KING.objective);
+                    RoleManager.givePlayerRole(p);
+                    KingsButBad.kinggender = "King";
+                    for (Player pe : Bukkit.getOnlinePlayers()) {
+                        pe.sendTitle(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>KING " + p.getName().toUpperCase()), ChatColor.GREEN + "is your new overlord!");
+                    }
                 }
                 return true;
             } else {

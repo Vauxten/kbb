@@ -18,12 +18,14 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.potion.PotionEffectType;
 
 import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 
 public class PlayerDeathListener implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerRespawnEvent event) {
+        event.getPlayer().addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE.createEffect(20 * 15, 0));
         if (!KingsButBad.king.equals(event.getPlayer())) {
             RoleManager.givePlayerRole(event.getPlayer());
         } else {
@@ -40,24 +42,27 @@ public class PlayerDeathListener implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerDeathEvent event) {
         if (event.getPlayer().equals(KingsButBad.king)) {
+            KingsButBad.cooldown = 20 * 5;
             if (event.getPlayer().getKiller() != null) {
-                KingsButBad.king = null;
-                KingsButBad.king2 = null;
-                for (Player p : Bukkit.getOnlinePlayers()) {
-                    if (KingsButBad.playerRoleHashMap.get(p) != Role.PEASANT) {
-                        KingsButBad.playerRoleHashMap.put(p, Role.PEASANT);
-                        RoleManager.givePlayerRole(p);
+                if (!RoleManager.isKingAtAll(event.getPlayer())) {
+                    KingsButBad.king = null;
+                    KingsButBad.king2 = null;
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        if (KingsButBad.playerRoleHashMap.get(p) != Role.PEASANT) {
+                            KingsButBad.playerRoleHashMap.put(p, Role.PEASANT);
+                            RoleManager.givePlayerRole(p);
+                        }
                     }
-                }
-                Player p = event.getPlayer().getKiller();
-                KingsButBad.playerRoleInviteHashMap.clear();
-                KingsButBad.king = p;
-                KingsButBad.playerRoleHashMap.put(p, Role.KING);
-                RoleManager.showKingMessages(p, Role.KING.objective);
-                RoleManager.givePlayerRole(p);
-                KingsButBad.kinggender = "King";
-                for (Player pe : Bukkit.getOnlinePlayers()) {
-                    pe.sendTitle(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>KING " + p.getName().toUpperCase()), ChatColor.GREEN + "is your new overlord!");
+                    Player p = event.getPlayer().getKiller();
+                    KingsButBad.playerRoleInviteHashMap.clear();
+                    KingsButBad.king = p;
+                    KingsButBad.playerRoleHashMap.put(p, Role.KING);
+                    RoleManager.showKingMessages(p, Role.KING.objective);
+                    RoleManager.givePlayerRole(p);
+                    KingsButBad.kinggender = "King";
+                    for (Player pe : Bukkit.getOnlinePlayers()) {
+                        pe.sendTitle(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>KING " + p.getName().toUpperCase()), ChatColor.GREEN + "is your new overlord!");
+                    }
                 }
             }
         }

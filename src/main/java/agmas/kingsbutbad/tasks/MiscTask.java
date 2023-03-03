@@ -50,6 +50,8 @@ public class MiscTask extends BukkitRunnable {
     @Override
     public void run(){
 
+        KingsButBad.cooldown -= 1;
+
         if (KingsButBad.joesunlocked) {
             KingsButBad.littlejoes.teleport(new Location(Bukkit.getWorld("world"), -113.5, -56.0, -1.5, -180, 0));
         } else {
@@ -254,17 +256,18 @@ public class MiscTask extends BukkitRunnable {
         if (KingsButBad.king == null || !KingsButBad.king.isOnline() || KingsButBad.king.isDead()) {
             KingsButBad.king = null;
             KingsButBad.king2 = null;
-                for (Player p : Bukkit.getOnlinePlayers()) {
-                    if (KingsButBad.playerRoleHashMap.get(p) != Role.PEASANT) {
-                        KingsButBad.playerRoleHashMap.put(p, Role.PEASANT);
-                        RoleManager.givePlayerRole(p);
-                    }
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (KingsButBad.playerRoleHashMap.get(p) != Role.PEASANT) {
+                    KingsButBad.playerRoleHashMap.put(p, Role.PEASANT);
+                    RoleManager.givePlayerRole(p);
                 }
+            }
         }
         if (KingsButBad.king != null) {
             if (KingsButBad.king.getInventory().getHelmet() == null) {
                 KingsButBad.king.setItemOnCursor(new ItemStack(Material.AIR));
                 KingsButBad.king = null;
+                KingsButBad.cooldown = 20 * 5;
                         Bukkit.broadcastMessage(CreateText.addColors("<red><b>>><b> THE <gradient:#FFFF52:#FFBA52><b>" + KingsButBad.kinggender.toUpperCase() + "<b></gradient><b><red> HAS RESIGNED! <#A52727>Use /king to become the king.."));
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     if (KingsButBad.playerRoleHashMap.get(p) != Role.PEASANT) {
@@ -420,6 +423,14 @@ public class MiscTask extends BukkitRunnable {
                 }
             }
 
+            if (KingsButBad.king != null) {
+                KingsButBad.lastking = KingsButBad.king;
+            }
+
+            if (KingsButBad.king2 != null) {
+                KingsButBad.lastking2 = KingsButBad.king2;
+            }
+
             Role.KING.tag = CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>"+ KingsButBad.kinggender.toUpperCase() + "<b></gradient>");
             Role.KING.uncompressedColors = "<gradient:#FFFF52:#FFBA52><b>"+ KingsButBad.kinggender.toUpperCase() + "<b></gradient>";
             DecimalFormat df = new DecimalFormat("#0.0");
@@ -473,7 +484,11 @@ public class MiscTask extends BukkitRunnable {
                         p.sendActionBar(CreateText.addColors("<gray>Current king<gray>: <gradient:#FFFF52:#FFBA52><b>" + KingsButBad.kinggender.toUpperCase() + " " + KingsButBad.king.getName().toUpperCase() + "<dark_gray></b> &</gray>" + "<gradient:#FFFF52:#FFBA52><b> " + KingsButBad.kinggender2.toUpperCase() + " " + KingsButBad.king2.getName().toUpperCase()) + actiobarextras);
                     }
                 } else {
-                    p.sendActionBar(CreateText.addColors("<gray>Current king<gray>: <gradient:#ff2f00:#fcff3d><b>NO KING! Use /king to claim!") + actiobarextras);
+                    String iscool = "<gradient:#ff2f00:#fcff3d><b>NO KING! Use /king to claim!";
+                    if (KingsButBad.cooldown > 0) {
+                        iscool = "<gradient:#ff2f00:#fcff3d><b>On Cooldown... <gray>[" + (KingsButBad.cooldown / 20) + "]";
+                    }
+                    p.sendActionBar(CreateText.addColors("<gray>Current king<gray>: " + iscool) + actiobarextras);
                 }
             }
         }
