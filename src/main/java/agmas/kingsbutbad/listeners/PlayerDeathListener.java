@@ -42,7 +42,6 @@ public class PlayerDeathListener implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerDeathEvent event) {
         if (event.getPlayer().equals(KingsButBad.king)) {
-            KingsButBad.cooldown = 20 * 5;
             if (event.getPlayer().getKiller() != null) {
                 if (!RoleManager.isKingAtAll(event.getPlayer())) {
                     KingsButBad.king = null;
@@ -65,6 +64,7 @@ public class PlayerDeathListener implements Listener {
                     }
                 }
             }
+            KingsButBad.cooldown = 20 * 5;
         }
         event.getDrops().clear();
         event.setDeathMessage(ChatColor.GRAY + event.getDeathMessage());
