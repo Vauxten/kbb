@@ -5,7 +5,7 @@ import org.bukkit.Color;
 
 public enum Role {
 
-    PRISONER(CreateText.addColors("<gold>PRISONER"), CreateText.addColors("<gray>You got caught! Mine 100 blocks.<gray>"), "<gold>PRISONER", false, ChatColor.DARK_GRAY),
+    PRISONER(CreateText.addColors("<gold>PRISONER"), CreateText.addColors("<gray>You got caught! Stay for 5m.<gray>"), "<gold>PRISONER", false, ChatColor.DARK_GRAY),
     PEASANT(CreateText.addColors("<#59442B>PEASANT"), CreateText.addColors("<gray>Survive.<gray>"), "<#59442B>PEASANT", false, ChatColor.DARK_GRAY),
     CRIMINAl(CreateText.addColors("<red>CRIMINAL"), CreateText.addColors("<gray>Don't get caught!<gray>"), "<red>CRIMINAL", false, ChatColor.DARK_GRAY),
     KNIGHT(CreateText.addColors("<gray>KNIGHT"), CreateText.addColors("<blue>Keep the kingdom safe!<gray>"), "<gray>KNIGHT", true, ChatColor.WHITE),

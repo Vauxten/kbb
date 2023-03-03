@@ -178,6 +178,7 @@ public class RoleManager {
             p.getInventory().addItem(new ItemStack(Material.BOW));
             p.getInventory().addItem(new ItemStack(Material.ARROW, 64));
             p.teleport(new Location(Bukkit.getWorld("world"), -66, -56, 26.5));
+            Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Monarchs").addPlayer(p);
             return;
         }
         if (KingsButBad.playerRoleHashMap.get(p) == Role.KNIGHT) {
@@ -221,6 +222,7 @@ public class RoleManager {
             Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
                 p.teleport(new Location(Bukkit.getWorld("world"), -56.5, -57, 30));
             }, 10);
+            Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Royals").addPlayer(p);
         }
         if (KingsButBad.playerRoleHashMap.get(p) == Role.PRISON_GUARD) {
             ItemStack diamondchest = new ItemStack(Material.IRON_CHESTPLATE);
@@ -272,6 +274,7 @@ public class RoleManager {
             Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
                 p.teleport(new Location(Bukkit.getWorld("world"), -137.5, -51, -8));
             }, 10);
+            Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Royals").addPlayer(p);
 
         }
         if (KingsButBad.playerRoleHashMap.get(p) == Role.BODYGUARD) {
@@ -315,11 +318,12 @@ public class RoleManager {
             Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
                 p.teleport(KingsButBad.bodylink.get(p).getLocation());
             }, 10);
+            Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Royals").addPlayer(p);
         }
         if (KingsButBad.playerRoleHashMap.get(p) == Role.PRISONER) {
             p.setCooldown(Material.TERRACOTTA, 80);
             if (!KingsButBad.prisonTimer.containsKey(p) || KingsButBad.prisonTimer.get(p).equals(0))
-                KingsButBad.prisonTimer.put(p, 100);
+                KingsButBad.prisonTimer.put(p, (20 * 60) * 5);
             ItemStack orangechest = new ItemStack(Material.LEATHER_CHESTPLATE);
             LeatherArmorMeta chestmeta = (LeatherArmorMeta) orangechest.getItemMeta();
             chestmeta.setColor(Color.fromRGB(208, 133, 22));
@@ -344,8 +348,10 @@ public class RoleManager {
             Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
                 p.teleport(new Location(Bukkit.getWorld("world"), -139.5, -57, 32.5, 180, 0));
             }, 10);
+            Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Prisoners").addPlayer(p);
         }
         if (KingsButBad.playerRoleHashMap.get(p) == Role.PEASANT) {
+            Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Peasants").addPlayer(p);
             p.getPersistentDataContainer().remove(KingsButBad.wasinPrison);
             Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
                 p.teleport(new Location(Bukkit.getWorld("world"), -120.5, -57, -30.5));

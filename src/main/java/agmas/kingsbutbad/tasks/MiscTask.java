@@ -416,6 +416,16 @@ public class MiscTask extends BukkitRunnable {
 
             String actiobarextras = "";
 
+            if (KingsButBad.playerRoleHashMap.get(p).equals(Role.CRIMINAl)) {
+                Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Criminals").addPlayer(p);
+                p.addPotionEffect(PotionEffectType.GLOWING.createEffect(40, 0));
+            }
+
+
+            if (KingsButBad.playerRoleHashMap.get(p).equals(Role.KING)) {
+                p.addPotionEffect(PotionEffectType.GLOWING.createEffect(40, 0));
+            }
+
 
             if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PRISON_GUARD)) {
                 if (bossbar.getPlayers().contains(p) && bossbar.getTitle().equals("LIGHTS OUT")) {
@@ -464,7 +474,7 @@ public class MiscTask extends BukkitRunnable {
                 } else {
                     p.setWalkSpeed(0.1f);
                 }
-                p.sendActionBar(CreateText.addColors("<gray>Sentence Left: <red><b>" + KingsButBad.prisonTimer.get(p) + "<gold> blocks to mine.") + tooltip);
+                p.sendActionBar(CreateText.addColors("<gray>Sentence Left: <red><b>" + (KingsButBad.prisonTimer.get(p) / 20) + "<gold> seconds") + tooltip);
                 if (KingsButBad.prisonTimer.get(p) <= 0) {
                     KingsButBad.playerRoleHashMap.put(p, Role.PEASANT);
                     RoleManager.givePlayerRole(p);
