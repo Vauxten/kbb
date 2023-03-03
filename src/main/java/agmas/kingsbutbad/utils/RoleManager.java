@@ -318,7 +318,8 @@ public class RoleManager {
         }
         if (KingsButBad.playerRoleHashMap.get(p) == Role.PRISONER) {
             p.setCooldown(Material.TERRACOTTA, 80);
-            KingsButBad.prisonTimer.put(p, 100);
+            if (!KingsButBad.prisonTimer.containsKey(p) || KingsButBad.prisonTimer.get(p).equals(0))
+                KingsButBad.prisonTimer.put(p, 100);
             ItemStack orangechest = new ItemStack(Material.LEATHER_CHESTPLATE);
             LeatherArmorMeta chestmeta = (LeatherArmorMeta) orangechest.getItemMeta();
             chestmeta.setColor(Color.fromRGB(208, 133, 22));
