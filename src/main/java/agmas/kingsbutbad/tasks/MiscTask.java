@@ -121,7 +121,7 @@ public class MiscTask extends BukkitRunnable {
                 }
             }
         }
-        if (Bukkit.getWorld("world").getTime() == 7000) {
+        if (Bukkit.getWorld("world").getTime() >= 7000 && Bukkit.getWorld("world").getTime() <= 7005) {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PRISONER)) {
                     KingsButBad.prisonQuota.put(p, 30);
@@ -347,6 +347,9 @@ public class MiscTask extends BukkitRunnable {
             if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PRISON_GUARD)) {
                 if (!bossbar.getPlayers().contains(p) && !bossbar.getTitle().equals("LIGHTS OUT")) {
                     p.sendTitle("", ChatColor.RED + "Stay in the prison!");
+                    for (Entity pe : p.getPassengers()) {
+                        pe.leaveVehicle();
+                    }
                     p.teleport(new Location(Bukkit.getWorld("world"), -137.5, -51, -8));
                 }
             }
@@ -505,13 +508,13 @@ public class MiscTask extends BukkitRunnable {
                 p.setFoodLevel(6);
                 stamina.put(p, 0.99f);
                 KingsButBad.prisonQuota.putIfAbsent(p, 0);
-                if (KingsButBad.prisonQuota.get(p) > 0) {
-                    p.sendTitle("", CreateText.addColors("<gold>MINE <red><b>" + KingsButBad.prisonQuota.get(p) + "<gold></b> BLOCKS! <gray>or +80s"));
-                }
                 KingsButBad.prisonTimer.put(p, KingsButBad.prisonTimer.getOrDefault(p, 0) - 1);
                 String tooltip = "";
+                if (KingsButBad.prisonQuota.get(p) > 0) {
+                    tooltip += CreateText.addColors("<gray> | <gold>MINE <red><b>" + KingsButBad.prisonQuota.get(p) + "<gold></b> BLOCKS! <gray>or +80s");
+                }
                 if (p.getLocation().getPitch() < 30) {
-                    tooltip = CreateText.addColors("<gray> | <red>Tip: Look down to go faster.");
+                    tooltip += CreateText.addColors("<gray> | <red>Tip: Look down to go faster.");
                     p.setWalkSpeed(0.02f);
                 } else {
                     p.setWalkSpeed(0.1f);

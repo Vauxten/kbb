@@ -222,7 +222,7 @@ public class RoleManager {
             Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
                 p.teleport(new Location(Bukkit.getWorld("world"), -56.5, -57, 30));
             }, 10);
-            Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Royals").addPlayer(p);
+            Bukkit.getScoreboardManager().getMainScoreboard().getTeam("NRoyals").addPlayer(p);
         }
         if (KingsButBad.playerRoleHashMap.get(p) == Role.PRISON_GUARD) {
             ItemStack diamondchest = new ItemStack(Material.IRON_CHESTPLATE);
@@ -274,7 +274,7 @@ public class RoleManager {
             Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
                 p.teleport(new Location(Bukkit.getWorld("world"), -137.5, -51, -8));
             }, 10);
-            Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Royals").addPlayer(p);
+            Bukkit.getScoreboardManager().getMainScoreboard().getTeam("NRoyals").addPlayer(p);
 
         }
         if (KingsButBad.playerRoleHashMap.get(p) == Role.BODYGUARD) {
@@ -318,7 +318,7 @@ public class RoleManager {
             Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
                 p.teleport(KingsButBad.bodylink.get(p).getLocation());
             }, 10);
-            Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Royals").addPlayer(p);
+            Bukkit.getScoreboardManager().getMainScoreboard().getTeam("NRoyals").addPlayer(p);
         }
         if (KingsButBad.playerRoleHashMap.get(p) == Role.PRISONER) {
             p.setCooldown(Material.TERRACOTTA, 80);
