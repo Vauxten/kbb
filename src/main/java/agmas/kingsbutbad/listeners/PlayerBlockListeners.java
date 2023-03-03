@@ -33,7 +33,6 @@ public class PlayerBlockListeners implements Listener {
         if (event.getBlock().getType().equals(Material.DEEPSLATE_COAL_ORE)) {
             event.setDropItems(false);
             event.setCancelled(true);
-            KingsButBad.prisonTimer.put(event.getPlayer(), KingsButBad.prisonTimer.getOrDefault(event.getPlayer(), 0) - 1);
             event.getBlock().setType(Material.DEEPSLATE);
             Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
                 event.getBlock().setType(Material.DEEPSLATE_COAL_ORE);

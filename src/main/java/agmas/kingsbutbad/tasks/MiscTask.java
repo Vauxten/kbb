@@ -467,6 +467,7 @@ public class MiscTask extends BukkitRunnable {
                 }
                 p.setFoodLevel(6);
                 stamina.put(p, 0.99f);
+                KingsButBad.prisonTimer.put(p, KingsButBad.prisonTimer.getOrDefault(p, 0) - 1);
                 String tooltip = "";
                 if (p.getLocation().getPitch() < 30) {
                     tooltip = CreateText.addColors("<gray> | <red>Tip: Look down to go faster.");
