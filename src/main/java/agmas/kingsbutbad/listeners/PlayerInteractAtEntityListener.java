@@ -217,7 +217,7 @@ public class PlayerInteractAtEntityListener implements Listener {
 
                     Player p = (Player) event.getWhoClicked();
                     Bukkit.broadcastMessage(CreateText.addColors("<red>>> <b>" + p.getName() + "<gold> </b> turned themselves in, for some reason.."));
-                    KingsButBad.prisonTimer.put(p, (20 * 60) * 5);
+                    KingsButBad.prisonTimer.put(p, 6000);
                     KingsButBad.playerRoleHashMap.put(p, Role.PRISONER);
                     event.setCancelled(true);
                     event.getWhoClicked().getInventory().clear();

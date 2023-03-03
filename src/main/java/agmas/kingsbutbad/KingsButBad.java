@@ -62,6 +62,7 @@ public final class KingsButBad extends JavaPlugin {
     public static boolean cooldownisreal = true;
     public static Player lastking;
     public static Player lastking2;
+    public static HashMap<Player, Integer> currentzone = new HashMap<>();
 
 
     @Override
@@ -204,7 +205,7 @@ public final class KingsButBad extends JavaPlugin {
         littlejoes.setPersistent(true);
         littlejoes.setAI(false);
 
-        miner = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -202.5, -39.0, -244.5, 25, 0), EntityType.VILLAGER);
+        miner = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -202.5, -39.0, -244.5, 0, 0), EntityType.VILLAGER);
 
         miner.setCustomName(CreateText.addColors("<gray>Miner Joseph"));
         miner.setCustomNameVisible(true);

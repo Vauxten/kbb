@@ -61,23 +61,15 @@ public class AsyncPlayerChatEventListener implements Listener {
         NoNoWords.previouslysaid.put(event.getPlayer(), event.getMessage());
         event.setFormat("%1$s" + ChatColor.GRAY + ": %2$s");
         event.setMessage(NoNoWords.filtermsg(event.getMessage()));
-        if (MiscTask.bossbar.getPlayers().contains(event.getPlayer())) {
+        Integer zone = KingsButBad.currentzone.get(event.getPlayer());
             for (Player p : Bukkit.getOnlinePlayers()) {
-                if (MiscTask.bossbar.getPlayers().contains(p)) {
+                if (KingsButBad.currentzone.get(p).equals(zone)) {
                     if (!DisguiseAPI.isDisguised(event.getPlayer())) {
                         p.sendMessage(event.getPlayer().getPlayerListName() + ChatColor.GRAY + ": " + event.getMessage());
-
                     } else {
                         p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.GOLD + "PRISONER" + ChatColor.DARK_GRAY + "] " + DisguiseAPI.getDisguise(event.getPlayer()).getWatcher().getCustomName() + ChatColor.GRAY + ": " + event.getMessage());
                     }
                 }
             }
-        } else {
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                if (!MiscTask.bossbar.getPlayers().contains(p)) {
-                    p.sendMessage(event.getPlayer().getPlayerListName() + ChatColor.GRAY + ": " + event.getMessage());
-                }
-            }
-        }
     }
 }

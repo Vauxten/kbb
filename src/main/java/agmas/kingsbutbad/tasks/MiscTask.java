@@ -305,26 +305,41 @@ public class MiscTask extends BukkitRunnable {
                 }
             }
 
+            KingsButBad.currentzone.putIfAbsent(p, 0);
+
+            if (KingsButBad.isInside(p, new Location(Bukkit.getWorld("world"), -133, -57, -18), new Location(Bukkit.getWorld("world"), -159, -26, 33))) {
+                if (KingsButBad.currentzone.get(p) != 1) {
+                    p.sendTitle("", ChatColor.GOLD + "-= The Prison =-");
+                    bossbar.addPlayer(p);
+                    KingsButBad.currentzone.put(p, 1);
+                    p.sendMessage(ChatColor.RED + "> You will only be able to see messages from people in the prison!");
+                }
+            }
+            else if (KingsButBad.isInside(p, new Location(p.getWorld(), -86, -63, -1), new Location(p.getWorld(), -45, -33, 39))) {
+                if (KingsButBad.currentzone.get(p) != 2) {
+                    p.sendTitle("", ChatColor.GRAY + "-= The Castle =-");
+                    bossbar.removePlayer(p);
+                    KingsButBad.currentzone.put(p, 2);
+                    p.sendMessage(ChatColor.RED + "> You will only be able to see messages from people in the outside!");
+                }
+            }
+            else {
+                if (KingsButBad.currentzone.get(p) != 0) {
+                    p.sendTitle("", ChatColor.GREEN + "-= The Outside =-");
+                    bossbar.removePlayer(p);
+                    KingsButBad.currentzone.put(p, 0);
+                    p.sendMessage(ChatColor.RED + "> You will only be able to see messages from people in the outside!");
+                }
+            }
+
             if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PRISON_GUARD)) {
                 if (!bossbar.getPlayers().contains(p) && !bossbar.getTitle().equals("LIGHTS OUT")) {
                     p.sendTitle("", ChatColor.RED + "Stay in the prison!");
                     p.teleport(new Location(Bukkit.getWorld("world"), -137.5, -51, -8));
                 }
             }
-            if (KingsButBad.isInside(p, new Location(Bukkit.getWorld("world"), -133, -57, -18), new Location(Bukkit.getWorld("world"), -159, -26, 33))) {
-                if (!bossbar.getPlayers().contains(p)) {
-                    p.sendTitle("", ChatColor.GOLD + "-= The Prison =-");
-                    bossbar.addPlayer(p);
-                    p.sendMessage(ChatColor.RED + "> You will only be able to see messages from people in the prison!");
-                }
-            }
-            else {
-                if (bossbar.getPlayers().contains(p)) {
-                    p.sendTitle("", ChatColor.GREEN + "-= The Outside =-");
-                    bossbar.removePlayer(p);
-                    p.sendMessage(ChatColor.RED + "> You will only be able to see messages from people in the outside!");
-                }
-            }
+
+
             p.setLevel(0);
 
             if (p.hasPotionEffect(PotionEffectType.LUCK)) {
@@ -444,7 +459,17 @@ public class MiscTask extends BukkitRunnable {
             Role.KING.tag = CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>"+ KingsButBad.kinggender.toUpperCase() + "<b></gradient>");
             Role.KING.uncompressedColors = "<gradient:#FFFF52:#FFBA52><b>"+ KingsButBad.kinggender.toUpperCase() + "<b></gradient>";
             DecimalFormat df = new DecimalFormat("#0.0");
+
+            if (RoleManager.isKingAtAll(p)) {
+                if (KingsButBad.isInside(p, new Location(p.getWorld(), -65, -48, 27),  new Location(p.getWorld(), -68, -57, 24))) {
+                    actiobarextras += ChatColor.GRAY + " | " + CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>+0.25$ for sitting on the throne.");
+                    p.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, p.getPersistentDataContainer().get(KingsButBad.money, PersistentDataType.DOUBLE)  + 0.25);
+                }
+            }
+
             actiobarextras += ChatColor.GRAY + " | " + CreateText.addColors("<color:#26ff00><b>$</b><gradient:#26ff00:#61ffc0>" +df.format(p.getPersistentDataContainer().get(KingsButBad.money, PersistentDataType.DOUBLE)));
+
+
             if (p.getGameMode().equals(GameMode.SURVIVAL))
                 p.setGameMode(GameMode.ADVENTURE);
             if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PRISONER)) {
