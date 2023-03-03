@@ -25,9 +25,10 @@ import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 public class PlayerDeathListener implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerRespawnEvent event) {
-        event.getPlayer().addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE.createEffect(20 * 15, 0));
         if (!KingsButBad.king.equals(event.getPlayer())) {
             RoleManager.givePlayerRole(event.getPlayer());
+            event.getPlayer().setNoDamageTicks(20 * 15);
+            event.getPlayer().addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE.createEffect(20 * 15, 0));
         } else {
             KingsButBad.king.setItemOnCursor(new ItemStack(Material.AIR));
             KingsButBad.king = null;
@@ -35,6 +36,8 @@ public class PlayerDeathListener implements Listener {
                 if (KingsButBad.playerRoleHashMap.get(p) != Role.PEASANT) {
                     KingsButBad.playerRoleHashMap.put(p, Role.PEASANT);
                     RoleManager.givePlayerRole(p);
+                    event.getPlayer().setNoDamageTicks(20 * 15);
+                    event.getPlayer().addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE.createEffect(20 * 15, 0));
                 }
             }
         }

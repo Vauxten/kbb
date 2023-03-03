@@ -6,16 +6,23 @@ import agmas.kingsbutbad.tasks.MiscTask;
 import agmas.kingsbutbad.utils.CreateText;
 import agmas.kingsbutbad.utils.Role;
 import me.libraryaddict.disguise.DisguiseAPI;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.*;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.util.RayTraceResult;
+import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
+import java.util.function.Predicate;
 
 public class AsyncPlayerChatEventListener implements Listener {
     @EventHandler
-    public void onPlayerJoin(AsyncPlayerChatEvent event) {
+    public void onPlayerJoin(PlayerChatEvent event) {
         event.setMessage(KingsButBad.playerRoleHashMap.get(event.getPlayer()).chatColor + event.getMessage());
         if (KingsButBad.king != null) {
             event.setMessage(event.getMessage().replace(KingsButBad.king.getName(), CreateText.addColors("<gradient:#FFFF52:#FFBA52><b>" + KingsButBad.kinggender + " " + KingsButBad.king.getName() + "<b></gradient>") + KingsButBad.playerRoleHashMap.get(event.getPlayer()).chatColor));
@@ -61,15 +68,45 @@ public class AsyncPlayerChatEventListener implements Listener {
         NoNoWords.previouslysaid.put(event.getPlayer(), event.getMessage());
         event.setFormat("%1$s" + ChatColor.GRAY + ": %2$s");
         event.setMessage(NoNoWords.filtermsg(event.getMessage()));
+        if (!NoNoWords.isClean(event.getMessage())) {
+            event.setMessage(KingsButBad.playerRoleHashMap.get(event.getMessage()).chatColor + "I LOVE THIS GAME!! It's so cool. It's so amazing. The work done here is great! The people who helped commiting @ the github, agmass and the dev team is so awesome, i would never trigger the chat filter, and i definetly am not right now! Thank you for making such a great server! I, " + event.getPlayer().getName() + " LOVE this server.");
+        }
         Integer zone = KingsButBad.currentzone.get(event.getPlayer());
+        if (KingsButBad.isInside(event.getPlayer(), new Location(event.getPlayer().getWorld(), -74, -54, 25), new Location(event.getPlayer().getWorld(), -74, -54, 25))) {
             for (Player p : Bukkit.getOnlinePlayers()) {
-                if (KingsButBad.currentzone.get(p).equals(zone)) {
-                    if (!DisguiseAPI.isDisguised(event.getPlayer())) {
-                        p.sendMessage(event.getPlayer().getPlayerListName() + ChatColor.GRAY + ": " + event.getMessage());
-                    } else {
-                        p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.GOLD + "PRISONER" + ChatColor.DARK_GRAY + "] " + DisguiseAPI.getDisguise(event.getPlayer()).getWatcher().getCustomName() + ChatColor.GRAY + ": " + event.getMessage());
+                p.playSound(p, Sound.ENTITY_BEE_LOOP_AGGRESSIVE, 1, 0.75f);
+                p.sendTitle(ChatColor.BLUE + "INTERCOM " + ChatColor.WHITE + ">>", ChatColor.GOLD + event.getMessage());
+                p.sendMessage(ChatColor.BLUE + "INTERCOM " + ChatColor.WHITE + ">> " + ChatColor.GOLD + event.getMessage());
+            }
+            return;
+        }
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            Location originalplayerloc = event.getPlayer().getEyeLocation();
+            Vector dir = p.getEyeLocation().toVector().subtract(event.getPlayer().getEyeLocation().toVector());
+            if (p.equals(event.getPlayer())) {
+                if (!DisguiseAPI.isDisguised(event.getPlayer())) {
+                    p.sendMessage(event.getPlayer().getPlayerListName() + ChatColor.GRAY + ": " + event.getMessage());
+                } else {
+                    p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.GOLD + "PRISONER" + ChatColor.DARK_GRAY + "] " + DisguiseAPI.getDisguise(event.getPlayer()).getWatcher().getCustomName() + ChatColor.GRAY + ": " + event.getMessage());
+                }
+                continue;
+            }
+            RayTraceResult rtr = event.getPlayer().getWorld().rayTrace(originalplayerloc, dir, 10, FluidCollisionMode.NEVER, true, 2.0, Predicate.isEqual(p));
+            if (rtr != null) {
+                if (rtr.getHitEntity() != null) {
+                    if (rtr.getHitEntity().equals(p)) {
+                        if (!DisguiseAPI.isDisguised(event.getPlayer())) {
+                            p.sendMessage(event.getPlayer().getPlayerListName() + ChatColor.GRAY + ": " + event.getMessage());
+                        } else {
+                            p.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.GOLD + "PRISONER" + ChatColor.DARK_GRAY + "] " + DisguiseAPI.getDisguise(event.getPlayer()).getWatcher().getCustomName() + ChatColor.GRAY + ": " + event.getMessage());
+                        }
+                        continue;
                     }
                 }
             }
+            if (ChatColor.stripColor(event.getMessage()).contains(p.getName())) {
+                event.getPlayer().sendMessage(ChatColor.RED + p.getName() + " isn't in range and can't hear you!");
+            }
+        }
     }
 }

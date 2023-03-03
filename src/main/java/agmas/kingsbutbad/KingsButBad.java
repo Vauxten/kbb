@@ -207,8 +207,7 @@ public final class KingsButBad extends JavaPlugin {
         littlejoes.setAI(false);
 
         miner = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -202.5, -39.0, -244.5, 0, 0), EntityType.VILLAGER);
-
-        miner.setCustomName(CreateText.addColors("<gray>Miner Joseph"));
+        miner.setCustomName(CreateText.addColors("<gold>Miner Joseph"));
         miner.setCustomNameVisible(true);
         miner.setInvulnerable(true);
         miner.setPersistent(true);
@@ -222,6 +221,7 @@ public final class KingsButBad extends JavaPlugin {
         sewervillager.remove();
         selfdefense.remove();
         bertrude.remove();
+        miner.remove();
         for (LivingEntity le : Bukkit.getWorld("world").getLivingEntities()) {
             if (le.getType().equals(EntityType.VILLAGER)) {
                 le.remove();

@@ -102,13 +102,17 @@ public class PlayerInteractAtEntityListener implements Listener {
     public void onPlayerQuit(EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Player d) {
             if (event.getDamager() instanceof Player p) {
-                if (p.hasPotionEffect(PotionEffectType.DAMAGE_RESISTANCE))
+                if (p.hasPotionEffect(PotionEffectType.DAMAGE_RESISTANCE)) {
                     p.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+                    p.setNoDamageTicks(0);
+                }
                 p.setCooldown(Material.RED_STAINED_GLASS, 20 * 6);
                 d.setCooldown(Material.RED_STAINED_GLASS, 20 * 6);
                 if (p.getInventory().getItemInMainHand().getType().equals(Material.IRON_SHOVEL)) {
-                    event.setCancelled(true);
-                    p.addPassenger(d);
+                    if (KingsButBad.king != d) {
+                        event.setCancelled(true);
+                        p.addPassenger(d);
+                    }
                 }
                 if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PEASANT)) {
                     if (KingsButBad.playerRoleHashMap.get(d).isPowerful) {

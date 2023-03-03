@@ -327,7 +327,6 @@ public class MiscTask extends BukkitRunnable {
                     p.sendTitle("", ChatColor.GOLD + "-= The Prison =-");
                     bossbar.addPlayer(p);
                     KingsButBad.currentzone.put(p, 1);
-                    p.sendMessage(ChatColor.RED + "> You will only be able to see messages from people in the prison!");
                 }
             }
             else if (KingsButBad.isInside(p, new Location(p.getWorld(), -86, -63, -1), new Location(p.getWorld(), -45, -33, 39))) {
@@ -335,7 +334,6 @@ public class MiscTask extends BukkitRunnable {
                     p.sendTitle("", ChatColor.GRAY + "-= The Castle =-");
                     bossbar.removePlayer(p);
                     KingsButBad.currentzone.put(p, 2);
-                    p.sendMessage(ChatColor.RED + "> You will only be able to see messages from people in the outside!");
                 }
             }
             else {
@@ -343,7 +341,6 @@ public class MiscTask extends BukkitRunnable {
                     p.sendTitle("", ChatColor.GREEN + "-= The Outside =-");
                     bossbar.removePlayer(p);
                     KingsButBad.currentzone.put(p, 0);
-                    p.sendMessage(ChatColor.RED + "> You will only be able to see messages from people in the outside!");
                 }
             }
 
@@ -484,13 +481,6 @@ public class MiscTask extends BukkitRunnable {
 
             actiobarextras += ChatColor.GRAY + " | " + CreateText.addColors("<color:#26ff00><b>$</b><gradient:#26ff00:#61ffc0>" +df.format(p.getPersistentDataContainer().get(KingsButBad.money, PersistentDataType.DOUBLE)));
 
-            if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PRISON_GUARD)) {
-                if (!bossbar.getPlayers().contains(p)) {
-                    for (Entity b : p.getPassengers()) {
-                        b.leaveVehicle();
-                    }
-                }
-            }
 
             if (p.getGameMode().equals(GameMode.SURVIVAL))
                 p.setGameMode(GameMode.ADVENTURE);
