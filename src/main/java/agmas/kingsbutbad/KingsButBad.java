@@ -36,6 +36,7 @@ public final class KingsButBad extends JavaPlugin {
     public static Boolean joesunlocked = false;
     public static Boolean coalCompactor = false;
     public static HashMap<Player, Integer> prisonTimer = new HashMap<>();
+    public static HashMap<Player, Integer> prisonQuota = new HashMap<>();
     public static HashMap<Player, Role> playerRoleInviteHashMap = new HashMap<>();
     public static LuckPerms api;
     public static Villager royalvillager;

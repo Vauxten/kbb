@@ -121,6 +121,21 @@ public class MiscTask extends BukkitRunnable {
                 }
             }
         }
+        if (Bukkit.getWorld("world").getTime() == 7000) {
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PRISONER)) {
+                    KingsButBad.prisonQuota.put(p, 30);
+                }
+            }
+        }
+        if (Bukkit.getWorld("world").getTime() == 10000) {
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (KingsButBad.prisonQuota.get(p) > 0) {
+                    p.sendTitle(ChatColor.RED + "MISSED QUOTA.", ChatColor.DARK_RED + "+80s to prison time.");
+                    KingsButBad.prisonTimer.put(p, KingsButBad.prisonTimer.get(p) + 80);
+                }
+            }
+        }
         if (Bukkit.getWorld("world").getTime() > 7000 && Bukkit.getWorld("world").getTime() < 10000) {
             timer1 = 7000;
             timer2 = 10000;
@@ -308,7 +323,7 @@ public class MiscTask extends BukkitRunnable {
             KingsButBad.currentzone.putIfAbsent(p, 0);
 
             if (KingsButBad.isInside(p, new Location(Bukkit.getWorld("world"), -133, -57, -18), new Location(Bukkit.getWorld("world"), -159, -26, 33))) {
-                if (KingsButBad.currentzone.get(p) != 1) {
+                    if (KingsButBad.currentzone.get(p) != 1) {
                     p.sendTitle("", ChatColor.GOLD + "-= The Prison =-");
                     bossbar.addPlayer(p);
                     KingsButBad.currentzone.put(p, 1);
@@ -469,6 +484,13 @@ public class MiscTask extends BukkitRunnable {
 
             actiobarextras += ChatColor.GRAY + " | " + CreateText.addColors("<color:#26ff00><b>$</b><gradient:#26ff00:#61ffc0>" +df.format(p.getPersistentDataContainer().get(KingsButBad.money, PersistentDataType.DOUBLE)));
 
+            if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PRISON_GUARD)) {
+                if (!bossbar.getPlayers().contains(p)) {
+                    for (Entity b : p.getPassengers()) {
+                        b.leaveVehicle();
+                    }
+                }
+            }
 
             if (p.getGameMode().equals(GameMode.SURVIVAL))
                 p.setGameMode(GameMode.ADVENTURE);
@@ -492,6 +514,10 @@ public class MiscTask extends BukkitRunnable {
                 }
                 p.setFoodLevel(6);
                 stamina.put(p, 0.99f);
+                KingsButBad.prisonQuota.putIfAbsent(p, 0);
+                if (KingsButBad.prisonQuota.get(p) > 0) {
+                    p.sendTitle("", CreateText.addColors("<gold>MINE <red><b>" + KingsButBad.prisonQuota.get(p) + "<gold></b> BLOCKS! <gray>or +80s"));
+                }
                 KingsButBad.prisonTimer.put(p, KingsButBad.prisonTimer.getOrDefault(p, 0) - 1);
                 String tooltip = "";
                 if (p.getLocation().getPitch() < 30) {
