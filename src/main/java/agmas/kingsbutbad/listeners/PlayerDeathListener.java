@@ -81,6 +81,7 @@ public class PlayerDeathListener implements Listener {
                 event.getPlayer().getPersistentDataContainer().set(KingsButBad.wasinPrison, PersistentDataType.INTEGER, 1);
                 RoleManager.givePlayerRole(event.getPlayer());
             } else {
+                KingsButBad.playerRoleHashMap.put(event.getPlayer(), Role.PEASANT);
                 Bukkit.broadcastMessage(CreateText.addColors("<red>>> <b>Criminal " + event.getPlayer().getName() + "<gold> </b>used their get-out-of-jail-free card."));
             }
         }

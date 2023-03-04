@@ -64,6 +64,7 @@ public final class KingsButBad extends JavaPlugin {
     public static Player lastking;
     public static Player lastking2;
     public static HashMap<Player, Integer> currentzone = new HashMap<>();
+    public static HashMap<Player, Boolean> soundwaves = new HashMap<>();
 
 
     @Override
@@ -94,6 +95,7 @@ public final class KingsButBad extends JavaPlugin {
         this.getCommand("setmoney").setExecutor(new SetMoneyCommand());
         this.getCommand("resign").setExecutor(new ResignCommand());
         this.getCommand("discord").setExecutor(new DiscordCommand());
+        this.getCommand("soundwaves").setExecutor(new SoundWavesCommand());
         while (Bukkit.getWorld("world") == null) {}
         for (LivingEntity le : Bukkit.getWorld("world").getLivingEntities()) {
             if (le.getType().equals(EntityType.VILLAGER)) {

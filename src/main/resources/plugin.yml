@@ -14,6 +14,9 @@ commands:
   king:
     description: "King Controls/Claiming"
     usage: /king
+  soundwaves:
+    description: ";)"
+    usage: /soundwaves
   accept:
     description: "Role accepting"
     usage: /accept

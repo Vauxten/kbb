@@ -20,7 +20,7 @@ public class NoNoWords {
             "retard",
             "faggot",
             "fagg",
-            "This sentence triggers the chat filter!"
+                "This sentence triggers the chat filter!"
             //"fag", this one's disabled as it disables things such as "of agmass"
     };
 

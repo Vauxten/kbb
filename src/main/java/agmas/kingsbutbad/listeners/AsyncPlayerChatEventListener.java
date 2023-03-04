@@ -7,6 +7,7 @@ import agmas.kingsbutbad.utils.CreateText;
 import agmas.kingsbutbad.utils.Role;
 import me.libraryaddict.disguise.DisguiseAPI;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.apache.commons.lang.Validate;
 import org.bukkit.*;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -17,7 +18,9 @@ import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
+import javax.swing.colorchooser.ColorSelectionModel;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.function.Predicate;
 
 public class AsyncPlayerChatEventListener implements Listener {
@@ -72,7 +75,7 @@ public class AsyncPlayerChatEventListener implements Listener {
             event.setMessage(KingsButBad.playerRoleHashMap.get(event.getMessage()).chatColor + "I LOVE THIS GAME!! It's so cool. It's so amazing. The work done here is great! The people who helped commiting @ the github, agmass and the dev team is so awesome, i would never trigger the chat filter, and i definetly am not right now! Thank you for making such a great server! I, " + event.getPlayer().getName() + " LOVE this server.");
         }
         Integer zone = KingsButBad.currentzone.get(event.getPlayer());
-        if (KingsButBad.isInside(event.getPlayer(), new Location(event.getPlayer().getWorld(), -74, -54, 25), new Location(event.getPlayer().getWorld(), -72, -58, 23))) {
+        if (KingsButBad.isInside(event.getPlayer(), new Location(event.getPlayer().getWorld(), -74, -54, 25), new Location(event.getPlayer().getWorld(), -72, -58, 23)) && KingsButBad.playerRoleHashMap.get(event.getPlayer()).equals(Role.KING)) {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 p.playSound(p, Sound.ENTITY_BEE_LOOP_AGGRESSIVE, 1, 0.75f);
                 p.sendTitle(ChatColor.BLUE + "INTERCOM " + ChatColor.WHITE + ">>", ChatColor.GOLD + event.getMessage());
@@ -88,6 +91,38 @@ public class AsyncPlayerChatEventListener implements Listener {
                 continue;
             }
             RayTraceResult rtr = event.getPlayer().getWorld().rayTrace(originalplayerloc, dir, 25, FluidCollisionMode.NEVER, true, 2.0, Predicate.isEqual(p));
+            if (KingsButBad.soundwaves.containsKey(event.getPlayer())) {
+                Color[] a = new Color[] {
+                        Color.AQUA,
+                        Color.BLUE,
+                        Color.BLACK,
+                        Color.FUCHSIA,
+                        Color.GRAY,
+                        Color.LIME,
+                        Color.OLIVE,
+                        Color.NAVY,
+                        Color.PURPLE,
+                        Color.ORANGE,
+                        Color.RED,
+                        Color.TEAL,
+                        Color.YELLOW,
+                        Color.WHITE
+                };
+                Color b = a[new Random().nextInt(0,a.length)];
+                Location point1 = originalplayerloc;
+                Location point2 = p.getLocation();
+                double space = 0.5;
+                World world = point1.getWorld();
+                double distance = point1.distance(point2);
+                Vector p1 = point1.toVector();
+                Vector p2 = point2.toVector();
+                Vector vector = p2.clone().subtract(p1).normalize().multiply(space);
+                double length = 0;
+                for (; length < distance; p1.add(vector)) {
+                    event.getPlayer().spawnParticle(Particle.REDSTONE, p1.getX(), p1.getY(), p1.getZ(), 1, new Particle.DustOptions(b, 1));
+                    length += space;
+                }
+            }
             if (rtr != null) {
                 if (rtr.getHitEntity() != null) {
                     if (rtr.getHitEntity().equals(p)) {
