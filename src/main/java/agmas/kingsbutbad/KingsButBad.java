@@ -101,6 +101,8 @@ public final class KingsButBad extends JavaPlugin {
             }
         }
 
+        Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
+
             royalvillager = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -63.5, -57, 23.5, 42, 0), EntityType.VILLAGER);
 
             royalvillager.setCustomName(CreateText.addColors("<gradient:#FFFF52:#FFBA52>Royal Villager"));
@@ -108,110 +110,112 @@ public final class KingsButBad extends JavaPlugin {
             royalvillager.setInvulnerable(true);
             royalvillager.setPersistent(true);
             royalvillager.setAI(false);
-        farmerjoe = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -100.5, -57, 2.5, 140, 0), EntityType.VILLAGER);
 
-        farmerjoe.setProfession(Villager.Profession.FARMER);
-        farmerjoe.setCustomName(CreateText.addColors("<blue>Farmer Joe"));
-        farmerjoe.setCustomNameVisible(true);
-        farmerjoe.setInvulnerable(true);
-        farmerjoe.setPersistent(true);
-        farmerjoe.setAI(false);
-        bertrude = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -112.5, -57, -5.5, -180, 0), EntityType.VILLAGER);
+            farmerjoe = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -100.5, -57, 2.5, 140, 0), EntityType.VILLAGER);
 
-        bertrude.setCustomName(CreateText.addColors("bertrude"));
-        bertrude.setCustomNameVisible(true);
-        bertrude.setInvulnerable(true);
-        bertrude.setPersistent(true);
-        bertrude.setAI(false);
+            farmerjoe.setProfession(Villager.Profession.FARMER);
+            farmerjoe.setCustomName(CreateText.addColors("<blue>Farmer Joe"));
+            farmerjoe.setCustomNameVisible(true);
+            farmerjoe.setInvulnerable(true);
+            farmerjoe.setPersistent(true);
+            farmerjoe.setAI(false);
+            bertrude = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -112.5, -57, -5.5, -180, 0), EntityType.VILLAGER);
 
-        sewervillager = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -78.5, -62, -28.5, -90, 0), EntityType.VILLAGER);
+            bertrude.setCustomName(CreateText.addColors("bertrude"));
+            bertrude.setCustomNameVisible(true);
+            bertrude.setInvulnerable(true);
+            bertrude.setPersistent(true);
+            bertrude.setAI(false);
 
-        sewervillager.setProfession(Villager.Profession.TOOLSMITH);
-        sewervillager.setCustomName(CreateText.addColors("<gray>Shady Slim"));
-        sewervillager.setCustomNameVisible(true);
-        sewervillager.setInvulnerable(true);
-        sewervillager.setPersistent(true);
-        sewervillager.setAI(false);
+            sewervillager = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -78.5, -62, -28.5, -90, 0), EntityType.VILLAGER);
 
-        selfdefense = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -122.5, -57, -2.5, 180, 0), EntityType.VILLAGER);
+            sewervillager.setProfession(Villager.Profession.TOOLSMITH);
+            sewervillager.setCustomName(CreateText.addColors("<gray>Shady Slim"));
+            sewervillager.setCustomNameVisible(true);
+            sewervillager.setInvulnerable(true);
+            sewervillager.setPersistent(true);
+            sewervillager.setAI(false);
 
-        selfdefense.setProfession(Villager.Profession.LEATHERWORKER);
-        selfdefense.setCustomName(CreateText.addColors("<red>Defender Jim"));
-        selfdefense.setCustomNameVisible(true);
-        selfdefense.setInvulnerable(true);
-        selfdefense.setPersistent(true);
-        selfdefense.setAI(false);
+            selfdefense = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -122.5, -57, -2.5, 180, 0), EntityType.VILLAGER);
 
-        minerguard = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -144.5, -57, 12.5, 45, 0), EntityType.VILLAGER);
+            selfdefense.setProfession(Villager.Profession.LEATHERWORKER);
+            selfdefense.setCustomName(CreateText.addColors("<red>Defender Jim"));
+            selfdefense.setCustomNameVisible(true);
+            selfdefense.setInvulnerable(true);
+            selfdefense.setPersistent(true);
+            selfdefense.setAI(false);
 
-        minerguard.setCustomName(CreateText.addColors("<gray>Miner"));
-        minerguard.setCustomNameVisible(true);
-        minerguard.setInvulnerable(true);
-        minerguard.setPersistent(true);
-        minerguard.setAI(false);
-        lunchlady = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -149.5, -57, 2.5, -90, 0), EntityType.VILLAGER);
+            minerguard = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -144.5, -57, 12.5, 45, 0), EntityType.VILLAGER);
 
-        lunchlady.setCustomName(CreateText.addColors("<gold>Lunch Lady"));
-        lunchlady.setCustomNameVisible(true);
-        lunchlady.setInvulnerable(true);
-        lunchlady.setPersistent(true);
-        lunchlady.setAI(false);
+            minerguard.setCustomName(CreateText.addColors("<gray>Miner"));
+            minerguard.setCustomNameVisible(true);
+            minerguard.setInvulnerable(true);
+            minerguard.setPersistent(true);
+            minerguard.setAI(false);
+            lunchlady = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -149.5, -57, 2.5, -90, 0), EntityType.VILLAGER);
 
-        royaltrader = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -128.5, -57, -6.5, 180, 0), EntityType.VILLAGER);
+            lunchlady.setCustomName(CreateText.addColors("<gold>Lunch Lady"));
+            lunchlady.setCustomNameVisible(true);
+            lunchlady.setInvulnerable(true);
+            lunchlady.setPersistent(true);
+            lunchlady.setAI(false);
 
-        royaltrader.setCustomName(CreateText.addColors("<yellow>Royal Trader"));
-        royaltrader.setCustomNameVisible(true);
-        royaltrader.setInvulnerable(true);
-        royaltrader.setPersistent(true);
-        royaltrader.setAI(false);
-        mopvillager = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -103.21, -57.00, -17.24, 60, 0), EntityType.VILLAGER);
+            royaltrader = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -128.5, -57, -6.5, 180, 0), EntityType.VILLAGER);
 
-        mopvillager.setCustomName(CreateText.addColors("<yellow>Janitor"));
-        mopvillager.setCustomNameVisible(true);
-        mopvillager.setInvulnerable(true);
-        mopvillager.setPersistent(true);
-        mopvillager.setAI(false);
+            royaltrader.setCustomName(CreateText.addColors("<yellow>Royal Trader"));
+            royaltrader.setCustomNameVisible(true);
+            royaltrader.setInvulnerable(true);
+            royaltrader.setPersistent(true);
+            royaltrader.setAI(false);
+            mopvillager = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -103.21, -57.00, -17.24, 60, 0), EntityType.VILLAGER);
 
-        archerjohn = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -140.30, -59.0, -39.59, -90, 0), EntityType.VILLAGER);
+            mopvillager.setCustomName(CreateText.addColors("<yellow>Janitor"));
+            mopvillager.setCustomNameVisible(true);
+            mopvillager.setInvulnerable(true);
+            mopvillager.setPersistent(true);
+            mopvillager.setAI(false);
 
-        archerjohn.setCustomName(CreateText.addColors("<green>archer johnm"));
-        archerjohn.setCustomNameVisible(true);
-        archerjohn.setInvulnerable(true);
-        archerjohn.setPersistent(true);
-        archerjohn.setAI(false);
+            archerjohn = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -140.30, -59.0, -39.59, -90, 0), EntityType.VILLAGER);
 
-        prisonguard = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -136.5, -57.0, -12, -90, 0), EntityType.VILLAGER);
+            archerjohn.setCustomName(CreateText.addColors("<green>archer johnm"));
+            archerjohn.setCustomNameVisible(true);
+            archerjohn.setInvulnerable(true);
+            archerjohn.setPersistent(true);
+            archerjohn.setAI(false);
 
-        prisonguard.setCustomName(CreateText.addColors("<blue>Prison Guard"));
-        prisonguard.setCustomNameVisible(true);
-        prisonguard.setInvulnerable(true);
-        prisonguard.setPersistent(true);
-        prisonguard.setAI(false);
+            prisonguard = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -136.5, -57.0, -12, -90, 0), EntityType.VILLAGER);
 
-        royalservant = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -67.5, -57.0, 23.5, -45, 0), EntityType.VILLAGER);
+            prisonguard.setCustomName(CreateText.addColors("<blue>Prison Guard"));
+            prisonguard.setCustomNameVisible(true);
+            prisonguard.setInvulnerable(true);
+            prisonguard.setPersistent(true);
+            prisonguard.setAI(false);
 
-        royalservant.setCustomName(CreateText.addColors("<gold>Royal Servant"));
-        royalservant.setCustomNameVisible(true);
-        royalservant.setInvulnerable(true);
-        royalservant.setPersistent(true);
-        royalservant.setAI(false);
+            royalservant = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -67.5, -57.0, 23.5, -45, 0), EntityType.VILLAGER);
 
-        littlejoes = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -113.5, -56.0, -1.5, -180, 0), EntityType.VILLAGER);
+            royalservant.setCustomName(CreateText.addColors("<gold>Royal Servant"));
+            royalservant.setCustomNameVisible(true);
+            royalservant.setInvulnerable(true);
+            royalservant.setPersistent(true);
+            royalservant.setAI(false);
 
-        littlejoes.setCustomName(CreateText.addColors("<blue>Little Joes"));
-        littlejoes.setCustomNameVisible(true);
-        littlejoes.setBaby();
-        littlejoes.setAgeLock(true);
-        littlejoes.setInvulnerable(true);
-        littlejoes.setPersistent(true);
-        littlejoes.setAI(false);
+            littlejoes = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -113.5, -56.0, -1.5, -180, 0), EntityType.VILLAGER);
 
-        miner = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -202.5, -39.0, -244.5, 0, 0), EntityType.VILLAGER);
-        miner.setCustomName(CreateText.addColors("<gold>Miner Joseph"));
-        miner.setCustomNameVisible(true);
-        miner.setInvulnerable(true);
-        miner.setPersistent(true);
-        miner.setAI(false);
+            littlejoes.setCustomName(CreateText.addColors("<blue>Little Joes"));
+            littlejoes.setCustomNameVisible(true);
+            littlejoes.setBaby();
+            littlejoes.setAgeLock(true);
+            littlejoes.setInvulnerable(true);
+            littlejoes.setPersistent(true);
+            littlejoes.setAI(false);
+
+            miner = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -202.5, -39.0, -244.5, 0, 0), EntityType.VILLAGER);
+            miner.setCustomName(CreateText.addColors("<gold>Miner Joseph"));
+            miner.setCustomNameVisible(true);
+            miner.setInvulnerable(true);
+            miner.setPersistent(true);
+            miner.setAI(false);
+        }, 20 * 3);
     }
 
     @Override
@@ -222,6 +226,13 @@ public final class KingsButBad extends JavaPlugin {
         selfdefense.remove();
         bertrude.remove();
         miner.remove();
+        littlejoes.remove();
+        royalservant.remove();
+        royaltrader.remove();
+        minerguard.remove();
+        prisonguard.remove();
+        mopvillager.remove();
+        archerjohn.remove();
         for (LivingEntity le : Bukkit.getWorld("world").getLivingEntities()) {
             if (le.getType().equals(EntityType.VILLAGER)) {
                 le.remove();

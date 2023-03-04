@@ -52,10 +52,12 @@ public class MiscTask extends BukkitRunnable {
 
         KingsButBad.cooldown -= 1;
 
-        if (KingsButBad.joesunlocked) {
-            KingsButBad.littlejoes.teleport(new Location(Bukkit.getWorld("world"), -113.5, -56.0, -1.5, -180, 0));
-        } else {
-            KingsButBad.littlejoes.teleport(new Location(Bukkit.getWorld("world"), -105.5, -63.0, -77, 0, 0));
+        if (KingsButBad.littlejoes != null) {
+            if (KingsButBad.joesunlocked) {
+                KingsButBad.littlejoes.teleport(new Location(Bukkit.getWorld("world"), -113.5, -56.0, -1.5, -180, 0));
+            } else {
+                KingsButBad.littlejoes.teleport(new Location(Bukkit.getWorld("world"), -105.5, -63.0, -77, 0, 0));
+            }
         }
         if (Bukkit.getWorld("world").getTime() > 0 && Bukkit.getWorld("world").getTime() < 2000) {
             timer1 = 0;
@@ -131,8 +133,10 @@ public class MiscTask extends BukkitRunnable {
         if (Bukkit.getWorld("world").getTime() == 10000) {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 if (KingsButBad.prisonQuota.get(p) > 0) {
-                    p.sendTitle(ChatColor.RED + "MISSED QUOTA.", ChatColor.DARK_RED + "+80s to prison time.");
-                    KingsButBad.prisonTimer.put(p, KingsButBad.prisonTimer.get(p) + 80);
+                    if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PRISONER)) {
+                        p.sendTitle(ChatColor.RED + "MISSED QUOTA.", ChatColor.DARK_RED + "+80s to prison time.");
+                        KingsButBad.prisonTimer.put(p, KingsButBad.prisonTimer.get(p) + 80);
+                    }
                 }
             }
         }
