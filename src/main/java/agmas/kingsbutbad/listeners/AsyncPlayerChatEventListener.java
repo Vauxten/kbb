@@ -110,7 +110,7 @@ public class AsyncPlayerChatEventListener implements Listener {
                 };
                 Color b = a[new Random().nextInt(0,a.length)];
                 Location point1 = originalplayerloc;
-                Location point2 = p.getLocation();
+                Location point2 = rtr.getHitPosition().toLocation(p.getWorld());
                 double space = 0.5;
                 World world = point1.getWorld();
                 double distance = point1.distance(point2);
@@ -118,12 +118,33 @@ public class AsyncPlayerChatEventListener implements Listener {
                 Vector p2 = point2.toVector();
                 Vector vector = p2.clone().subtract(p1).normalize().multiply(space);
                 double length = 0;
+                int i = 0;
+                int ii = 0;
+                ArrayList<Location> locations = new ArrayList<>();
                 for (; length < distance; p1.add(vector)) {
-                    event.getPlayer().spawnParticle(Particle.REDSTONE, p1.getX(), p1.getY(), p1.getZ(), 1, new Particle.DustOptions(b, 1));
+                    locations.add(new Location(p.getWorld(), p1.getX(), p1.getY(), p1.getZ()));
                     length += space;
+                }
+                for (Location l : locations) {
+                    Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
+                        event.getPlayer().spawnParticle(Particle.REDSTONE, l.getX(), l.getY(), l.getZ(), 1, new Particle.DustOptions(b, 1));
+                        event.getPlayer().playSound(l, Sound.BLOCK_NOTE_BLOCK_BANJO, 1, 1);
+                        if (KingsButBad.soundwaves.containsKey(p)) {
+                            p.spawnParticle(Particle.REDSTONE, l.getX(), l.getY(), l.getZ(), 1, new Particle.DustOptions(b, 1));
+                            p.playSound(l, Sound.BLOCK_NOTE_BLOCK_BANJO, 1, 1);
+                        }
+                    }, i);
+                    ii++;
+                    if (ii >= 2) {
+                        ii = 0;
+                        i++;
+                    }
                 }
             }
             if (rtr != null) {
+                if (KingsButBad.soundwaves.containsKey(event.getPlayer())) {
+
+                }
                 if (rtr.getHitEntity() != null) {
                     if (rtr.getHitEntity().equals(p)) {
                         hearcount++;
