@@ -2,24 +2,17 @@ package agmas.kingsbutbad.listeners;
 
 import agmas.kingsbutbad.KingsButBad;
 import agmas.kingsbutbad.NoNoWords;
-import agmas.kingsbutbad.tasks.MiscTask;
 import agmas.kingsbutbad.utils.CreateText;
 import agmas.kingsbutbad.utils.Role;
 import me.libraryaddict.disguise.DisguiseAPI;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.apache.commons.lang.Validate;
 import org.bukkit.*;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
-import javax.swing.colorchooser.ColorSelectionModel;
-import java.util.ArrayList;
 import java.util.Random;
 import java.util.function.Predicate;
 

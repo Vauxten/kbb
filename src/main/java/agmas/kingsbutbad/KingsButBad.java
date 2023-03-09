@@ -2,9 +2,7 @@ package agmas.kingsbutbad;
 
 import agmas.kingsbutbad.commands.*;
 import agmas.kingsbutbad.listeners.*;
-import agmas.kingsbutbad.tasks.FailsafeTask;
-import agmas.kingsbutbad.tasks.MiscTask;
-import agmas.kingsbutbad.tasks.RoleTask;
+import agmas.kingsbutbad.tasks.*;
 import agmas.kingsbutbad.utils.CreateText;
 import agmas.kingsbutbad.utils.Role;
 import net.luckperms.api.LuckPerms;
@@ -38,6 +36,7 @@ public final class KingsButBad extends JavaPlugin {
     public static HashMap<Player, Integer> prisonTimer = new HashMap<>();
     public static HashMap<Player, Integer> prisonQuota = new HashMap<>();
     public static HashMap<Player, Role> playerRoleInviteHashMap = new HashMap<>();
+    public static HashMap<Player, Location> datedLocations = new HashMap<>();
     public static LuckPerms api;
     public static Villager royalvillager;
     public static Villager sewervillager;
@@ -85,6 +84,8 @@ public final class KingsButBad extends JavaPlugin {
         FailsafeTask task3 = new FailsafeTask();
         task3.runTaskTimer(this, 0, 1);
         RoleTask task2 = new RoleTask();
+        new AFKTask().runTaskTimer(this, 0, 6000);
+        new LocationTask().runTaskTimer(this, 3000, 6000);
 
         wasinPrison = new NamespacedKey(this, "inPrison");
         money = new NamespacedKey(this, "money");
