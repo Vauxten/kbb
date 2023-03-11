@@ -5,8 +5,6 @@ import agmas.kingsbutbad.tasks.MiscTask;
 import agmas.kingsbutbad.utils.CreateText;
 import agmas.kingsbutbad.utils.Role;
 import agmas.kingsbutbad.utils.RoleManager;
-import com.destroystokyo.paper.Namespaced;
-import com.destroystokyo.paper.NamespacedTag;
 import org.bukkit.*;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.type.Door;
@@ -17,7 +15,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
@@ -27,9 +24,7 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.checkerframework.checker.units.qual.K;
 import org.spigotmc.event.entity.EntityDismountEvent;
 import org.spigotmc.event.entity.EntityMountEvent;
 
@@ -73,10 +68,10 @@ public class PlayerInteractAtEntityListener implements Listener {
             if (event.getEntity().getShooter() != null) {
                 if (event.getEntity().getShooter() instanceof Player p) {
                     if (event.getHitEntity() instanceof  Player d) {
-                        if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PEASANT)) {
-                            if (KingsButBad.playerRoleHashMap.get(d).isPowerful) {
+                        if (KingsButBad.roles.get(p).equals(Role.PEASANT)) {
+                            if (KingsButBad.roles.get(d).isPowerful) {
                                 p.sendTitle(ChatColor.RED + "!!! You're now a criminal !!!", ChatColor.GRAY + "You hit someone of authority.");
-                                KingsButBad.playerRoleHashMap.put(p, Role.CRIMINAl);
+                                KingsButBad.roles.put(p, Role.CRIMINAl);
                                 p.playSound(p, Sound.ENTITY_SILVERFISH_DEATH, 1, 0.5f);
                             }
                         }
@@ -118,16 +113,16 @@ public class PlayerInteractAtEntityListener implements Listener {
                         p.addPassenger(d);
                     }
                 }
-                if (KingsButBad.playerRoleHashMap.get(p).equals(Role.SERVANT)) {
-                    if (KingsButBad.playerRoleHashMap.get(d).isPowerful) {
+                if (KingsButBad.roles.get(p).equals(Role.SERVANT)) {
+                    if (KingsButBad.roles.get(d).isPowerful) {
                         p.sendMessage(ChatColor.RED + "You can't do that.");
                         event.setCancelled(true);
                     }
                 }
-                if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PEASANT)) {
-                    if (KingsButBad.playerRoleHashMap.get(d).isPowerful) {
+                if (KingsButBad.roles.get(p).equals(Role.PEASANT)) {
+                    if (KingsButBad.roles.get(d).isPowerful) {
                         p.sendTitle(ChatColor.RED + "!!! You're now a criminal !!!", ChatColor.GRAY + "You hit someone of authority.");
-                        KingsButBad.playerRoleHashMap.put(p, Role.CRIMINAl);
+                        KingsButBad.roles.put(p, Role.CRIMINAl);
                         p.playSound(p, Sound.ENTITY_SILVERFISH_DEATH, 1, 0.5f);
                     }
                 }
@@ -156,7 +151,7 @@ public class PlayerInteractAtEntityListener implements Listener {
             return;
         }
         if (event.getTarget() instanceof Player p) {
-            if (!KingsButBad.playerRoleHashMap.get(p).equals(Role.CRIMINAl)) {
+            if (!KingsButBad.roles.get(p).equals(Role.CRIMINAl)) {
                 event.setCancelled(true);
             }
         }
@@ -182,7 +177,7 @@ public class PlayerInteractAtEntityListener implements Listener {
                     if (p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) >= 150.0) {
                         p.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) - 150.0);
                         Bukkit.broadcastMessage(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b><b>" + RoleManager.getKingGender(p) + " " + p.getName() + "<blue> has bought the <gold>Mines"));
-                        KingsButBad.mineunlocked = true;
+                        KingsButBad.mineUnlocked = true;
                     }
                 }
                 if (event.getCurrentItem().getType().equals(Material.LIGHT_BLUE_WOOL)) {
@@ -190,7 +185,7 @@ public class PlayerInteractAtEntityListener implements Listener {
                     if (p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) >= 200.0) {
                         p.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) - 200.0);
                         Bukkit.broadcastMessage(CreateText.addColors("<gradient:#FFFF52:#FFBA52><b><b>" + RoleManager.getKingGender(p) + " " + p.getName() + "<blue> has bought <gold>Little Joe's Shack"));
-                        KingsButBad.joesunlocked = true;
+                        KingsButBad.joesUnlocked = true;
                     }
                 }
                 if (event.getCurrentItem().getType().equals(Material.IRON_SHOVEL)) {
@@ -216,10 +211,10 @@ public class PlayerInteractAtEntityListener implements Listener {
                     Integer prisonercount = 0;
                     Integer guardcount = 0;
                     for (Player p : Bukkit.getOnlinePlayers()) {
-                        if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PRISONER)) {
+                        if (KingsButBad.roles.get(p).equals(Role.PRISONER)) {
                             prisonercount++;
                         }
-                        if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PRISON_GUARD)) {
+                        if (KingsButBad.roles.get(p).equals(Role.PRISON_GUARD)) {
                             guardcount++;
                         }
                     }
@@ -232,10 +227,10 @@ public class PlayerInteractAtEntityListener implements Listener {
                     Player p = (Player) event.getWhoClicked();
                     Bukkit.broadcastMessage(CreateText.addColors("<red>>> <b>" + p.getName() + "<gold> </b> turned themselves in, for some reason.."));
                     KingsButBad.prisonTimer.put(p, 6000);
-                    KingsButBad.playerRoleHashMap.put(p, Role.PRISONER);
+                    KingsButBad.roles.put(p, Role.PRISONER);
                     event.setCancelled(true);
                     event.getWhoClicked().getInventory().clear();
-                    event.getWhoClicked().getPersistentDataContainer().set(KingsButBad.wasinPrison, PersistentDataType.INTEGER, 1);
+                    event.getWhoClicked().getPersistentDataContainer().set(KingsButBad.wasInPrison, PersistentDataType.INTEGER, 1);
                     RoleManager.givePlayerRole(p);
                 }
                 if (event.getCurrentItem().getType().equals(Material.GOLDEN_APPLE)) {
@@ -247,7 +242,7 @@ public class PlayerInteractAtEntityListener implements Listener {
                 }
                 if (event.getCurrentItem().getType().equals(Material.IRON_NUGGET)) {
                     Player p = (Player) event.getWhoClicked();
-                    KingsButBad.playerRoleHashMap.put(p, Role.SERVANT);
+                    KingsButBad.roles.put(p, Role.SERVANT);
                     RoleManager.givePlayerRole(p);
                 }
 
@@ -678,7 +673,7 @@ public class PlayerInteractAtEntityListener implements Listener {
                     ItemStack cod = new ItemStack(Material.IRON_NUGGET);
                     cod.addItemFlags(ItemFlag.HIDE_PLACED_ON);
                     ItemMeta codmeta = cod.getItemMeta();
-                    codmeta.setDisplayName(ChatColor.GOLD + "Become a " + KingsButBad.kinggender.toUpperCase() + ChatColor.GOLD + "'s servant");
+                    codmeta.setDisplayName(ChatColor.GOLD + "Become a " + KingsButBad.kingGender.toUpperCase() + ChatColor.GOLD + "'s servant");
                     ArrayList<String> codlore = new ArrayList<>();
                     codlore.add(ChatColor.GRAY + "Makes you a servant.");
                     codlore.add(ChatColor.GRAY + "Listen to the king's orders. This " + ChatColor.RED + "isn't" + ChatColor.GRAY + "a role of power.");
@@ -688,7 +683,7 @@ public class PlayerInteractAtEntityListener implements Listener {
 
                     event.getPlayer().openInventory(inv);
                 }
-                if (event.getRightClicked().equals(KingsButBad.selfdefense)) {
+                if (event.getRightClicked().equals(KingsButBad.selfDefense)) {
                     Inventory inv = Bukkit.createInventory(null, 9);
                     ItemStack cod = new ItemStack(Material.LEATHER_CHESTPLATE);
                     cod.addItemFlags(ItemFlag.HIDE_PLACED_ON);
@@ -736,7 +731,7 @@ public class PlayerInteractAtEntityListener implements Listener {
                     inv.setItem(7, cod);
                     event.getPlayer().openInventory(inv);
                 }
-                if (event.getRightClicked().equals(KingsButBad.royalservant)) {
+                if (event.getRightClicked().equals(KingsButBad.royalServant)) {
                     if (RoleManager.isKingAtAll(event.getPlayer())) {
                         int zombiecount = 0;
                         for (LivingEntity le : Bukkit.getWorld("world").getLivingEntities()) {
@@ -790,7 +785,7 @@ public class PlayerInteractAtEntityListener implements Listener {
                             cod.setItemMeta(codmeta);
                             inv.setItem(3, cod);
                         }
-                        if (!KingsButBad.mineunlocked) {
+                        if (!KingsButBad.mineUnlocked) {
                             cod = new ItemStack(Material.OAK_FENCE);
                             cod.addItemFlags(ItemFlag.HIDE_PLACED_ON);
                             codmeta = cod.getItemMeta();
@@ -812,7 +807,7 @@ public class PlayerInteractAtEntityListener implements Listener {
                             cod.setItemMeta(codmeta);
                             inv.setItem(4, cod);
                         }
-                        if (!KingsButBad.joesunlocked) {
+                        if (!KingsButBad.joesUnlocked) {
                             cod = new ItemStack(Material.LIGHT_BLUE_WOOL);
                             cod.addItemFlags(ItemFlag.HIDE_PLACED_ON);
                             codmeta = cod.getItemMeta();
@@ -838,7 +833,7 @@ public class PlayerInteractAtEntityListener implements Listener {
                         event.getPlayer().openInventory(inv);
                     }
                 }
-                if (event.getRightClicked().equals(KingsButBad.littlejoes)) {
+                if (event.getRightClicked().equals(KingsButBad.littleJoes)) {
                     Inventory inv = Bukkit.createInventory(null, 9);
                     ItemStack cod = new ItemStack(Material.GOLDEN_CARROT, 16);
                     cod.addItemFlags(ItemFlag.HIDE_PLACED_ON);
@@ -883,7 +878,7 @@ public class PlayerInteractAtEntityListener implements Listener {
                     inv.setItem(7, cod);
                     event.getPlayer().openInventory(inv);
                 }
-                if (event.getRightClicked().equals(KingsButBad.royaltrader)) {
+                if (event.getRightClicked().equals(KingsButBad.royalTrader)) {
                     Inventory inv = Bukkit.createInventory(null, 9);
                     ItemStack cod = new ItemStack(Material.PAPER);
                     cod.addItemFlags(ItemFlag.HIDE_PLACED_ON);
@@ -935,7 +930,7 @@ public class PlayerInteractAtEntityListener implements Listener {
                     inv.setItem(7, cod);
                     event.getPlayer().openInventory(inv);
                 }
-                if (event.getRightClicked().equals(KingsButBad.sewervillager)) {
+                if (event.getRightClicked().equals(KingsButBad.sewerVillager)) {
                     Inventory inv = Bukkit.createInventory(null, 9);
                     ItemStack cod = new ItemStack(Material.TRIPWIRE_HOOK);
                     cod.addItemFlags(ItemFlag.HIDE_PLACED_ON);
@@ -986,7 +981,7 @@ public class PlayerInteractAtEntityListener implements Listener {
                     inv.setItem(7, cod);
                     event.getPlayer().openInventory(inv);
                 }
-                if (event.getRightClicked().equals(KingsButBad.archerjohn)) {
+                if (event.getRightClicked().equals(KingsButBad.archerJohn)) {
                     Inventory inv = Bukkit.createInventory(null, 9);
                     ItemStack cod = new ItemStack(Material.ARROW);
                     cod.addItemFlags(ItemFlag.HIDE_PLACED_ON);
@@ -1072,13 +1067,13 @@ public class PlayerInteractAtEntityListener implements Listener {
                     inv.setItem(7, cod);
                     event.getPlayer().openInventory(inv);
                 }
-                if (event.getRightClicked().equals(KingsButBad.lunchlady)) {
+                if (event.getRightClicked().equals(KingsButBad.lunchLady)) {
                     if (MiscTask.bossbar.getTitle().equals("Lunch") || MiscTask.bossbar.getTitle().equals("Breakfast")) {
                         event.getPlayer().sendMessage(CreateText.addColors("<gold>Lunch Lady <white><b>>> Here's your lunch."));
                         event.getPlayer().getInventory().addItem(new ItemStack(Material.POTION));
                     }
                 }
-                if (event.getRightClicked().equals(KingsButBad.farmerjoe)) {
+                if (event.getRightClicked().equals(KingsButBad.farmerJoe)) {
                     Inventory inv = Bukkit.createInventory(null, 9);
                     ItemStack hoe = new ItemStack(Material.WOODEN_HOE);
                     hoe.addItemFlags(ItemFlag.HIDE_PLACED_ON);
@@ -1119,7 +1114,7 @@ public class PlayerInteractAtEntityListener implements Listener {
                     event.getPlayer().openInventory(inv);
 
                 }
-                if (event.getRightClicked().equals(KingsButBad.minerguard)) {
+                if (event.getRightClicked().equals(KingsButBad.minerGuard)) {
                     Inventory inv = Bukkit.createInventory(null, 9);
                     ItemStack hoe = new ItemStack(Material.IRON_PICKAXE);
                     hoe.addItemFlags(ItemFlag.HIDE_PLACED_ON);
@@ -1129,7 +1124,7 @@ public class PlayerInteractAtEntityListener implements Listener {
                     inv.setItem(4, hoe);
                     event.getPlayer().openInventory(inv);
                 }
-                if (event.getRightClicked().equals(KingsButBad.prisonguard)) {
+                if (event.getRightClicked().equals(KingsButBad.prisonGuard)) {
                     Inventory inv = Bukkit.createInventory(null, 9);
                     ItemStack hoe = new ItemStack(Material.RED_CONCRETE);
                     hoe.addItemFlags(ItemFlag.HIDE_PLACED_ON);
@@ -1147,7 +1142,7 @@ public class PlayerInteractAtEntityListener implements Listener {
                     inv.setItem(6, hoe);
                     event.getPlayer().openInventory(inv);
                 }
-                if (event.getRightClicked().equals(KingsButBad.mopvillager)) {
+                if (event.getRightClicked().equals(KingsButBad.mopVillager)) {
                     Inventory inv = Bukkit.createInventory(null, 9);
                     ItemStack hoe = new ItemStack(Material.BONE);
                     hoe.addItemFlags(ItemFlag.HIDE_PLACED_ON);
@@ -1163,7 +1158,7 @@ public class PlayerInteractAtEntityListener implements Listener {
                     inv.setItem(6, wheat);
                     event.getPlayer().openInventory(inv);
                 }
-                if (event.getRightClicked().equals(KingsButBad.royalvillager))
+                if (event.getRightClicked().equals(KingsButBad.royalVillager))
                     event.getPlayer().performCommand("king help");
 
             }, 1);

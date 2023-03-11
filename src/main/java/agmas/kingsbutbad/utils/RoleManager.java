@@ -23,9 +23,9 @@ public class RoleManager {
 
     public static String getKingGender(Player p) {
         if (KingsButBad.king == p)
-            return KingsButBad.kinggender;
+            return KingsButBad.kingGender;
         if (KingsButBad.king2 == p)
-            return KingsButBad.kinggender2;
+            return KingsButBad.kingGender2;
         return "ERROR";
     }
 
@@ -33,31 +33,31 @@ public class RoleManager {
         if (KingsButBad.king == p) {
             switch (toset) {
                 case "male":
-                    KingsButBad.kinggender = "King";
+                    KingsButBad.kingGender = "King";
                     break;
                 case "female":
-                    KingsButBad.kinggender = "Queen";
+                    KingsButBad.kingGender = "Queen";
                     break;
                 case "sussy":
-                    KingsButBad.kinggender = "Among Us Impostor";
+                    KingsButBad.kingGender = "Among Us Impostor";
                     break;
                 default:
-                    KingsButBad.kinggender = "Monarch";
+                    KingsButBad.kingGender = "Monarch";
             }
         }
         if (KingsButBad.king2 == p) {
             switch (toset) {
                 case "male":
-                    KingsButBad.kinggender2 = "King";
+                    KingsButBad.kingGender2 = "King";
                     break;
                 case "female":
-                    KingsButBad.kinggender2 = "Queen";
+                    KingsButBad.kingGender2 = "Queen";
                     break;
                 case "sussy":
-                    KingsButBad.kinggender2 = "Among Us Impostor";
+                    KingsButBad.kingGender2 = "Among Us Impostor";
                     break;
                 default:
-                    KingsButBad.kinggender2 = "Monarch";
+                    KingsButBad.kingGender2 = "Monarch";
             }
         }
         return;
@@ -67,30 +67,30 @@ public class RoleManager {
         if (oneortwo) {
             switch (toset) {
                 case "male":
-                    KingsButBad.kinggender = "King";
+                    KingsButBad.kingGender = "King";
                     break;
                 case "female":
-                    KingsButBad.kinggender = "Queen";
+                    KingsButBad.kingGender = "Queen";
                     break;
                 case "sussy":
-                    KingsButBad.kinggender = "Among Us Impostor";
+                    KingsButBad.kingGender = "Among Us Impostor";
                     break;
                 default:
-                    KingsButBad.kinggender = "Monarch";
+                    KingsButBad.kingGender = "Monarch";
             }
         } else {
             switch (toset) {
                 case "male":
-                    KingsButBad.kinggender2 = "King";
+                    KingsButBad.kingGender2 = "King";
                     break;
                 case "female":
-                    KingsButBad.kinggender2 = "Queen";
+                    KingsButBad.kingGender2 = "Queen";
                     break;
                 case "sussy":
-                    KingsButBad.kinggender2 = "Among Us Impostor";
+                    KingsButBad.kingGender2 = "Among Us Impostor";
                     break;
                 default:
-                    KingsButBad.kinggender2 = "Monarch";
+                    KingsButBad.kingGender2 = "Monarch";
             }
         }
         return;
@@ -102,12 +102,12 @@ public class RoleManager {
     }
 
     public static void givePlayerRole(Player p) {
-        KingsButBad.playerRoleHashMap.putIfAbsent(p, Role.PEASANT);
+        KingsButBad.roles.putIfAbsent(p, Role.PEASANT);
         if (p.getWorldBorder() != null) {
             p.setWorldBorder(null);
         }
         p.getInventory().clear();
-        if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PRINCE)) {
+        if (KingsButBad.roles.get(p).equals(Role.PRINCE)) {
             p.getInventory().setHelmet(new ItemStack(Material.LEATHER_HELMET));
             ItemStack diamondchest = new ItemStack(Material.GOLDEN_CHESTPLATE);
             ItemMeta diamondchestmeta = diamondchest.getItemMeta();
@@ -151,9 +151,9 @@ public class RoleManager {
         }
         if (p == KingsButBad.king || p == KingsButBad.king2) {
             if (p == KingsButBad.king) {
-                KingsButBad.joesunlocked = false;
+                KingsButBad.joesUnlocked = false;
                 KingsButBad.coalCompactor = false;
-                KingsButBad.mineunlocked = false;
+                KingsButBad.mineUnlocked = false;
                 for (LivingEntity le : Bukkit.getWorld("world").getLivingEntities()) {
                     if (le.getType().equals(EntityType.ZOMBIE)) {
                         le.remove();
@@ -225,7 +225,7 @@ public class RoleManager {
             Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Monarchs").addPlayer(p);
             return;
         }
-        if (KingsButBad.playerRoleHashMap.get(p) == Role.KNIGHT) {
+        if (KingsButBad.roles.get(p) == Role.KNIGHT) {
             ItemStack diamondchest = new ItemStack(Material.IRON_CHESTPLATE);
             ItemMeta diamondchestmeta = diamondchest.getItemMeta();
             diamondchestmeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 3, true);
@@ -268,7 +268,7 @@ public class RoleManager {
             }, 10);
             Bukkit.getScoreboardManager().getMainScoreboard().getTeam("NRoyals").addPlayer(p);
         }
-        if (KingsButBad.playerRoleHashMap.get(p) == Role.PRISON_GUARD) {
+        if (KingsButBad.roles.get(p) == Role.PRISON_GUARD) {
             ItemStack diamondchest = new ItemStack(Material.IRON_CHESTPLATE);
             ItemMeta diamondchestmeta = diamondchest.getItemMeta();
             diamondchestmeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 3, true);
@@ -321,7 +321,7 @@ public class RoleManager {
             Bukkit.getScoreboardManager().getMainScoreboard().getTeam("NRoyals").addPlayer(p);
 
         }
-        if (KingsButBad.playerRoleHashMap.get(p) == Role.BODYGUARD) {
+        if (KingsButBad.roles.get(p) == Role.BODYGUARD) {
             ItemStack diamondchest = new ItemStack(Material.NETHERITE_CHESTPLATE);
             ItemMeta diamondchestmeta = diamondchest.getItemMeta();
             diamondchestmeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2, true);
@@ -360,11 +360,11 @@ public class RoleManager {
             p.getInventory().addItem(new ItemStack(Material.BOW));
             p.getInventory().addItem(new ItemStack(Material.ARROW, 64));
             Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
-                p.teleport(KingsButBad.bodylink.get(p).getLocation());
+                p.teleport(KingsButBad.bodyLink.get(p).getLocation());
             }, 10);
             Bukkit.getScoreboardManager().getMainScoreboard().getTeam("NRoyals").addPlayer(p);
         }
-        if (KingsButBad.playerRoleHashMap.get(p) == Role.PRISONER) {
+        if (KingsButBad.roles.get(p) == Role.PRISONER) {
             p.setCooldown(Material.TERRACOTTA, 80);
             if (!KingsButBad.prisonTimer.containsKey(p) || KingsButBad.prisonTimer.get(p).equals(0))
                 KingsButBad.prisonTimer.put(p, 6000);
@@ -394,13 +394,13 @@ public class RoleManager {
             }, 10);
             Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Prisoners").addPlayer(p);
         }
-        if (KingsButBad.playerRoleHashMap.get(p) == Role.PEASANT || KingsButBad.playerRoleHashMap.get(p) == Role.SERVANT) {
+        if (KingsButBad.roles.get(p) == Role.PEASANT || KingsButBad.roles.get(p) == Role.SERVANT) {
             Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Peasants").addPlayer(p);
-            p.getPersistentDataContainer().remove(KingsButBad.wasinPrison);
+            p.getPersistentDataContainer().remove(KingsButBad.wasInPrison);
             Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {
                 p.teleport(new Location(Bukkit.getWorld("world"), -120.5, -57, -30.5));
             }, 10);
         }
-        p.sendTitle(KingsButBad.playerRoleHashMap.get(p).tag, KingsButBad.playerRoleHashMap.get(p).objective);
+        p.sendTitle(KingsButBad.roles.get(p).tag, KingsButBad.roles.get(p).objective);
     }
 }

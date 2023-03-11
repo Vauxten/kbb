@@ -14,7 +14,7 @@ public class FailsafeTask extends BukkitRunnable {
     public void run(){
 
         for (Player p : Bukkit.getOnlinePlayers()) {
-            KingsButBad.playerRoleHashMap.putIfAbsent(p, Role.PEASANT);
+            KingsButBad.roles.putIfAbsent(p, Role.PEASANT);
             if (p.getGameMode().equals(GameMode.SURVIVAL))
                 p.setGameMode(GameMode.ADVENTURE);
             if (p.getLocation().getY() <= -60 && p.getLocation().getBlock().getType().equals(Material.WATER)) {
