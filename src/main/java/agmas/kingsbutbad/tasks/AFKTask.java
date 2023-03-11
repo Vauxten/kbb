@@ -18,14 +18,9 @@ public class AFKTask extends BukkitRunnable {
         authorities.add(KingsButBad.king2);
 
         for (Player player : authorities) {
-            if (player == null) continue;
+            if (player == null || !KingsButBad.datedLocations.containsKey(player)) continue;
 
             Location datedLocation = KingsButBad.datedLocations.get(player);
-
-            System.out.println("Dated location " + datedLocation);
-
-            if (datedLocation == null)
-                continue;
 
             if (player
                     .getLocation()

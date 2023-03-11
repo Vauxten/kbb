@@ -17,9 +17,9 @@ commands:
   soundwaves:
     description: ";)"
     usage: /soundwaves
-  resetVillavgers:
+  resetVillagers:
     description: "resets villagers"
-    usage: /resetvillagers
+    usage: /resetVillagers
   accept:
     description: "Role accepting"
     usage: /accept
