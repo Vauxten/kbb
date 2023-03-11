@@ -42,8 +42,14 @@ public class AsyncPlayerChatEventListener implements Listener {
                     case PRISON_GUARD:
                         event.setMessage(event.getMessage().replace(p.getName(), CreateText.addColors("<blue>Prison Guard " + p.getName()) +  KingsButBad.roles.get(event.getPlayer()).chatColor));
                         break;
+                    case PRINCE:
+                        event.setMessage(event.getMessage().replace(p.getName(), CreateText.addColors("<gradient:#FFFF52:#FFBA52>" + KingsButBad.princeGender.get(p).toUpperCase() + p.getName()) +  KingsButBad.roles.get(event.getPlayer()).chatColor));
+                        break;
                     case PEASANT:
                         event.setMessage(event.getMessage().replace(p.getName(), CreateText.addColors("<#59442B>Peasant " + p.getName()) + KingsButBad.roles.get(event.getPlayer()).chatColor));
+                        break;
+                    case SERVANT:
+                        event.setMessage(event.getMessage().replace(p.getName(), CreateText.addColors("<#867143>Servant " + p.getName()) + KingsButBad.roles.get(event.getPlayer()).chatColor));
                         break;
                     case CRIMINAl:
                         event.setMessage(event.getMessage().replace(p.getName(), CreateText.addColors("<red>Criminal " + p.getName()) + KingsButBad.roles.get(event.getPlayer()).chatColor));
