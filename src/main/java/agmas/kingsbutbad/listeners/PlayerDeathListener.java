@@ -8,6 +8,7 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,6 +26,7 @@ import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 public class PlayerDeathListener implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerRespawnEvent event) {
+        KingsButBad.thirst.put(event.getPlayer(), 300);
         if (!KingsButBad.king.equals(event.getPlayer())) {
             RoleManager.givePlayerRole(event.getPlayer());
             event.getPlayer().setNoDamageTicks(20 * 15);
@@ -69,6 +71,7 @@ public class PlayerDeathListener implements Listener {
             }
             KingsButBad.cooldown = 20 * 5;
         }
+
         event.getDrops().clear();
         event.setDeathMessage(ChatColor.GRAY + event.getDeathMessage());
         if (KingsButBad.playerRoleHashMap.get(event.getPlayer()).equals(Role.CRIMINAl)) {

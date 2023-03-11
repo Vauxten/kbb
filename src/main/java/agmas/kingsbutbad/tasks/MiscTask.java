@@ -10,6 +10,7 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.*;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.Sign;
 import org.bukkit.block.data.type.Door;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
@@ -44,6 +45,7 @@ public class MiscTask extends BukkitRunnable {
     HashMap<Player, Boolean> regenstamina = new HashMap<>();
     ArrayList<Location> cells = new ArrayList<Location>();
     public static BossBar bossbar = Bukkit.createBossBar("??? TIME", BarColor.WHITE, BarStyle.SOLID);
+    public static BossBar bar = Bukkit.createBossBar("KingHealth", BarColor.WHITE, BarStyle.SOLID);
     Integer timer1 = 0;
     Integer timer2 = 1000;
 
@@ -283,6 +285,21 @@ public class MiscTask extends BukkitRunnable {
             }
         }
         if (KingsButBad.king != null) {
+
+            if (KingsButBad.king2 == null) {
+                Sign sign = (Sign) Bukkit.getWorld("world").getBlockAt(-63, -44, 29).getState();
+                sign.setLine(0, "");
+                sign.setLine(1, KingsButBad.kinggender.toUpperCase() + "'s");
+                sign.setLine(0, "Bedroom");
+                sign.setLine(3, "");
+                sign.update(true);
+            } else {
+                Sign sign = (Sign) Bukkit.getWorld("world").getBlockAt(-63, -44, 29).getState();
+                sign.setLine(0, KingsButBad.kinggender.toUpperCase() + " and");
+                sign.setLine(1, KingsButBad.kinggender2.toUpperCase() + "'s");
+                sign.setLine(2, "Bedroom");
+                sign.update(true);
+            }
             if (KingsButBad.king.getInventory().getHelmet() == null) {
                 KingsButBad.king.setItemOnCursor(new ItemStack(Material.AIR));
                 KingsButBad.king = null;
@@ -297,6 +314,19 @@ public class MiscTask extends BukkitRunnable {
                 }
             }
         for (Player p : Bukkit.getOnlinePlayers()) {
+            KingsButBad.thirst.putIfAbsent(p, 300);
+            if (KingsButBad.thirst.get(p) <= 0) {
+                KingsButBad.thirst.put(p, 0);
+                p.damage(3);
+            }
+            if (KingsButBad.thirst.get(p) > 300) {
+                KingsButBad.thirst.put(p, 300);
+            }
+            p.setRemainingAir(KingsButBad.thirst.get(p));
+
+            if (new Random().nextInt(0, 16) == 0) {
+                KingsButBad.thirst.put(p, KingsButBad.thirst.get(p) - 1);
+            }
             for (Entity e : p.getPassengers()) {
                 LivingEntity le = (LivingEntity) e;
                 le.setNoDamageTicks(3);
@@ -324,6 +354,14 @@ public class MiscTask extends BukkitRunnable {
                 }
             }
 
+            if (KingsButBad.king != null) {
+                bar.setTitle(KingsButBad.kinggender.toUpperCase() + " " +  KingsButBad.king.getName().toUpperCase());
+                bar.setProgress(KingsButBad.king.getHealth() / KingsButBad.king.getHealthScale());
+                bar.setColor(BarColor.YELLOW);
+                bar.addPlayer(p);
+            } else {
+                bar.removeAll();
+            }
             KingsButBad.currentzone.putIfAbsent(p, 0);
 
             if (KingsButBad.isInside(p, new Location(Bukkit.getWorld("world"), -133, -57, -18), new Location(Bukkit.getWorld("world"), -159, -26, 33))) {

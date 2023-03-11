@@ -62,6 +62,7 @@ public class RoleManager {
         }
         return;
     }
+
     public static void setKingGender(Boolean oneortwo, String toset) {
         if (oneortwo) {
             switch (toset) {
@@ -77,8 +78,7 @@ public class RoleManager {
                 default:
                     KingsButBad.kinggender = "Monarch";
             }
-        }
-        else {
+        } else {
             switch (toset) {
                 case "male":
                     KingsButBad.kinggender2 = "King";
@@ -95,16 +95,60 @@ public class RoleManager {
         }
         return;
     }
+
     public static void showKingMessages(Player p, String reason) {
         p.sendTitle(ChatColor.GREEN + "YOU ARE " + LegacyComponentSerializer.legacySection().serialize(miniMessage().deserialize("<gradient:#FFFF52:#FFBA52><b>THE KING!<b></gradient>")), reason);
         p.sendMessage(miniMessage().deserialize("<green><b>You're </green><gradient:#FFFF52:#FFBA52><b>The king!<b></gradient><#AEAEAE> Read <red><b>/ᴋɪɴɢ ʜᴇʟᴘ</b></red><#AEAEAE> for a small tutorial!<reset>"));
     }
+
     public static void givePlayerRole(Player p) {
         KingsButBad.playerRoleHashMap.putIfAbsent(p, Role.PEASANT);
         if (p.getWorldBorder() != null) {
             p.setWorldBorder(null);
         }
         p.getInventory().clear();
+        if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PRINCE)) {
+            p.getInventory().setHelmet(new ItemStack(Material.LEATHER_HELMET));
+            ItemStack diamondchest = new ItemStack(Material.GOLDEN_CHESTPLATE);
+            ItemMeta diamondchestmeta = diamondchest.getItemMeta();
+            diamondchestmeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1, true);
+            diamondchestmeta.setUnbreakable(true);
+            diamondchest.setItemMeta(diamondchestmeta);
+            p.getInventory().setChestplate(diamondchest);
+            diamondchest = new ItemStack(Material.GOLDEN_LEGGINGS);
+            diamondchestmeta = diamondchest.getItemMeta();
+            diamondchestmeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1, true);
+            diamondchestmeta.setUnbreakable(true);
+            diamondchest.setItemMeta(diamondchestmeta);
+            p.getInventory().setLeggings(diamondchest);
+            diamondchest = new ItemStack(Material.GOLDEN_BOOTS);
+            diamondchestmeta = diamondchest.getItemMeta();
+            diamondchestmeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1, true);
+            diamondchestmeta.setUnbreakable(true);
+            diamondchest.setItemMeta(diamondchestmeta);
+            p.getInventory().setBoots(diamondchest);
+            p.getInventory().addItem(new ItemStack(Material.IRON_SWORD));
+
+            ItemStack handcuffs = new ItemStack(Material.IRON_SHOVEL);
+            ItemMeta handmeta = handcuffs.getItemMeta();
+            handmeta.setUnbreakable(true);
+            handmeta.setDisplayName(CreateText.addColors("<color:#ffff00><b>Handcuffs</color>"));
+            handmeta.addEnchant(Enchantment.DAMAGE_ALL, 2, true);
+            handmeta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
+            handcuffs.setItemMeta(handmeta);
+            p.getInventory().addItem(handcuffs);
+
+            ItemStack card = new ItemStack(Material.TRIPWIRE_HOOK);
+            ItemMeta cardm = card.getItemMeta();
+            cardm.setDisplayName(ChatColor.BLUE + "Keycard");
+            card.setItemMeta(cardm);
+            p.getInventory().addItem(card);
+            p.getInventory().addItem(new ItemStack(Material.BOW));
+            p.getInventory().addItem(new ItemStack(Material.ARROW, 64));
+            p.teleport(new Location(Bukkit.getWorld("world"), -66, -56, 26.5));
+            Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Monarchs").addPlayer(p);
+            return;
+        }
         if (p == KingsButBad.king || p == KingsButBad.king2) {
             if (p == KingsButBad.king) {
                 KingsButBad.joesunlocked = false;
@@ -350,7 +394,7 @@ public class RoleManager {
             }, 10);
             Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Prisoners").addPlayer(p);
         }
-        if (KingsButBad.playerRoleHashMap.get(p) == Role.PEASANT) {
+        if (KingsButBad.playerRoleHashMap.get(p) == Role.PEASANT || KingsButBad.playerRoleHashMap.get(p) == Role.SERVANT) {
             Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Peasants").addPlayer(p);
             p.getPersistentDataContainer().remove(KingsButBad.wasinPrison);
             Bukkit.getScheduler().runTaskLater(KingsButBad.getPlugin(KingsButBad.class), () -> {

@@ -24,6 +24,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
@@ -40,6 +41,9 @@ public class PlayerInteractAtEntityListener implements Listener {
 
     @EventHandler
     public void onPlayerQuit(PlayerItemConsumeEvent event) {
+        if (event.getItem().getType().equals(Material.POTION)) {
+            KingsButBad.thirst.put(event.getPlayer(), KingsButBad.thirst.get(event.getPlayer()) + 100);
+        }
         if (event.getItem().getType().equals(Material.COOKED_COD)) {
             event.getPlayer().sendMessage(CreateText.addColors("<gray><b>|<green><b> +5 HP<gray><b> |"));
             event.getPlayer().setHealth(Math.min(event.getPlayer().getHealth() + 5, event.getPlayer().getMaxHealth()));
@@ -112,6 +116,12 @@ public class PlayerInteractAtEntityListener implements Listener {
                     if (KingsButBad.king != d) {
                         event.setCancelled(true);
                         p.addPassenger(d);
+                    }
+                }
+                if (KingsButBad.playerRoleHashMap.get(p).equals(Role.SERVANT)) {
+                    if (KingsButBad.playerRoleHashMap.get(d).isPowerful) {
+                        p.sendMessage(ChatColor.RED + "You can't do that.");
+                        event.setCancelled(true);
                     }
                 }
                 if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PEASANT)) {
@@ -235,6 +245,12 @@ public class PlayerInteractAtEntityListener implements Listener {
                         p.getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE));
                     }
                 }
+                if (event.getCurrentItem().getType().equals(Material.IRON_NUGGET)) {
+                    Player p = (Player) event.getWhoClicked();
+                    KingsButBad.playerRoleHashMap.put(p, Role.SERVANT);
+                    RoleManager.givePlayerRole(p);
+                }
+
                 if (event.getCurrentItem().getType().equals(Material.LEATHER_CHESTPLATE)) {
                     Player p = (Player) event.getWhoClicked();
                     if (p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) >= 50.0) {
@@ -243,6 +259,18 @@ public class PlayerInteractAtEntityListener implements Listener {
                         p.getInventory().setChestplate(new ItemStack(Material.LEATHER_CHESTPLATE));
                         p.getInventory().setLeggings(new ItemStack(Material.LEATHER_LEGGINGS));
                         p.getInventory().setBoots(new ItemStack(Material.LEATHER_BOOTS));
+                    }
+                }
+                if (event.getCurrentItem().getType().equals(Material.POTION)) {
+                    Player p = (Player) event.getWhoClicked();
+                    if (p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) >= 15.0) {
+                        p.getPersistentDataContainer().set(KingsButBad.money, PersistentDataType.DOUBLE, p.getPersistentDataContainer().getOrDefault(KingsButBad.money, PersistentDataType.DOUBLE, 0.0) - 15.0);
+                        ItemStack cod = new ItemStack(Material.POTION);
+                        PotionMeta ptmeta = (PotionMeta) cod.getItemMeta();
+                        ptmeta.setDisplayName(ChatColor.BLUE + "Water");
+                        ptmeta.setColor(Color.BLUE);
+                        cod.setItemMeta(ptmeta);
+                        p.getInventory().addItem(cod);
                     }
                 }
                 if (event.getCurrentItem().getType().equals(Material.IRON_SWORD)) {
@@ -576,7 +604,8 @@ public class PlayerInteractAtEntityListener implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerInteractEvent event) {
         if (event.getItem() != null) {
-            if (event.getItem().getType().equals(Material.CLAY_BALL) && !event.getPlayer().isInsideVehicle()) {
+            if (event.getItem().getType().equals(Material.CLAY_BALL) && !event.getPlayer().isInsideVehicle() && !event.getPlayer().hasCooldown(Material.CLAY_BALL)) {
+                event.getPlayer().setCooldown(Material.CLAY_BALL, 20 * 4);
                 Horse horse = (Horse) event.getPlayer().getWorld().spawnEntity(event.getPlayer().getLocation(), EntityType.HORSE);
                 horse.setCustomName(event.getPlayer().getName() + "'s horse");
                 horse.addPassenger(event.getPlayer());
@@ -644,6 +673,21 @@ public class PlayerInteractAtEntityListener implements Listener {
                 event.getPlayer().closeInventory();
                 event.setCancelled(true);
                 event.setCancelled(true);
+                if (event.getRightClicked().equals(KingsButBad.servant)) {
+                    Inventory inv = Bukkit.createInventory(null, 9);
+                    ItemStack cod = new ItemStack(Material.IRON_NUGGET);
+                    cod.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+                    ItemMeta codmeta = cod.getItemMeta();
+                    codmeta.setDisplayName(ChatColor.GOLD + "Become a " + KingsButBad.kinggender.toUpperCase() + ChatColor.GOLD + "'s servant");
+                    ArrayList<String> codlore = new ArrayList<>();
+                    codlore.add(ChatColor.GRAY + "Makes you a servant.");
+                    codlore.add(ChatColor.GRAY + "Listen to the king's orders. This " + ChatColor.RED + "isn't" + ChatColor.GRAY + "a role of power.");
+                    codmeta.setLore(codlore);
+                    cod.setItemMeta(codmeta);
+                    inv.setItem(4, cod);
+
+                    event.getPlayer().openInventory(inv);
+                }
                 if (event.getRightClicked().equals(KingsButBad.selfdefense)) {
                     Inventory inv = Bukkit.createInventory(null, 9);
                     ItemStack cod = new ItemStack(Material.LEATHER_CHESTPLATE);
@@ -1015,12 +1059,23 @@ public class PlayerInteractAtEntityListener implements Listener {
                     codmeta.setLore(codlore);
                     cod.setItemMeta(codmeta);
                     inv.setItem(5, cod);
+                    cod = new ItemStack(Material.POTION);
+                    cod.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+                    PotionMeta ptmeta = (PotionMeta) cod.getItemMeta();
+                    ptmeta.setDisplayName(ChatColor.BLUE + "Water");
+                    ptmeta.setColor(Color.BLUE);
+                    codlore = new ArrayList<>();
+                    codlore.add(ChatColor.GRAY + "fancy a bot'o'w'ota");
+                    codlore.add(ChatColor.GREEN + "$15");
+                    ptmeta.setLore(codlore);
+                    cod.setItemMeta(ptmeta);
+                    inv.setItem(7, cod);
                     event.getPlayer().openInventory(inv);
                 }
                 if (event.getRightClicked().equals(KingsButBad.lunchlady)) {
                     if (MiscTask.bossbar.getTitle().equals("Lunch") || MiscTask.bossbar.getTitle().equals("Breakfast")) {
                         event.getPlayer().sendMessage(CreateText.addColors("<gold>Lunch Lady <white><b>>> Here's your lunch."));
-                        event.getPlayer().getInventory().addItem(new ItemStack(Material.BEETROOT_SOUP));
+                        event.getPlayer().getInventory().addItem(new ItemStack(Material.POTION));
                     }
                 }
                 if (event.getRightClicked().equals(KingsButBad.farmerjoe)) {

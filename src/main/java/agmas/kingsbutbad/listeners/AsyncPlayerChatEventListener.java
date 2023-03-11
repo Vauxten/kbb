@@ -13,6 +13,7 @@ import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.function.Predicate;
 

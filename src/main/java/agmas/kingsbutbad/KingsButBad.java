@@ -53,6 +53,7 @@ public final class KingsButBad extends JavaPlugin {
     public static Villager archerjohn;
     public static Villager prisonguard;
     public static Villager littlejoes;
+    public static Villager servant;
     public static Villager miner;
     public static String kinggender = "King";
     public static String kinggender2 = "King";
@@ -63,6 +64,7 @@ public final class KingsButBad extends JavaPlugin {
     public static Player lastking;
     public static Player lastking2;
     public static HashMap<Player, Integer> currentzone = new HashMap<>();
+    public static HashMap<Player, Integer> thirst = new HashMap<>();
     public static HashMap<Player, Boolean> soundwaves = new HashMap<>();
 
 
@@ -227,6 +229,13 @@ public final class KingsButBad extends JavaPlugin {
         miner.setInvulnerable(true);
         miner.setPersistent(true);
         miner.setAI(false);
+
+        servant = (Villager) Bukkit.getWorld("world").spawnEntity(new Location(Bukkit.getWorld("world"), -67.5, -57.0, 2.5, 0, 0), EntityType.VILLAGER);
+        servant.setCustomName(CreateText.addColors("<gray>Servant Application"));
+        servant.setCustomNameVisible(true);
+        servant.setInvulnerable(true);
+        servant.setPersistent(true);
+        servant.setAI(false);
     }
     @Override
     public void onDisable() {
