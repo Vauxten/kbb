@@ -71,6 +71,9 @@ public final class KingsButBad extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
+        
+        
+        
         api = LuckPermsProvider.get();
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new PlayerJoinListener(), this);
