@@ -9,7 +9,6 @@ import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -71,9 +70,6 @@ public final class KingsButBad extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
-
-
-
         api = LuckPermsProvider.get();
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new PlayerJoinListener(), this);
@@ -100,6 +96,7 @@ public final class KingsButBad extends JavaPlugin {
         this.getCommand("discord").setExecutor(new DiscordCommand());
         this.getCommand("soundwaves").setExecutor(new SoundWavesCommand());
         this.getCommand("resetVillavgers").setExecutor(new ResetVillagersCommand());
+        this.getCommand("pay").setExecutor(new PayCommand());
         while (Bukkit.getWorld("world") == null) {}
         for (LivingEntity le : Bukkit.getWorld("world").getLivingEntities()) {
             if (le.getType().equals(EntityType.VILLAGER)) {

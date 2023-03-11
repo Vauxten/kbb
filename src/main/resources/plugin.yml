@@ -33,3 +33,6 @@ commands:
     description: "set's a player's money count"
     usage: /setmoney <player> <money>
     permission: kbb.setMoney
+  pay:
+    description: "Pay a player money."
+    usage: /pay <player> <money>
