@@ -21,6 +21,27 @@ public class KingCommand implements CommandExecutor {
                 p.sendMessage(ChatColor.RED + "You can't become a king as a prisoner. Stay in, scum.");
                 return true;
             }
+            if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PRINCE)) {
+                if (args.length >= 2) {
+                    if (args[0].equals("gender")) {
+                        switch (args[1]) {
+                            case "male":
+                                KingsButBad.princeGender.put(p, "Prince");
+                                break;
+                            case "female":
+                                KingsButBad.princeGender.put(p, "Princess");
+                                break;
+                            case "sussy":
+                                KingsButBad.princeGender.put(p, "Cringe");
+                                break;
+                            default:
+                                KingsButBad.princeGender.put(p, "Royal Heir");
+                        }
+                    }
+                    return true;
+                }
+                return true;
+            }
             if (KingsButBad.king == null) {
                 if (KingsButBad.cooldown <= 0) {
                     if (p != KingsButBad.lastking || p != KingsButBad.lastking2) {
@@ -83,15 +104,19 @@ public class KingCommand implements CommandExecutor {
                         if (args[0].equals("prince")) {
                             if (args.length > 1) {
                                 if (Bukkit.getPlayer(args[1]) != null) {
+                                    int i = 0;
                                     for (Player de : Bukkit.getOnlinePlayers()) {
                                         if (KingsButBad.playerRoleHashMap.get(de).equals(Role.PRINCE)) {
-                                            return true;
+                                            i++;
                                         }
                                         if (KingsButBad.playerRoleInviteHashMap.containsKey(de)) {
                                             if (KingsButBad.playerRoleInviteHashMap.get(de).equals(Role.PRINCE)) {
-                                                return true;
+                                                i++;
                                             }
                                         }
+                                    }
+                                    if (i >= 2) {
+                                        p.sendMessage(ChatColor.RED + "Too many princes! (Max: 2)");
                                     }
                                     Player pe = Bukkit.getPlayer(args[1]);
                                     if (KingsButBad.playerRoleHashMap.get(pe) == Role.PEASANT) {

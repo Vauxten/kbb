@@ -20,6 +20,7 @@ public class RoleTask extends BukkitRunnable {
     public void run(){
 
         for (Player p : Bukkit.getOnlinePlayers()) {
+            KingsButBad.princeGender.putIfAbsent(p, "Prince");
             if (KingsButBad.playerRoleHashMap.get(p).isPowerful) {
                 if (KingsButBad.isInside(p, new Location(Bukkit.getWorld("world"), -82, -44, -15), new Location(Bukkit.getWorld("world"), -70, -56, -27))) {
                     p.teleport(new Location(Bukkit.getWorld("world"), -101.5, -57, -18.5));
@@ -30,18 +31,27 @@ public class RoleTask extends BukkitRunnable {
                 }
             }
             KingsButBad.playerRoleHashMap.putIfAbsent(p, Role.PEASANT);
+
             if (KingsButBad.api.getPlayerAdapter(Player.class).getUser(p).getCachedData().getMetaData().getPrefix() != null) {
                 if (KingsButBad.king2 == p) {
                     p.setPlayerListName(CreateText.addColors("<dark_gray>[" + KingsButBad.api.getPlayerAdapter(Player.class).getUser(p).getCachedData().getMetaData().getPrefix() + "<dark_gray>] " + "<dark_gray>[" + "<gradient:#FFFF52:#FFBA52><b>" + KingsButBad.kinggender2.toUpperCase() + "<dark_gray></b><dark_gray>] <white>") + KingsButBad.playerRoleHashMap.get(p).chatColor + p.getName());
                 } else {
-                    p.setPlayerListName(CreateText.addColors("<dark_gray>[" + KingsButBad.api.getPlayerAdapter(Player.class).getUser(p).getCachedData().getMetaData().getPrefix() + "<dark_gray>] " + "[" + KingsButBad.playerRoleHashMap.get(p).uncompressedColors + "<dark_gray>] ") + KingsButBad.playerRoleHashMap.get(p).chatColor + p.getName());
+                    if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PRINCE)) {
+                        p.setPlayerListName(CreateText.addColors("<dark_gray>[" + KingsButBad.api.getPlayerAdapter(Player.class).getUser(p).getCachedData().getMetaData().getPrefix() + "<dark_gray>] " + "[<gradient:#FFFF52:#FFBA52>" + KingsButBad.princeGender.get(p).toUpperCase() + "<dark_gray>] ") + KingsButBad.playerRoleHashMap.get(p).chatColor + p.getName());
+                    }  else {
+                        p.setPlayerListName(CreateText.addColors("<dark_gray>[" + KingsButBad.api.getPlayerAdapter(Player.class).getUser(p).getCachedData().getMetaData().getPrefix() + "<dark_gray>]  " +"<dark_gray>[" + "<gradient:#FFFF52:#FFBA52>" + KingsButBad.playerRoleHashMap.get(p).uncompressedColors + "<dark_gray><dark_gray>] <white>") + KingsButBad.playerRoleHashMap.get(p).chatColor + p.getName());
+                    }
                 }
 
             } else {
                 if (KingsButBad.king2 == p) {
                     p.setPlayerListName(CreateText.addColors("<dark_gray>[" + "<gradient:#FFFF52:#FFBA52><b>" + KingsButBad.kinggender2.toUpperCase() + "<dark_gray></b><dark_gray>] <white>") + KingsButBad.playerRoleHashMap.get(p).chatColor + p.getName());
                 } else {
-                    p.setPlayerListName(CreateText.addColors("<dark_gray>[" + KingsButBad.playerRoleHashMap.get(p).uncompressedColors + "<dark_gray>] <white>") + KingsButBad.playerRoleHashMap.get(p).chatColor + p.getName());
+                    if (KingsButBad.playerRoleHashMap.get(p).equals(Role.PRINCE)) {
+                        p.setPlayerListName(CreateText.addColors("<dark_gray>[<gradient:#FFFF52:#FFBA52>" + KingsButBad.princeGender.get(p).toUpperCase() + "<dark_gray>] <white>") + KingsButBad.playerRoleHashMap.get(p).chatColor + p.getName());
+                    } else {
+                        p.setPlayerListName(CreateText.addColors("<dark_gray>[" + "<gradient:#FFFF52:#FFBA52>" + KingsButBad.playerRoleHashMap.get(p).uncompressedColors + "<dark_gray><dark_gray>] <white>") + KingsButBad.playerRoleHashMap.get(p).chatColor + p.getName());
+                    }
                 }
 
             }

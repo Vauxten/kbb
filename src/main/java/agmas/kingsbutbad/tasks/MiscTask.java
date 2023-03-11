@@ -52,6 +52,7 @@ public class MiscTask extends BukkitRunnable {
     @Override
     public void run(){
 
+
         KingsButBad.cooldown -= 1;
 
         if (KingsButBad.littlejoes != null) {
@@ -318,6 +319,11 @@ public class MiscTask extends BukkitRunnable {
             if (KingsButBad.thirst.get(p) <= 0) {
                 KingsButBad.thirst.put(p, 0);
                 p.damage(3);
+            }
+            if (!KingsButBad.playerRoleHashMap.containsKey(p)) {
+                if (KingsButBad.playerRoleInviteHashMap.get(p).equals(Role.PRISONER) || KingsButBad.playerRoleInviteHashMap.get(p).equals(Role.PRISON_GUARD)) {
+                    KingsButBad.thirst.put(p, 300);
+                }
             }
             if (KingsButBad.thirst.get(p) > 300) {
                 KingsButBad.thirst.put(p, 300);
