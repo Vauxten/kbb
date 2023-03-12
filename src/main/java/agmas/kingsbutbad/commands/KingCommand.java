@@ -47,6 +47,7 @@ public class KingCommand implements CommandExecutor {
                         p.sendMessage(ChatColor.RED + "You were a king last time!");
                         return true;
                     }
+                    KingsButBad.thirst.put(p, 300);
                     KingsButBad.invitations.clear();
                     KingsButBad.king = p;
                     KingsButBad.roles.put(p, Role.KING);
