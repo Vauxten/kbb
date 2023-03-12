@@ -117,6 +117,7 @@ public class KingCommand implements CommandExecutor {
                                     }
                                     if (i >= 2) {
                                         p.sendMessage(ChatColor.RED + "Too many princes! (Max: 2)");
+                                        return true;
                                     }
                                     Player pe = Bukkit.getPlayer(args[1]);
                                     if (KingsButBad.roles.get(pe) == Role.PEASANT) {
