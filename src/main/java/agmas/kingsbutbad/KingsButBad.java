@@ -196,7 +196,7 @@ public final class KingsButBad extends JavaPlugin {
         );
 
         littleJoes = createVillager(
-                new Location(world, -113.5, -56.0, -1.5, -180, 0),
+                new Location(world, -114, -57.0, -1, -180, 0),
                 "<blue>Little Joes"
         );
 
