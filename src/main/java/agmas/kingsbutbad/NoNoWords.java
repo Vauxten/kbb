@@ -18,6 +18,7 @@ public class NoNoWords {
             "nigger",
             "nigga",
             "retard",
+            "ret@rd",
             "faggot",
             "fagg",
                 "This sentence triggers the chat filter!"
