@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 public class NoNoWords {
     public static String[] filter = {
+            "n1gger"
             "niga",
             "niger",
             "niba",
